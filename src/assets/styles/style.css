@@ -37,6 +37,12 @@ body {
     transform: translateY(-5px);
 }
 
+.title {
+  font-size: 60px;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
 .input {
   border: none;
   outline: none;

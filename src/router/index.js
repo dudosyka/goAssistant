@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Menu from '../views/Menu.vue'
+import CloseGame from '../views/CloseGame.vue'
 
 Vue.use(VueRouter)
 
@@ -19,8 +20,13 @@ const routes = [
   },
   {
     path: '/menu',
-    name: 'menu',
+    name: 'Menu',
     component: Menu
+  },
+  {
+    path: '/menu/closegame',
+    name: 'CloseGame',
+    component: CloseGame
   },
 ]
 

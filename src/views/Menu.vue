@@ -5,7 +5,7 @@
         <button class="button-light w3-button w3-card-4 tr w3-hover-white">Продолжить игру</button>
         <button class="button-light w3-button w3-card-4 tr w3-hover-white">Игра со случайным соперником</button>
         <button class="button-light w3-button w3-card-4 tr w3-hover-white">Игра с ИИ</button>
-        <button class="button-light w3-button w3-card-4 tr w3-hover-white">Закрытая игра</button>
+        <router-link class="button-light w3-button w3-card-4 tr w3-hover-white" to="/menu/closegame">Частная игра</router-link>
       </div>
     </article>
   </main>
