@@ -6,13 +6,9 @@
       <router-link id="nav" to="/menu">Menu</router-link> |
       <router-link id="nav" to="/menu/closegame">CloseGame</router-link> |
     </div>
-    <!--
-    <header class="user w3-card-4">
-      <h1 class="user-nick"><router-link to="/pasport">{{nick}}</router-link></h1>
-      <img v-bind:src="ava" height="100%">
-    </header>
-    !-->
-    <router-view></router-view>
+    <transition name="slide-fade">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -31,8 +27,7 @@
   export default {
     data() {
       return {
-        ava: 'https://www.castorama.ru/media/catalog/product/cache/image/1800x/040ec09b1e35df139433887a97daa66f/6/6/66d549_510228_1.jpg',
-        nick: 'ex@mp1e',
+
       }
     },
     computed: {
