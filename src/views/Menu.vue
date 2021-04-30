@@ -1,7 +1,7 @@
 <template>
   <main class="menu">
     <article class="form_window menu">
-      <div class="shadow">
+      <div class="">
         <button class="button-light">Продолжить игру</button>
         <button class="button-light">Игра со случайным сопреником</button>
         <button class="button-light">Игра с ИИ</button>

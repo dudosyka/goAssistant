@@ -56,8 +56,14 @@ body {
   font-size: 40px;
   color: #1f1233;
   padding: 20px;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
+  transition: transform 0.3s;
 }
+.button-light:hover {
+  cursor: pointer;
+  transform: scale(1.05) translateX(-5px);
+}
+
 .shadow {
   box-shadow: 0px 0px 20px 10px #1f1233;
 }
