@@ -5,12 +5,13 @@
           <button v-on:click="lever = 0">Войти</button> \ <button v-on:click="lever = 1">Зарегистрироваться</button>
         </header>
         <section class="form_login" v-show="!lever">
-          <input type="mail" class="input" placeholder="Email">
-          <input type="text" class="input" placeholder="Password">
+          <input v-model='email' type="mail" class="input" placeholder="Email">
+          <input v-model='password' type="text" class="input" placeholder="Password">
         </section>
         <section class="form_signup" v-show="lever">
-          <input type="text" class="input" placeholder="Email">
-          <input type="text" class="input" placeholder="Nickname">
+          <input v-model='email' type="text" class="input" placeholder="Email">
+          <input v-model='nickname' type="text" class="input" placeholder="Nickname">
+          <button @click='auth()'>Зарегистрироваться</button>
         </section>
       </article>
     </main>
@@ -23,8 +24,8 @@
     data() {
       return {
         email: null,
-        pass: null,
-        nick: null,
+        password: null,
+        nickname: null,
         lever: 0
       }
     },
@@ -33,27 +34,14 @@
     },
     methods: {
         auth() {
-
-        let bodyFormData = new FormData();
-
-        bodyFormData.append('email', 'a.hatson@ya.ru');
-        bodyFormData.append('nickname', 'dudosyka');
-
-        axios({
-          method: "post",
-          url: "https://go-backend-denis.ambersoft.llc/user/register",
-          data: bodyFormData,
-          headers: { "Content-Type": "multipart/form-data" },
-        }).then(data => { console.log(data); }).catch(err => { console.log(err); });
-        },
-        statistic() {
-            axios.get('https://go-backend-denis.ambersoft.llc/user/statistics')
-            .then(data => {console.log(data)}).catch(err => {console.log(err)});
+            post('/user/register', { email: this.email, nickname: this.nickname }, data => {
+                localStorage.setItem('token', data.data.token);
+                window.location = window.location;
+            });
         }
     },
     created() {
         this.statistic();
-        this.auth();
     }
   }
 </script>
