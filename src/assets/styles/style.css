@@ -70,6 +70,20 @@ body {
   transform: scale(1.05) translateX(-5px);
 }
 
+.back-button {
+  position: relative;
+}
+.back-button::before {
+  content: "⟵";
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  left: 50px;
+  transition: transform 0.3s;
+}
+.back-button:hover::before {
+  transform: translateX(-20px) translateY(-50%);
+}
+
 .shadow {
   box-shadow: 0px 0px 20px 10px #1f1233;
 }
