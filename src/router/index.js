@@ -3,7 +3,9 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Menu from '../views/Menu.vue'
+
 import CloseGame from '../views/CloseGame.vue'
+import JoinToCloseGame from '../views/JoinToCloseGame'
 
 Vue.use(VueRouter)
 
@@ -27,6 +29,11 @@ const routes = [
     path: '/menu/closegame',
     name: 'CloseGame',
     component: CloseGame
+  },
+  {
+    path: '/menu/closegame/joingame',
+    name: 'JoinToCloseGame',
+    component: JoinToCloseGame
   },
 ]
 
