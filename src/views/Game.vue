@@ -502,7 +502,7 @@ export default {
         }
         //storybar
         function addMoveToStory(color, player, position, loaded) {
-            e("moveHistory").innerHTML += movePrefab.replace("{MOVE}", `<i class="fas circle fa-circle w3-text-${color==1?'black':'white'}"></i> <span>${player}</span> <b>${position==null?'Пасс':position}</b>`);
+            e("moveHistory").innerHTML += movePrefab.replace("{MOVE}", `<i class="fas circle fa-circle w3-text-${color==1?'black':'white'}"></i> <span>${player}</span> <b>${position==null?'Пас':position}</b>`);
             moveStory.push([color,player,position]);
             if(!loaded) {
                 localStorage.setItem("story", JSON.stringify(moveStory));
