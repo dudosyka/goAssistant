@@ -1,13 +1,13 @@
 <template>
   <div id="app">
-    <transition name="slide-fade">
-      <router-view></router-view>
-    </transition>
     <div id="nav">
       <router-link id="nav" to="/">Home</router-link> |
       <router-link id="nav" v-if="!alreadyLogin" to="/login">Login</router-link> <span v-if='!alreadyLogin'>|</span>
       <router-link id="nav" to="/menu/closegame">CloseGame</router-link> |
     </div>
+    <transition name="slide-fade">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -23,12 +23,6 @@
 
 <script>
   export default {
-    data() {
-      return {
-
-      }
-    },
-    computed: {
     name: 'Menu',
     data() {
       return {
@@ -43,6 +37,5 @@
     created() {
         this.alreadyLogin = storage('token') != null;
     }
-  }
   }
 </script>
