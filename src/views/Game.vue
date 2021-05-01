@@ -46,6 +46,7 @@ export default {
             return get('/game/info/' + storage('curGameId') + "?token=" + storage('token'), null, data => {
                 return data;
             });
+        },
         
         move(type) {
             client.send(JSON.stringify([
