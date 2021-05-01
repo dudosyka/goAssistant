@@ -47,10 +47,10 @@ body {
   transform: scale(1.025);
 }
 
-.button:disabled {
+.button:disabled, .disabled {
   opacity: 0.5;
 }
-.button:disabled:hover {
+.button:disabled:hover, .disabled {
   cursor: not-allowed;
   transform: none;
 }
