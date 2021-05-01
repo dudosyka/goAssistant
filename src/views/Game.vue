@@ -326,14 +326,11 @@ export default {
                     for(let i of selectedPoints) {
                         converted.push(parseField(i[0],i[1]));
                     }
-                    debugger;
                     const result = await hint.bestMovesOf(converted);
+                    console.log(result);
                     console.log("Hint fetched");
-                    for(let i of result) {
-                        let coords = parseXY(i);
-                        addHint(coords[0],coords[1]);
-                    }
-                    console.log(result)
+                    let coords = parseXY(result.data.hint);
+                    addHint(coords[0],coords[1]);
                     togglePlacement();
                     clearSelectors();
                 })

@@ -36,9 +36,7 @@ Hint.prototype.bestMovesEnemy = async function (count) {
 
 Hint.prototype.bestMovesOf = async function (moves) {
     return await get('/hints/show-best?token='+storage("token")+'&centaur_token=' + ct + "&moves=" + moves.join() + "&game_id=" + this.gameId, null, data => {
-        return data.data.hint.map(el => {
-            return el.move;
-        });
+        return data;
     });
 }
 
