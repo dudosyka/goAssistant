@@ -27,7 +27,7 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
     name: 'NewCloseGame',
     data() {
       return {
-        code: '',
+        code: 'XXXX',
         client: false,
         search: false
       }
