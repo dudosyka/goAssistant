@@ -2,10 +2,17 @@
   <main class="menu">
     <article class="form_window menu">
       <div class="">
+<<<<<<< Updated upstream
         <button @click='continueGame()' class="button full-width w3-button w3-card-4 tr w3-hover-white">Продолжить игру</button>
         <button @click='randomGame()' class="button full-width w3-button w3-card-4 tr w3-hover-white" :disabled="alreadyStart">Игра со случайным соперником</button>
         <button @click='startGameWithBot()' class="button full-width w3-button w3-card-4 tr w3-hover-white" :disabled="alreadyStart">Игра с ИИ</button>
         <button class="button full-width w3-button w3-card-4 tr w3-hover-white" onclick="window.location = '/menu/closegame'" :disabled="alreadyStart">Частная игра</button>
+=======
+        <button @click='continueGame()' class="button full-width w3-button w3-card-4 tr w3-hover-white" :disabled="!alreadyStart">Продолжить игру</button>
+        <button @click='randomGame()' class="button full-width w3-button w3-card-4 tr w3-hover-white" :disabled="alreadyStart">Игра со случайным соперником</button>
+        <button @click='startGameWithBot()' class="button full-width w3-button w3-card-4 tr w3-hover-white" :disabled="alreadyStart">Игра с ИИ</button>
+        <button class="button full-width w3-button w3-card-4 tr w3-hover-white" onclick="window.location = '/closegame'" :disabled="alreadyStart">Частная игра</button>
+>>>>>>> Stashed changes
       </div>
     </article>
   </main>
