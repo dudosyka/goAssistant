@@ -1,11 +1,49 @@
-.circle {
-    line-height: unset!important;
+.bar {
+  font-size: 15px;
+  overflow: auto;
+  max-height: calc(100% - 25px);
+  padding: 20px;
+}
+.section {
+  margin-bottom: 20px;
+}
+.icon {
+  font-size: 20px;
+}
+.opposite {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .moveDiv {
     padding: 8px!important;
-    display: flex!important;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 14px 1fr 20px 30px;
+    grid-gap: 10px;
+    grid-template-areas:
+      "circle name timer-i timer";
+    font-size: 15px;
 }
+.circle {
+    line-height: unset!important;
+    grid-area: circle;
+}
+.textLimiter {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+    grid-area: name;
+}
+#whiteTimer, #blackTimer {
+  text-align: right;
+  grid-area: timer;
+}
+.time-icon {
+  grid-area: timer-i;
+}
+
+
 .helperButton {
     width:100%;
     border-bottom: 3px solid #3e1a75;
@@ -17,9 +55,4 @@
     width:100%;
     padding: 2px;
     background-color: #dec8ff;
-}
-.textLimiter {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
