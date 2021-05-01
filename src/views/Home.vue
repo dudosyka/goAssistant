@@ -5,7 +5,7 @@
         <button @click='continueGame()' class="button-light w3-button w3-card-4 tr w3-hover-white">Продолжить игру</button>
         <button @click='randomGame()' class="button-light w3-button w3-card-4 tr w3-hover-white" :disabled="alreadyStart">Игра со случайным соперником</button>
         <button @click='startGameWithBot()' class="button-light w3-button w3-card-4 tr w3-hover-white" :disabled="alreadyStart">Игра с ИИ</button>
-        <button class="button-light w3-button w3-card-4 tr w3-hover-white" onclick="window.location = '/menu/closegame'" :disabled="alreadyStart">Частная игра</button>
+        <button class="button-light w3-button w3-card-4 tr w3-hover-white" onclick="window.location = '/closegame'" :disabled="alreadyStart">Частная игра</button>
       </div>
     </article>
   </main>
