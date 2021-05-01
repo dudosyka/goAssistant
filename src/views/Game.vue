@@ -24,7 +24,7 @@
         </div>
         <div class="w3-sidebar w3-bar-block w3-white" style="width:250px;right:0;top:0px;overflow:hidden;">
             <div class="w3-container w3-card-4 w3-center" style="padding: 10px">История ходов</div>
-            <div id="moveHistory" style="overflow: auto;max-height: calc(100% - 25px);"></div>
+            <div id="moveHistory" style="overflow: auto;max-height: calc(100% - 25px);padding-bottom:18px;"></div>
         </div>
         <div id="modal" class="w3-modal">
             <div class="w3-modal-content w3-animate-top w3-card-4">
@@ -124,11 +124,9 @@ export default {
         client.onmessage = function (event) {
             let data = JSON.parse(event.data);
             try {
+                console.log("PC:"+playerColor);
                 if(data.payload.type == "currentMap" || data.payload.type == "newTurn") {
-                    playerColor = data.payload.player=="w"?colors.WHITE:colors.BLACK;
                     currentTurn = data.payload.turn=="black"?colors.BLACK:colors.WHITE;
-                    canPlace = (playerColor == colors.WHITE && data.payload.turn == "white")||
-                        (playerColor == colors.BLACK && data.payload.turn == "black");
                     updateHintStatus();
                     turnBlackEnd = data.payload.turnBlackEndedAt;
                     turnWhiteEnd = data.payload.turnWhiteEndedAt;
@@ -137,6 +135,10 @@ export default {
                     updateTimer();
                 }
                 if(data.payload.type == "currentMap") {
+                    playerColor = data.payload.player=="w"?colors.WHITE:colors.BLACK;
+                    canPlace = (playerColor == colors.WHITE && data.payload.turn == "white")||
+                        (playerColor == colors.BLACK && data.payload.turn == "black");
+                    updateHintStatus();
                     console.log("Parsing current map...");
                     data.payload.currentMap = normalizeMatrix(data.payload.currentMap);
                     loadMatrix(data.payload.currentMap);
@@ -167,6 +169,9 @@ export default {
                     let movePlace = data.payload.place;
                     if(data.payload.moveType == "pass") movePlace = null;
                     addMoveToStory(color, data.payload.move.split("(")[0], data.payload.place, false);
+                    currentTurn = color==colors.BLACK?colors.WHITE:colors.BLACK;
+                    if(playerColor == currentTurn) canPlace = true;
+                    updateHintStatus();
                 }
                 if(data.payload.type == "endGame") {
                     forceStage = 3;
@@ -211,7 +216,7 @@ export default {
         let data = await this.loadGame();
         console.log(data);
 
-        let canPlace = true;
+        let canPlace = false;
         let playerColor = 0;
         let whitePlayerName = "";
         let blackPlayerName = "";
@@ -364,6 +369,8 @@ export default {
             updateHintStatus();
             instance.sendMove(parseField(actualX,actualY));
             console.log("Sent move");
+            console.log(hints);
+            clearHints();
         }
 
         function onCellHover(event, x, y) {
@@ -402,6 +409,9 @@ export default {
                 fantom = [x, y];
                 block.setAttribute("id", "block" + x + "_" + y + "_f");
             }
+            if(c == colors.HINT) {
+                block.setAttribute("id", "block" + x + "_" + y + "_h");
+            }
             if (e("x" + x + "y" + y) != null) {
                 block.setAttribute("class", "block block_0corner block_" + c);
                 e("x" + x + "y" + y).appendChild(block);
@@ -415,7 +425,7 @@ export default {
                 block.setAttribute("class", "block block_2corner block_" + c);
                 e("x" + (x - 1) + "y" + (y - 1)).appendChild(block);
             }
-            if (!o) putted.push("block" + x + "_" + y);
+            if (!o && c!=colors.HINT) putted.push("block" + x + "_" + y);
 
             function setOnClick() {
                 const X = x;
@@ -447,7 +457,7 @@ export default {
                 setOnHover();
                 return setOnClick();
             }
-            if (o != "fantom") blocks[x][y] = c;
+            if (o != "fantom" && c != 'hint') blocks[x][y] = c;
             else {
                 setOnClick();
                 setOnHover();
@@ -459,11 +469,25 @@ export default {
             hints.push([x, y]);
             generateBlock(x, y, colors.HINT, opacity);
         }
+        function addHintZone(x,y,radius,opacity) {
+            console.log(parseField(x,y));
+            x = x+Math.round(Math.random()*radius)*(Math.random>0.5?1:-1)
+            y = y+Math.round(Math.random()*radius)*(Math.random>0.5?1:-1)
+            if(x<0) x=0;
+            if(y<0) y=0;
+            if(x>size-1) x=size-radius;
+            if(y>size-1) y=size-radius;
+            for(let i=x;i<x+radius;i++) {
+                for(let j=y;j<y+radius;j++) {
+                    if(x<=size-1&&y<=size-1) addHint(i,j,opacity);
+                }
+            }
+        }
         function clearHints() {
             for (let i of hints)
                 try {
-                    if (e("block" + i[0] + "_" + i[1]).className.includes("hint"))
-                        e("block" + i[0] + "_" + i[1]).remove();
+                    if (e("block" + i[0] + "_" + i[1]+"_h").className.includes("hint"))
+                        e("block" + i[0] + "_" + i[1]+"_h").remove();
                 } catch (e) {}
             hints = []
         }
@@ -474,7 +498,7 @@ export default {
                     if (e("block" + i[0] + "_" + i[1]).className.includes("selector"))
                         e("block" + i[0] + "_" + i[1]).remove();
                 } catch (e) {}
-            hints = []
+            selectedPoints = []
         }
         //storybar
         function addMoveToStory(color, player, position, loaded) {
@@ -485,6 +509,7 @@ export default {
                 localStorage.setItem("storyMatrix", JSON.stringify(blocks));
                 localStorage.setItem("storyTurn", currentTurn);
             }
+            e("moveHistory").scrollTop = e("moveHistory").scrollHeight;
         }
         function loadStory() {
             if(localStorage.getItem("savedStory")) {
@@ -560,6 +585,8 @@ export default {
         function updateHintStatus() {
             for(let i of helpers)
                 i.enabled = canPlace;
+            if(!canPlace) e("passButton").setAttribute("disabled","true");
+            else e("passButton").removeAttribute("disabled");
             stageDefinder();
         }
         //modal
@@ -672,6 +699,9 @@ export default {
             }
             e("passButton").onclick = instance.sendPass;
             e("resignButton").onclick = instance.sendResign;
+            /*for(let i=0;i<5;i++) {
+                addHintZone(Math.floor(Math.random()*size),Math.floor(Math.random()*size),3);
+            }*/
         }, 10);
         //timer calculator
         setInterval(updateTimer, 1000);
