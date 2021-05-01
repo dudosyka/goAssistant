@@ -28,7 +28,7 @@ global.request = (url, type, data, success) => {
     })
     .then(
         data => {
-            success(data);
+            return success(data);
         }
     )
     .catch(
