@@ -19,8 +19,8 @@
                 </div>
             </div>
         </div>
-        <div class="w3-sidebar w3-bar-block w3-white" style="width:250px;right:0;top:0px;overflow:hidden;">    
-            <div class="w3-container w3-card-4 w3-center" style="padding: 10px">История ходов</div>    
+        <div class="w3-sidebar w3-bar-block w3-white" style="width:250px;right:0;top:0px;overflow:hidden;">
+            <div class="w3-container w3-card-4 w3-center" style="padding: 10px">История ходов</div>
             <div id="moveHistory" style="overflow: auto;max-height: calc(100% - 25px);"></div>
         </div>
     </div>
@@ -33,12 +33,15 @@
 </style>
 
 <script>
+import { w3cwebsocket as W3CWebSocket } from "websocket";
+
 export default {
     name: 'Home',
     components: {},
     data() {
         return {
-            game: null
+            game: null,
+            client: null,
         }
     },
     methods: {
@@ -47,9 +50,9 @@ export default {
                 return data;
             });
         },
-        
+
         move(type) {
-            client.send(JSON.stringify([
+            this.client.send(JSON.stringify([
             7,// 7 - статус: отправка сообщения
             "go/game", // в какой топик отправляется сообщение
             {
@@ -60,7 +63,7 @@ export default {
             ]));
         },
         sendMove(place) {
-            client.send(JSON.stringify([
+            this.client.send(JSON.stringify([
             7,// 7 - статус: отправка сообщения
             "go/game", // в какой топик отправляется сообщение
             {
@@ -79,8 +82,9 @@ export default {
         }
     },
     async created() {
-        this.client = new W3CWebSocket('ws://172.104.137.176:41239');
-        this.client.onopen = function () {
+        const client = new W3CWebSocket('ws://172.104.137.176:41239');
+        client.onopen = function () {
+            console.log(client);
             client.send(JSON.stringify([
                 7, // 7 - статус: отправка сообщения
                 "go/game", // в какой топик отправляется сообщение
@@ -92,10 +96,11 @@ export default {
                 ])
             );
         }
-        this.client.onmessage = function (event) {
+        client.onmessage = function (event) {
             let data = JSON.parse(event.data);
             console.log(data);
         }
+        this.client = client;
         let data = await this.loadGame();
         console.log(data);
 
@@ -445,7 +450,7 @@ export default {
             }
             createHorizontal("top");
             e("game").appendChild(table);
-            
+
             //init stuff
             stageDefinder();
             e("allHelpersButton").onclick = function() {
