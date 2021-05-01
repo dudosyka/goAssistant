@@ -64,4 +64,29 @@ Hint.prototype.fullHeatmap = async function () {
     return await this.simpleRequest('heatmap-full');
 }
 
+Hint.prototype.heatmapQuarter = async function (quarter) {
+    return await get('/hints/heatmap-quarter?token='+storage("token")+'&centaur_token=' + ct + "&quarter=" + quarter + "&game_id=" + this.gameId, null, data => {
+        return data.data.hint;
+    });
+}
+
+Hint.prototype.heatmapQuarters = async function (quarters) {
+    return await get('/hints/heatmap-two-quarters?token='+storage("token")+'&centaur_token=' + ct + "&quarters=" + quarters.join() + "&game_id=" + this.gameId, null, data => {
+        return data.data.hint;
+    });
+}
+
+Hint.prototype.heatmapBestZone = async function (is_quarters) {
+    return await get('/hints/heatmap-best-move-zone?token='+storage("token")+'&centaur_token=' + ct + "&is_quarters=" + is_quarters + "&game_id=" + this.gameId, null, data => {
+        return data.data.hint;
+    });
+}
+
+Hint.prototype.heatmapEnemyBestZone = async function (is_quarters) {
+    return await get('/hints/heatmap-best-enemy-move-zone?token='+storage("token")+'&centaur_token=' + ct + "&is_quarters=" + is_quarters + "&game_id=" + this.gameId, null, data => {
+        return data.data.hint;
+    });
+}
+
+
 export default Hint;
