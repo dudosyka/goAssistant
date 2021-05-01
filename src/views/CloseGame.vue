@@ -3,10 +3,33 @@
     <article class="form_window menu">
       <h1 class="title">Частная игра</h1>
       <div class="">
-        <router-link class="button-light w3-button w3-card-4 tr w3-hover-white" to="/menu/closegame/newgame">Создать</router-link>
+        <router-link @click="create()" class="button-light w3-button w3-card-4 tr w3-hover-white" to="/menu/closegame/newgame">Создать</router-link>
         <router-link class="button-light w3-button w3-card-4 tr w3-hover-white" to="/menu/closegame/joingame">Присоединиться</router-link>
         <router-link class="button-light w3-button w3-card-4 tr w3-hover-white back-button" to="/menu">Назад</router-link>
       </div>
     </article>
   </main>
 </template>
+<script>
+  export default {
+    name: 'CloseGame',
+    data() {
+      return {
+
+      }
+    },
+    components: {
+
+    },
+    methods: {
+        create() {
+            post('/game/create/code', { token: storage('token') }, data => {
+                setStorage('secretRoom', data.data.code);
+                console.log(data.data.code);
+            });
+        }
+    },
+    created() {
+    }
+  }
+</script>

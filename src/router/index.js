@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
-import Menu from '../views/Menu.vue'
+import Game from '../views/Game.vue'
 
 import CloseGame from '../views/CloseGame.vue'
 import JoinToCloseGame from '../views/JoinToCloseGame.vue'
@@ -24,22 +24,17 @@ const routes = [
     component: Login
   },
   {
-    path: '/menu',
-    name: 'Menu',
-    component: Menu
-  },
-  {
-    path: '/menu/closegame',
+    path: '/closegame',
     name: 'CloseGame',
     component: CloseGame
   },
   {
-    path: '/menu/closegame/joingame',
+    path: '/closegame/joingame',
     name: 'JoinToCloseGame',
     component: JoinToCloseGame
   },
   {
-    path: '/menu/closegame/newgame',
+    path: '/closegame/newgame',
     name: 'NewCloseGame',
     component: NewCloseGame
   },
@@ -48,6 +43,11 @@ const routes = [
     name: 'Passport',
     component: Passport
   },
+  {
+      path: '/game',
+      name: 'Game',
+      component: Game
+  }
 ]
 
 const router = new VueRouter({

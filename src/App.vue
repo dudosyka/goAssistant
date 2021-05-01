@@ -2,8 +2,7 @@
   <div id="app">
     <div id="nav">
       <router-link id="nav" to="/">Home</router-link> |
-      <router-link id="nav" to="/login">Login</router-link> |
-      <router-link id="nav" to="/menu">Menu</router-link> |
+      <router-link id="nav" v-if="!alreadyLogin" to="/login">Login</router-link> <span v-if='!alreadyLogin'>|</span>
       <router-link id="nav" to="/menu/closegame">CloseGame</router-link> |
     </div>
     <transition name="slide-fade">
@@ -22,9 +21,9 @@
 }
 </style>
 
-<script type="text/javascript">
-
+<script>
   export default {
+<<<<<<< HEAD
     data() {
       return {
 
@@ -32,6 +31,21 @@
     },
     computed: {
 
+=======
+    name: 'Menu',
+    data() {
+      return {
+          alreadyLogin: false,
+      }
+    },
+    components: {
+
+    },
+    methods: {
+    },
+    created() {
+        this.alreadyLogin = storage('token') != null;
+>>>>>>> master
     }
   }
 </script>
