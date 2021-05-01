@@ -16,6 +16,24 @@ body {
   opacity: 0;
 }
 
+.row {
+  display: grid;
+  grid-template-columns: 1fr 100px;
+  grid-gap: 20px;
+}
+
+.right-arrow {
+  display: block;
+  width: 50px;;
+  background: #fff;
+  border: 0;
+  outline: none;
+  transition: transform 0.3s;
+}
+.right-arrow:hover {
+  transform: scale(1.05);
+}
+
 .menu {
   height: 100vh;
   display: flex;
