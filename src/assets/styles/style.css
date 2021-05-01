@@ -2,9 +2,10 @@ body {
   margin: 0;
   font-family: sans-serif;
   background-color: #543389;
+}
+html {
   overflow: hidden;
 }
-
 /* transitions */
 
 .slide-fade-enter-active {
@@ -235,6 +236,13 @@ body {
 /* End patters */
 
 /* Emoji */
+.add-emoji::before {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  left: 10px;
+  content-visibility: visible;
+}
+
 .hi::before {
   content: '👋'
 }
