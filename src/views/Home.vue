@@ -24,7 +24,13 @@
     methods: {
         continueGame(start = true) {
             get("/game/current?token=" + storage('token'), null, data => {
-                this.alreadyStart = (data.data.gameId !== null);
+                if (data.data.gameId !== null) {
+                  this.alreadyStart = true;
+                }
+                else {
+                  setStorage('curGameId', null);
+                }
+
                 if (start)
                     startGame(data.data.gameId);
             });

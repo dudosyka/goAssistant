@@ -3,15 +3,18 @@
         <div style="text-align: center;">
             <div id="game"></div><br>
             <button class="w3-button w3-white w3-hover-white tr" id="passButton" style="margin-right:10px;width:100px">Пас</button>
-            <button class="w3-button w3-white w3-hover-white tr" id="giveUpButton" style="width:100px">Сдаться</button><br>
+            <button class="w3-button w3-white w3-hover-white tr" id="resignButton" style="width:100px">Сдаться</button><br>
             <span id="specialMessages"></span>
         </div>
-        <div class="w3-sidebar w3-bar-block w3-white" style="width:250px;left:0;top:0px;line-height:2">
+        <div class="w3-sidebar w3-bar-block w3-white" style="width:250px;left:0;top:0px;line-height:2;">
             <div class="w3-container w3-card-2 w3-center" style="padding: 10px">GoAssistant</div>
-            <div style="overflow: auto;max-height: calc(100% - 25px);padding:10px;font-size:13px">
+            <div style="overflow: auto;max-height: calc(100% - 25px);padding:10px;font-size:13px;">
+                <div class="moveDiv"><i class="far circle fa-circle w3-text-black"></i> <b id="whitePlayerName">Загрузка...</b><span id="whiteTimer">--:--</span></div>
+                <div class="moveDiv"><i class="fas circle fa-circle w3-text-black"></i> <b id="blackPlayerName">Загрузка...</b><span id="blackTimer">--:--</span></div>
+
                 <span>Камней на поле: <b id="blockCount">0</b></span><br>
                 <span>Стадия игры: <b id="gameStage">N/A</b></span><br>
-                <span>Рекомендуемые подсказки:</span>
+                <span id="recommendedHelpersLabel">Рекомендуемые подсказки:</span>
                 <div id="recommendedHelpers">
                 </div><br>
                 <button class="w3-button main_color w3-hover-black tr helperButton" id="allHelpersButton">Все подсказки</button>
@@ -23,6 +26,20 @@
             <div class="w3-container w3-card-4 w3-center" style="padding: 10px">История ходов</div>
             <div id="moveHistory" style="overflow: auto;max-height: calc(100% - 25px);"></div>
         </div>
+        <div id="modal" class="w3-modal">
+            <div class="w3-modal-content w3-animate-top w3-card-4">
+                <header class="w3-container w3-purple"> 
+                    <!--span onclick="document.getElementById('modalMessage').style.display='none'" 
+                    class="w3-button w3-display-topright">&times;</span-->
+                <h2 id="modalHeader">-</h2>
+            </header>
+            <div class="w3-container">
+                <p id="modalText">Some text..</p>
+            </div>
+            <footer class="w3-container w3-purple" id="modalFooter">
+            </footer>
+            </div>
+            </div>
     </div>
 </template>
 
@@ -75,14 +92,21 @@ export default {
             ]));
         },
         sendPass() {
-            move('pass');
+            this.move('pass');
         },
         sendResign() {
-            move('resign');
+            this.move('resign');
         }
     },
     async created() {
+        let gameId = -1;
+        await get("/game/current?token=" + storage('token'), null, data => {
+            if (data.data.gameId === null) {
+                window.location = "/"
+            } else gameId = data.data.gameId;
+        });
         const client = new W3CWebSocket('ws://172.104.137.176:41239');
+        let instance = this;
         client.onopen = function () {
             console.log(client);
             client.send(JSON.stringify([
@@ -96,8 +120,91 @@ export default {
                 ])
             );
         }
+        let firstMapLoad = true;
         client.onmessage = function (event) {
             let data = JSON.parse(event.data);
+            try {
+                if(data.payload.type == "currentMap" || data.payload.type == "newTurn") {
+                    playerColor = data.payload.player=="w"?colors.WHITE:colors.BLACK;
+                    currentTurn = data.payload.turn=="black"?colors.BLACK:colors.WHITE;
+                    canPlace = (playerColor == colors.WHITE && data.payload.turn == "white")||
+                        (playerColor == colors.BLACK && data.payload.turn == "black");
+                    updateHintStatus();
+                    turnBlackEnd = data.payload.turnBlackEndedAt;
+                    turnWhiteEnd = data.payload.turnWhiteEndedAt;
+                    console.log(turnBlackEnd)
+                    console.log(turnWhiteEnd)
+                    updateTimer();
+                }
+                if(data.payload.type == "currentMap") {
+                    console.log("Parsing current map...");
+                    data.payload.currentMap = normalizeMatrix(data.payload.currentMap);
+                    loadMatrix(data.payload.currentMap);
+                    console.log("Current map parsed.");
+                    let playerName = data.payload.you.nickname;
+                    let opponentName = data.payload.opponent.nickname;
+                    if(playerColor == colors.WHITE) {
+                        whitePlayerName = playerName;
+                        blackPlayerName = opponentName;
+                        e("whitePlayerName").innerHTML = playerName;
+                        e("blackPlayerName").innerHTML = opponentName;
+                    } else {
+                        whitePlayerName = opponentName;
+                        blackPlayerName = playerName;
+                        e("whitePlayerName").innerHTML = opponentName;
+                        e("blackPlayerName").innerHTML = playerName;
+                    }
+                    if(firstMapLoad) {
+                        loadStory();
+                        firstMapLoad = false;
+                    }
+                }
+                if(data.payload.type == "newTurn") {
+                    data.payload.currentMap = normalizeMatrix(data.payload.currentMap);
+                    loadMatrix(data.payload.currentMap);
+                    let color = colors.BLACK;
+                    if (data.payload.turn == "black") color = colors.WHITE;
+                    let movePlace = data.payload.place;
+                    if(data.payload.moveType == "pass") movePlace = null;
+                    addMoveToStory(color, data.payload.move.split("(")[0], data.payload.place, false);
+                }
+                if(data.payload.type == "endGame") {
+                    forceStage = 3;
+                    stageDefinder();
+                    let score = data.payload.finalScore; //string
+                    let winner = data.payload.winner.toLowerCase(); //w/b
+                    let loserPlayer = {
+                        nickname: data.payload.loserPlayer.nickname,
+                        finalScore: data.payload.loserPlayer.finalScore,
+                        hintScore: data.payload.loserPlayer.hintScore
+                    };
+                    let winnerPlayer = {
+                        nickname: data.payload.winnerPlayer.nickname,
+                        finalScore: data.payload.winnerPlayer.finalScore,
+                        hintScore: data.payload.winnerPlayer.hintScore
+                    }
+                    showModal(`Игра окончена`,`Счет: <b>${score}</b><br><br>
+                                                Победитель: <b>${winnerPlayer.nickname}</b><br>
+                                                Очки победителя: <b>${winnerPlayer.finalScore}</b> (подсказки: ${winnerPlayer.hintScore})<br><br>
+                                                Проигравший: <b>${loserPlayer.nickname}</b><br>
+                                                Очки проигравшего: <b>${loserPlayer.finalScore}</b> (подсказки: ${loserPlayer.hintScore})<br>
+                                                `,
+                                `<button class="w3-button w3-white w3-hover-white w3-card-4 tr" onclick="window.location.href='/'">В главное меню</button>`);
+                }
+                if(data.payload.type == "notify") {
+                    try {
+                        if(data.error.length > 0) {
+                            canPlace = true;
+                            updateHintStatus();
+                        }
+                    } catch(e) {}
+                }
+                if(data.payload.type == "userConnected") {
+                    console.log(data.payload.turn);
+                }
+            } catch(e) {
+                console.log(e)
+            }
             console.log(data);
         }
         this.client = client;
@@ -105,7 +212,9 @@ export default {
         console.log(data);
 
         let canPlace = true;
-        let last = -1;
+        let playerColor = 0;
+        let whitePlayerName = "";
+        let blackPlayerName = "";
         let constants = [20];
 
         let fantom = [-1, -1];
@@ -121,6 +230,14 @@ export default {
         let putted = [];
         let blocks = [];
         let blockCount = 0;
+        
+        let turnWhiteEnd = -1;
+        let turnBlackEnd = -1;
+        let currentTurn = 0;
+
+        let forceStage = -1;
+
+        let moveStory = [];
 
         const colors = {
             BLACK: 1,
@@ -135,6 +252,7 @@ export default {
                 this.label = label;
                 this.stage = stage;
                 this.sender = sender;
+                this.enabled = true;
             }
         };
         let helpers = [
@@ -168,7 +286,11 @@ export default {
             const xAlign = "ABCDEFGHJKLMN";
             return xAlign[x] + (13 - y);
         }
-
+        function normalizeMatrix(matrix) {
+            for(let i in matrix) 
+                matrix[i] = matrix[i].reverse();
+            return matrix;
+        }
         //load game board
         function loadMatrix(matrix) {
             blockCount = 0;
@@ -202,7 +324,7 @@ export default {
                 }
                 blocks.push(subBlock);
             }
-            for (i of putted) {
+            for (let i of putted) {
                 e(i).remove();
             }
             putted = [];
@@ -235,14 +357,17 @@ export default {
                 generateBlock(actualX, actualY, colors.SELECTOR);
                 return;
             }
-            if (last == colors.BLACK) last = colors.WHITE;
-            else last = colors.BLACK;
             removeFantom();
-            generateBlock(actualX, actualY, last);
-            addMoveToStory(last, "Player" + last, parseField(actualX, actualY));
+            /*generateBlock(actualX, actualY, last);
+            addMoveToStory(last, "Player" + last, parseField(actualX, actualY));*/
+            canPlace = false;
+            updateHintStatus();
+            instance.sendMove(parseField(actualX,actualY));
+            console.log("Sent move");
         }
 
         function onCellHover(event, x, y) {
+            if(!canPlace) return removeFantom();
             let actualX = x;
             let actualY = y;
             if (event != null) {
@@ -264,7 +389,7 @@ export default {
                 return removeFantom();
             if (fantom[0] != actualX || fantom[1] != actualY) {
                 removeFantom();
-                let fantomColor = last == colors.BLACK ? colors.WHITE : colors.BLACK;
+                let fantomColor = playerColor;
                 if (selectorMode) fantomColor = colors.SELECTOR;
                 generateBlock(actualX, actualY, fantomColor, "fantom");
             }
@@ -351,46 +476,128 @@ export default {
                 } catch (e) {}
             hints = []
         }
-        //sidebar
-        function addMoveToStory(color, player, position) {
-            e("moveHistory").innerHTML += movePrefab.replace("{MOVE}", `<i class="fas circle fa-circle w3-text-${color==1?'black':'white'}"></i> <span>${player}</span> <b>${position}</b>`);
+        //storybar
+        function addMoveToStory(color, player, position, loaded) {
+            e("moveHistory").innerHTML += movePrefab.replace("{MOVE}", `<i class="fas circle fa-circle w3-text-${color==1?'black':'white'}"></i> <span>${player}</span> <b>${position==null?'Пасс':position}</b>`);
+            moveStory.push([color,player,position]);
+            if(!loaded) {
+                localStorage.setItem("story", JSON.stringify(moveStory));
+                localStorage.setItem("storyMatrix", JSON.stringify(blocks));
+                localStorage.setItem("storyTurn", currentTurn);
+            }
         }
-        //parse incoming data
-        function loadTurn(data) {
-            data = JSON.parse(data);
-            loadMatrix(data.payload.currentMap);
-            let color = colors.BLACK;
-            if (data.payload.turn == "black") color = colors.WHITE;
-            addMoveToStory(color, data.payload.move.split("(")[0], data.payload.place);
+        function loadStory() {
+            if(localStorage.getItem("savedStory")) {
+                if(localStorage.getItem("savedStory") == gameId) {
+                    for(let i of JSON.parse(localStorage.getItem("story")))
+                        addMoveToStory(i[0],i[1],i[2],true);
+                    if(firstMapLoad && currentTurn != localStorage.getItem("storyTurn")) {
+                        /*let turnInStory = localStorage.getItem("storyTurn");
+                        let matrix = localStorage.getItem("storyMatrix");
+                        for(let x in matrix) {
+                            for(let y in matrix[x]) {
+                                if(matrix[x][y] != blocks[x][y] && matrix[x][y] != 0) {
+                                    addMoveToStory(matrix[x][y],matrix[x][y]==colors.WHITE?whitePlayerName:blackPlayerName,parseField(x,y),false);
+                                    turnInStory = matrix[x][y]==colors.WHITE?colors.BLACK:colors.WHITE;
+                                }
+                            }
+                        }
+                        if(turnInStory != currentTurn) {
+                            addMoveToStory(turnInStory,turnInStory==colors.WHITE?whitePlayerName:blackPlayerName,null,false)
+                        }*/
+                    }
+                    return;
+                }
+            }
+            localStorage.setItem("savedStory",gameId);
+            localStorage.setItem("story", JSON.stringify(moveStory));
+            localStorage.setItem("storyMatrix", JSON.stringify(blocks));
+            localStorage.setItem("storyTurn", currentTurn);
         }
         //helper stuff
         function stageDefinder() {
-            const stages = ["Начальная", "Основная", "Финальная"];
+            const stages = ["Начальная", "Основная", "Финальная", "Игра окончена"];
             e("blockCount").innerHTML = blockCount;
             let currentStage = 0;
-            if (blockCount > 15) currentStage = 1;
-            if (blockCount > size * size * 0.7) currentStage = 2
+            if (blockCount > 180 * 0.15) currentStage = 1;
+            if (blockCount > 180 * 0.8) currentStage = 2
+            if(turnBlackEnd > -1 && turnWhiteEnd > -1) {
+                let time = (new Date()).getTime();
+                if(time-turnBlackEnd > 0 || time-turnWhiteEnd > 0) {
+                    currentStage = 3
+                }
+            }
+            if(forceStage > -1) currentStage = forceStage;
             e("gameStage").innerHTML = stages[currentStage];
 
             e("recommendedHelpers").innerHTML = "";
             e("allHelpers").innerHTML = "";
-
-            for (let i of helpers) {
-                let helperButton = document.createElement("button");
-                helperButton.innerHTML = i.label;
-                helperButton.onclick = i.sender;
-                if (helpersBlocked) helperButton.setAttribute("disabled", "true")
-                if (i.stage == currentStage) {
-                    helperButton.setAttribute("class", "w3-button w3-purple w3-hover-cyan tr helperButton");
-                    e("recommendedHelpers").appendChild(helperButton);
-                } else {
-                    helperButton.setAttribute("class", "w3-button w3-gray w3-hover-black tr helperButtonSmall");
-                    e("allHelpers").appendChild(helperButton);
+            if(currentStage != 3) {
+                for (let i of helpers) {
+                    let helperButton = document.createElement("button");
+                    if(!i.enabled) helperButton.setAttribute("disabled","true");
+                    helperButton.innerHTML = i.label;
+                    helperButton.onclick = i.sender;
+                    if (helpersBlocked) helperButton.setAttribute("disabled", "true")
+                    if (i.stage == currentStage) {
+                        helperButton.setAttribute("class", "w3-button w3-purple w3-hover-cyan tr helperButton");
+                        e("recommendedHelpers").appendChild(helperButton);
+                    } else {
+                        helperButton.setAttribute("class", "w3-button w3-hover-black tr helperButtonSmall");
+                        e("allHelpers").appendChild(helperButton);
+                    }
                 }
+            } else {
+                e("recommendedHelpersLabel").style.display = "none";
+                e("allHelpersButton").style.display = "none";
+                e("allHelpers").style.display = "none";
             }
             if (allHelpersShown) {
                 allHelpersShown = false;
                 e("allHelpersButton").click();
+            }
+        }
+        function updateHintStatus() {
+            for(let i of helpers)
+                i.enabled = canPlace;
+            stageDefinder();
+        }
+        //modal
+        function showModal(header,text,footer) {
+            if(!footer) footer = `<button class="w3-button w3-red w3-hover-orange tr" onclick="document.getElementById('modal').style.display='none'">Закрыть</button>`;
+            e('modal').style.display='block';
+            e('modalHeader').innerHTML = header;
+            e('modalText').innerHTML = text;
+            e('modalFooter').innerHTML = footer;
+        }
+        let firstTimer = true;
+        //timer
+        function updateTimer() {
+            if(forceStage == 3) return;
+            function parseTime(time) {
+                let seconds = Math.floor(-time/1000);
+                let minutes = Math.floor(seconds/60);
+                seconds = seconds%60;
+                if(seconds < 10) seconds = "0"+seconds;
+                return minutes+":"+seconds;
+            }
+            let time = (new Date()).getTime();
+            let blackRemain = time-turnBlackEnd;
+            let whiteRemain = time-turnWhiteEnd;
+            if(blackRemain > 0 || whiteRemain > 0) {
+                e("whiteTimer").innerHTML = "--:--";
+                e("blackTimer").innerHTML = "--:--";
+                return;
+            }
+            if(firstTimer) {
+                e("whiteTimer").innerHTML = parseTime(whiteRemain);
+                e("blackTimer").innerHTML = parseTime(blackRemain);
+                firstTimer = false;
+            }
+            if(currentTurn == colors.WHITE) {
+                e("whiteTimer").innerHTML = parseTime(whiteRemain);
+            } else {
+                e("blackTimer").innerHTML = parseTime(blackRemain);
             }
         }
         //load page
@@ -463,7 +670,11 @@ export default {
                     e("allHelpers").style.display = "none";
                 }
             }
+            e("passButton").onclick = instance.sendPass;
+            e("resignButton").onclick = instance.sendResign;
         }, 10);
+        //timer calculator
+        setInterval(updateTimer, 1000);
     }
 }
 </script>

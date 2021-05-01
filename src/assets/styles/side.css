@@ -8,8 +8,13 @@
 }
 .helperButton {
     width:100%;
+    border-bottom: 3px solid #3e1a75;
+}
+.helperButton:last-child {
+    border:none;
 }
 .helperButtonSmall {
     width:100%;
     padding: 2px;
+    background-color: #dec8ff;
 }

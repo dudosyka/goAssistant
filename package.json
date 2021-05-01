@@ -12,7 +12,8 @@
     "graphql": "^15.4.0",
     "graphql-request": "^3.4.0",
     "vue": "^2.6.11",
-    "vue-router": "^3.2.0"
+    "vue-router": "^3.2.0",
+    "websocket": "^1.0.34"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
