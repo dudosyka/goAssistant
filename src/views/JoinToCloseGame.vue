@@ -8,22 +8,18 @@
         <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/closegame">Назад</router-link>
       </div>
     </article>
-    <div style="display: block" class="w3-modal" v-show="modal">
-      <div class="w3-modal-content w3-animate-top w3-card-4">
-        <header class="w3-container w3-purple">
-          <span @click="modal = false"
-          class="w3-button w3-display-topright">&times;</span>
-          <h2>Modal Header</h2>
-        </header>
-        <div class="w3-container">
-          <p>Some text..</p>
-          <p>Some text..</p>
+    <transition name="top-fade">
+      <aside class="modal_bg" v-show="modal">
+        <div class="modal">
+          <header class="modal">
+            <h1 class="modal">Error</h1>
+            <span></span>
+            <button class="modal-close" @click="modal = false">❌</button>
+          </header>
+          <p class="modal">Ошибка подключения</p>
         </div>
-        <footer class="w3-container w3-purple">
-          <p>Modal Footer</p>
-        </footer>
-      </div>
-    </div>
+      </aside>
+    </transition>
   </main>
 </template>
 
@@ -33,7 +29,7 @@
     data() {
       return {
         code: "",
-        modal: true,
+        modal: false,
       }
     },
     components: {

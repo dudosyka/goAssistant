@@ -2,6 +2,7 @@ body {
   margin: 0;
   font-family: sans-serif;
   background-color: #543389;
+  overflow: hidden;
 }
 
 /* transitions */
@@ -164,6 +165,7 @@ body {
   background: #fff;
   padding: 20px;
   margin: 0;
+  font-size: 30px;
 }
 /* End patters */
 
