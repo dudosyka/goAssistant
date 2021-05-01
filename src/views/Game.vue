@@ -22,7 +22,7 @@
             </div>
         </div>
     </div>
-  <div class="w3-sidebar w3-bar-block w3-white" style="width:250px;right:0;top:0px;">
+  <div class="w3-sidebar w3-bar-block w3-white" style="width:250px;right:0;top:0px;overflow:hidden;">
         <div class="w3-container w3-card-4 w3-center" style="padding: 10px">История ходов</div>
         <div id="moveHistory" style="overflow: auto;max-height: calc(100% - 25px);"></div>
     </div>
