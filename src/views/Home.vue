@@ -1,5 +1,12 @@
 <template>
   <main class="menu">
+    <aside class="modal loading" v-show="search">
+      <header class="modal">
+        <h1 class="modal">Ожидание соперника</h1>
+        <span></span>
+        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+      </header>
+    </aside>
     <article class="form_window menu">
       <div class="">
         <button @click='continueGame()' class="button full-width w3-button w3-card-4 tr w3-hover-white point" v-if="alreadyStart">Продолжить игру</button>
@@ -47,7 +54,8 @@ import * as Hint from "../Models/Hint";
       return {
           alreadyStart: false,
           ava: 'https://www.castorama.ru/media/catalog/product/cache/image/1800x/040ec09b1e35df139433887a97daa66f/2/e/2ef250_510229_1.jpg',
-          nick: 'ex@mple'
+          nick: 'ex@mple',
+          search: false
       }
     },
     components: {
