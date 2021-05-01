@@ -2,6 +2,8 @@
   <div class="home">
   <div style="text-align: center;">
     <div id="game"></div><br>
+    <button class="w3-button w3-white w3-hover-white tr" id="passButton" style="margin-right:10px;width:100px">Пас</button>
+    <button class="w3-button w3-white w3-hover-white tr" id="giveUpButton" style="width:100px">Сдаться</button><br>
     <span id="specialMessages"></span>
   </div>
 
@@ -20,7 +22,7 @@
             </div>
         </div>
     </div>
-  <div class="w3-sidebar w3-bar-block w3-white" style="width:250px;right:0;top:0px;">
+  <div class="w3-sidebar w3-bar-block w3-white" style="width:250px;right:0;top:0px;overflow:hidden;">
         <div class="w3-container w3-card-4 w3-center" style="padding: 10px">История ходов</div>
         <div id="moveHistory" style="overflow: auto;max-height: calc(100% - 25px);"></div>
     </div>
@@ -49,8 +51,8 @@ export default {
   },
   methods: {
     async loadGame(gameId) {
-        await get('/game/info/' + storage('curGameId') + "?token=" + storage('token'), null, data => {
-            console.log(data);
+        return get('/game/info/' + storage('curGameId') + "?token=" + storage('token'), null, data => {
+            return data;
         });
     },
     move(type) {
@@ -430,7 +432,7 @@ export default {
             }
         }
         //init stuff
-        loadTurn(`{"payload":{"type":"newTurn","turn":"white","currentMap":[[0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0]],"move":"Mulon(\u0447\u0435\u0440\u043d\u044b\u0435) \u0441\u0434\u0435\u043b\u0430\u043b \u0445\u043e\u0434 H10","turnBlackEndedAt":1619815434000,"turnWhiteEndedAt":1619815448000,"place":"H10"},"time":1619814845412,"error":""}`);
+        stageDefinder();
         let allHelpersShown = false;
         e("allHelpersButton").onclick = function() {
             allHelpersShown = !allHelpersShown;

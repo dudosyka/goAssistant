@@ -15,7 +15,7 @@
               <input v-model='nickname' type="text" class="input" placeholder="Nickname" style="margin:0;">
             </section>
           </div>
-          <button @click='auth()' class="right-arrow w3-button w3-card-4 tr w3-hover-white">&#10148;</button>
+          <button @click='auth()' class="button w3-button w3-card-4 tr w3-hover-white">&#10148;</button>
         </div>
       </article>
     </main>
