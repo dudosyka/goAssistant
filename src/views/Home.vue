@@ -1,6 +1,6 @@
 <template>
   <main class="menu">
-    <aside class="modal loading" v-show="search">
+    <aside class="modal loading" v-show="showLoader">
       <header class="modal">
         <h1 class="modal">Ожидание соперника</h1>
         <span></span>
@@ -56,6 +56,7 @@ import * as Hint from "../Models/Hint";
           ava: 'https://www.castorama.ru/media/catalog/product/cache/image/1800x/040ec09b1e35df139433887a97daa66f/2/e/2ef250_510229_1.jpg',
           nick: 'ex@mple',
           search: false
+
       }
     },
     components: {
@@ -63,7 +64,9 @@ import * as Hint from "../Models/Hint";
     },
     methods: {
         continueGame(start = true) {
+          this.showLoader = true;
             get("/game/current?token=" + storage('token'), null, data => {
+                this.showLoader = false;
                 if (data.data.gameId !== null) {
                   this.alreadyStart = true;
                 }
@@ -77,20 +80,24 @@ import * as Hint from "../Models/Hint";
             });
         },
         randomGame() {
+          this.showLoader = true;
             post("/game/create/random?token=" + storage('token'), null, data => {
+              this.showLoader = false;
                 setStorage('curGameId', data.data.gameId);
                 startGame(data.data.gameId);
             })
         },
         startGameWithBot() {
+          this.showLoader = true;
             post("/game/create/bot?token=" + storage('token'), null, data => {
+              this.showLoader = false;
                 setStorage('curGameId', data.data.gameId);
                 startGame(data.data.gameId);
             })
         }
     },
     async created() {
-        let hint = new Hint.default(11494);
+        // let hint = new Hint.default(11494);
         // const playerBestMove = await hint.bestMoves(1);
         // const enemyBestMove = await hint.bestMovesEnemy(3);
         // const bestMovesOf = await hint.bestMovesOf(playerBestMove);
@@ -98,8 +105,8 @@ import * as Hint from "../Models/Hint";
         // const winner = await hint.winner();
         // const heatmapQuarter = await hint.heatmapQuarter(1);
         // const heatmapQuarters = await hint.heatmapQuarters([1,4]);
-        const heatmapBestZone = await hint.heatmapBestZone();
-        const heatmapEnemyBestZone = await hint.heatmapEnemyBestZone();
+        // const heatmapBestZone = await hint.heatmapBestZone();
+        // const heatmapEnemyBestZone = await hint.heatmapEnemyBestZone();
         // console.log(playerBestMove);
         // console.log(enemyBestMove);
         // console.log(bestMovesOf);
@@ -107,8 +114,8 @@ import * as Hint from "../Models/Hint";
         // console.log(winner);
         // console.log(heatmapQuarter);
         // console.log(heatmapQuarters);
-        console.log(heatmapBestZone);
-        console.log(heatmapEnemyBestZone);
+        // console.log(heatmapBestZone);
+        // console.log(heatmapEnemyBestZone);
         // console.log('res', hint);
         this.continueGame(false);
     }

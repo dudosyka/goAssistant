@@ -55,6 +55,8 @@ global.startGame = (gameId) => {
     window.location = "/game";
 }
 
+global.showLoader = false;
+
 router.afterEach(async (to, from) => {
     let isLogin = true;
     isLogin = (token !== null);

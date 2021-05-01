@@ -1,5 +1,12 @@
 <template>
   <main class="menu">
+  <aside class="modal loading" v-show="search">
+    <header class="modal">
+      <h1 class="modal">Ожидание соперника</h1>
+      <span></span>
+      <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    </header>
+  </aside>
     <article class="form_window menu">
       <h1 class="title">Укажите код гобана</h1>
       <div class="">
@@ -37,6 +44,7 @@
     },
     methods: {
         join() {
+
             post('/game/join/' + this.code + "?token=" + storage('token'), {token: storage('token')}, data => {
                 get("/game/current?token=" + storage('token'), null, data => {
                     if (data.data.gameId === null) {

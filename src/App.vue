@@ -21,7 +21,7 @@
     name: 'Menu',
     data() {
       return {
-          alreadyLogin: false,
+          alreadyLogin: false
       }
     },
     components: {
