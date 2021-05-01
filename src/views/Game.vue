@@ -305,16 +305,68 @@ export default {
         ];*/
         let hint = new Hint.default(gameId);
         let helpers = [
-            new Helper("В какой четверти играть?",0,function(){
-                
+            new Helper("В какой четверти играть?",0,async function(){
+                togglePlacement(true);
+                console.log("Fetching best quarter");
+                const result = await hint.heatmapBestZone();
+                console.log("Hint fetched");
+                console.log(result)
+                for(let x=0;x<size;x++) {
+                    for(let y=0;y<size;y++) {
+                        if(defineQuarter(x,y)==result) addHint(x,y);
+                    }
+                }
+                togglePlacement();
             }),
             new Helper("Лучший ход из 4",0,function(){
-                toggleSelector("Выберите 4 поля",4,function(){
-                    
+                toggleSelector("Выберите 4 поля",4,async function(){
+                    togglePlacement(true);
+                    console.log("Fetching best move of selected");
+                    let converted = [];
+                    for(let i of selectedPoints) {
+                        converted.push(parseField(i[0],i[1]));
+                    }
+                    debugger;
+                    const result = await hint.bestMovesOf(converted);
+                    console.log("Hint fetched");
+                    for(let i of result) {
+                        let coords = parseXY(i);
+                        addHint(coords[0],coords[1]);
+                    }
+                    console.log(result)
+                    togglePlacement();
+                    clearSelectors();
                 })
             }),
-            new Helper("Тепловая карта доски",1,function(){
-
+            new Helper("Тепловая карта доски",1,async function(){
+                function getMaxOfArray(numArray) {
+                    return Math.max.apply(null, numArray);
+                }
+                togglePlacement(true);
+                console.log("Fetching heatmap");
+                const result = await hint.fullHeatmap();
+                console.log("Hint fetched");
+                console.log(result)
+                let matrix = normalizeMatrix(result);
+                console.log(matrix);
+                let max = -1;
+                for(let i of matrix) {
+                    let localMax = getMaxOfArray(i);
+                    if(localMax > max) max = localMax
+                }
+                for(let x in matrix) {
+                    for(let y in matrix[x]) {
+                        let opacity = 0.9/(max/matrix[x][y])
+                        if(opacity>0) opacity += 0.02;
+                        addHint(x,y,opacity);
+                    }
+                }
+                /*for(let x=0;x<size;x++) {
+                    for(let y=0;y<size;y++) {
+                        if(defineQuarter(x,y)==result) addHint(x,y);
+                    }
+                }*/
+                togglePlacement();
             }),
             new Helper("Зоны требующие защиту",1,async function(){
                 togglePlacement(true);
@@ -374,6 +426,16 @@ export default {
         function parseXY(field) {
             const xAlign = "ABCDEFGHJKLMN";
             return [xAlign.indexOf(field[0]),(13-field.slice(1,3))];
+        }
+        function defineQuarter(x,y) {
+            if(x<=size/2) {
+                if(y<=size/2)
+                    return 2;
+                return 3;
+            }
+            if(y<=size/2)
+                return 1
+            return 4;
         }
         function togglePlacement(clear) {
             if(clear) clearHints();
