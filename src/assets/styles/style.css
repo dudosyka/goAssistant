@@ -69,6 +69,7 @@ body {
 
 .input {
   border: none;
+  border-color: #fff;
   outline: none;
   position: relative;
 
@@ -81,19 +82,8 @@ body {
   margin-bottom: 10px;
   transition: border-color 0.3s;
 }
-.input::after {
-  position: absolute;
-  top: 50%; transform: translateY(-50%);
-  right: 20px;
-  content: '';
-  width: 20px;
-  height: 20px;
-  background-color: #1f1233;
-  border-radius: 50%;
-}
 .input:hover {
-  border-right: 5px solid #1f1233;
-
+  border-right: 10px solid #a999c4;
 }
 
 .output {
