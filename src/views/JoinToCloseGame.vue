@@ -8,6 +8,22 @@
         <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/closegame">Назад</router-link>
       </div>
     </article>
+    <div style="display: block" class="w3-modal" v-show="modal">
+      <div class="w3-modal-content w3-animate-top w3-card-4">
+        <header class="w3-container w3-purple">
+          <span @click="modal = false"
+          class="w3-button w3-display-topright">&times;</span>
+          <h2>Modal Header</h2>
+        </header>
+        <div class="w3-container">
+          <p>Some text..</p>
+          <p>Some text..</p>
+        </div>
+        <footer class="w3-container w3-purple">
+          <p>Modal Footer</p>
+        </footer>
+      </div>
+    </div>
   </main>
 </template>
 
@@ -16,7 +32,8 @@
     name: 'JoinToCloseGame',
     data() {
       return {
-        code: ""
+        code: "",
+        modal: true,
       }
     },
     components: {
