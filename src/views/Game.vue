@@ -399,6 +399,22 @@ export default {
                 console.log(result)
                 togglePlacement();
             }),
+            new Helper("Прогноз игры",1,async function(){
+                togglePlacement(true);
+                console.log("Fetching future moves");
+                const result = await hint.futureMoves(10);
+                console.log("Hint fetched");
+                console.log(result);
+                let baseOpacity = 0.9;
+                let count=0;
+                for(let i of result.data.hint) {
+                    count++;
+                    let coords = parseXY(i.move);
+                    addHint(coords[0],coords[1],baseOpacity,count%2==1);
+                    baseOpacity *= 0.8
+                }
+                togglePlacement();
+            }),
             new Helper("Перевес в очках",2,async function(){
                 togglePlacement(true);
                 console.log("Fetching superiority");
@@ -560,7 +576,7 @@ export default {
                 generateBlock(actualX, actualY, fantomColor, "fantom");
             }
         }
-        function generateBlock(x, y, c, o) {
+        function generateBlock(x, y, c, o, s) {
             let block = document.createElement("div");
             block.setAttribute("id", "block" + x + "_" + y);
             if (o == "fantom") {
@@ -613,6 +629,7 @@ export default {
             }
             if (c == 'hint') {
                 block.setAttribute("style", "opacity:" + o);
+                if(s) block.setAttribute("class", block.getAttribute("class").replace("block_hint","block_hint_special"))
                 setOnHover();
                 return setOnClick();
             }
@@ -623,10 +640,10 @@ export default {
             }
         }
         //hints stuff
-        function addHint(x, y, opacity) {
+        function addHint(x, y, opacity, special) {
             if (blocks[x][y] != 0) return;
             hints.push([x, y]);
-            generateBlock(x, y, colors.HINT, opacity);
+            generateBlock(x, y, colors.HINT, opacity, special);
         }
         function addHintZone(x,y,radius,opacity) {
             console.log(parseField(x,y));

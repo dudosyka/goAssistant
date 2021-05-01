@@ -72,6 +72,10 @@
     background-color: red;
     opacity: 0.4;
 }
+.block_hint_special {
+    background-color: blue;
+    opacity: 0.4;
+}
 .block_selector {
     background-color: aqua;
     opacity: 0.4;

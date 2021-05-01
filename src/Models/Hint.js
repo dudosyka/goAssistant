@@ -86,5 +86,11 @@ Hint.prototype.heatmapEnemyBestZone = async function (is_quarters) {
     });
 }
 
+Hint.prototype.futureMoves = async function (deep) {
+    return await get('/hints/future-moves?token='+storage("token")+'&centaur_token=' + ct + "&count=" + deep + "&game_id=" + this.gameId, null, data => {
+        return data;
+    });
+}
+
 
 export default Hint;
