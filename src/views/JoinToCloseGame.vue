@@ -8,17 +8,22 @@
         <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/closegame">Назад</router-link>
       </div>
     </article>
-    <transition name="top-fade">
-      <div class="modal_bg" v-show="modal">
-        <div class="modal">
-          <header>
-              <h1 class="modal-title">Lorem ipsum</h1><span></span>
-              <button class="modal-close" @click="modal = false">❌</button>
-          </header>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <div style="display: block" class="w3-modal" v-show="modal">
+      <div class="w3-modal-content w3-animate-top w3-card-4">
+        <header class="w3-container w3-purple">
+          <span @click="modal = false"
+          class="w3-button w3-display-topright">&times;</span>
+          <h2>Modal Header</h2>
+        </header>
+        <div class="w3-container">
+          <p>Some text..</p>
+          <p>Some text..</p>
         </div>
+        <footer class="w3-container w3-purple">
+          <p>Modal Footer</p>
+        </footer>
       </div>
-    </transition>
+    </div>
   </main>
 </template>
 
