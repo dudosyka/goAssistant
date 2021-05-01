@@ -2,17 +2,10 @@
   <main class="menu">
     <article class="form_window menu">
       <div class="">
-<<<<<<< Updated upstream
-        <button @click='continueGame()' class="button-light w3-button w3-card-4 tr w3-hover-white">Продолжить игру</button>
-        <button @click='randomGame()' class="button-light w3-button w3-card-4 tr w3-hover-white" :disabled="alreadyStart">Игра со случайным соперником</button>
-        <button @click='startGameWithBot()' class="button-light w3-button w3-card-4 tr w3-hover-white" :disabled="alreadyStart">Игра с ИИ</button>
-        <button class="button-light w3-button w3-card-4 tr w3-hover-white" onclick="window.location = '/closegame'" :disabled="alreadyStart">Частная игра</button>
-=======
         <button @click='continueGame()' class="button full-width w3-button w3-card-4 tr w3-hover-white" v-if="alreadyStart">Продолжить игру</button>
         <button @click='randomGame()' class="button full-width w3-button w3-card-4 tr w3-hover-white hi" :disabled="alreadyStart">Игра со случайным соперником</button>
         <button @click='startGameWithBot()' class="button full-width w3-button w3-card-4 tr w3-hover-white lamp" :disabled="alreadyStart">Игра с ИИ</button>
         <router-link v-bind:class="{button:true, 'full-width':true, 'w3-button':true, 'w3-card-4':true, tr:true, 'w3-hover-white':true, disabled: alreadyStart, loocker:true}" to="closegame">Частная игра</router-link>
->>>>>>> Stashed changes
       </div>
     </article>
   </main>
