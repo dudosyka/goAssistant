@@ -56,3 +56,6 @@
     padding: 2px;
     background-color: #dec8ff;
 }
+#recommendedHelpersLabel {
+  white-space: nowrap;
+}

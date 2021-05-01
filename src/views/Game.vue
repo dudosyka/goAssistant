@@ -7,21 +7,21 @@
             <span id="specialMessages"></span>
         </div>
 
-        <div class="w3-sidebar w3-bar-block w3-white" style="width:250px;left:0;top:0px;line-height:2;">
+        <div class="w3-sidebar w3-bar-block w3-white" style="width:270px;left:0;top:0px;line-height:2;">
             <div class="w3-container w3-card-2 w3-center" style="padding: 10px">GoAssistant</div>
 
             <div class="bar">
               <div class="section">
-                <div class="moveDiv"><i class="far circle fa-circle w3-text-black"></i> <b id="whitePlayerName" class="textLimiter">Загрузка...</b><span class="time-icon">⏳</span><span id="whiteTimer">--:--</span></div>
-                <div class="moveDiv"><i class="fas circle fa-circle w3-text-black"></i> <b id="blackPlayerName" class="textLimiter">Загрузка...</b><span class="time-icon">⏳</span><span id="blackTimer">--:--</span></div>
+                <div class="moveDiv">&#9898; <b id="whitePlayerName" class="textLimiter">Загрузка...</b><span class="time-icon">⏳</span><span id="whiteTimer">--:--</span></div>
+                <div class="moveDiv">&#9899; <b id="blackPlayerName" class="textLimiter">Загрузка...</b><span class="time-icon">⏳</span><span id="blackTimer">--:--</span></div>
               </div>
 
               <div class="section">
-                <span class="opposite"><div><span class="icon">🪨 </span>Камней на поле:</div> <b id="blockCount">0</b></span><br>
-                <span class="opposite">Стадия игры: <b id="gameStage">N/A</b></span>
+                <span class="opposite"><div><span class="icon">&#128028; </span>Камней на поле: </div><b id="blockCount">0</b></span><br>
+                <span class="opposite"><div>{{stage}} Стадия игры: </div><b id="gameStage">N/A</b></span>
               </div>
 
-                <span id="recommendedHelpersLabel">Рекомендуемые подсказки:</span>
+                <span id="recommendedHelpersLabel"><span class="icon">💡</span> Рекомендуемые подсказки</span>
                 <div id="recommendedHelpers">
                 </div><br>
                 <button class="w3-button main_color w3-hover-black tr helperButton" id="allHelpersButton">Все подсказки</button>
@@ -34,6 +34,7 @@
             <div class="w3-container w3-card-4 w3-center" style="padding: 10px">История ходов</div>
             <div id="moveHistory" style="overflow: auto;max-height: calc(100% - 25px);padding-bottom:18px;"></div>
         </div>
+        
         <div id="modal" class="w3-modal">
             <div class="w3-modal-content w3-animate-top w3-card-4">
                 <header class="w3-container w3-purple">
@@ -68,6 +69,7 @@ export default {
         return {
             game: null,
             client: null,
+            stage: '🟢' //&#128994; &#128993; &#128308;
         }
     },
     methods: {
