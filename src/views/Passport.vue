@@ -9,7 +9,7 @@
           <div class="output-passport full-width">{{user.email}}</div>
           <div class="output-passport full-width">{{user.pts}}</div>
         </div>
-        <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/closegame">Назад</router-link>
+        <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/">Назад</router-link>
         <div class="score-table">
           <div class="output full-width score-td">
             <img src="https://www.castorama.ru/media/catalog/product/cache/image/1800x/040ec09b1e35df139433887a97daa66f/f/d/fd9d0a_382026_1.jpg">
