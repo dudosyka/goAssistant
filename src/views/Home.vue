@@ -2,10 +2,10 @@
   <main class="menu">
     <article class="form_window menu">
       <div class="">
-        <button @click='continueGame()' class="button full-width w3-button w3-card-4 tr w3-hover-white" :disabled="!alreadyStart">Продолжить игру</button>
-        <button @click='randomGame()' class="button full-width w3-button w3-card-4 tr w3-hover-white" :disabled="alreadyStart">Игра со случайным соперником</button>
-        <button @click='startGameWithBot()' class="button full-width w3-button w3-card-4 tr w3-hover-white" :disabled="alreadyStart">Игра с ИИ</button>
-        <router-link v-bind:class="{button:true, 'full-width':true, 'w3-button':true, 'w3-card-4':true, tr:true, 'w3-hover-white':true, disabled: alreadyStart}" to="closegame">Частная игра</router-link>
+        <button @click='continueGame()' class="button-light w3-button w3-card-4 tr w3-hover-white">Продолжить игру</button>
+        <button @click='randomGame()' class="button-light w3-button w3-card-4 tr w3-hover-white" :disabled="alreadyStart">Игра со случайным соперником</button>
+        <button @click='startGameWithBot()' class="button-light w3-button w3-card-4 tr w3-hover-white" :disabled="alreadyStart">Игра с ИИ</button>
+        <button class="button-light w3-button w3-card-4 tr w3-hover-white" onclick="window.location = '/closegame'" :disabled="alreadyStart">Частная игра</button>
       </div>
     </article>
   </main>
