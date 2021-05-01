@@ -1,13 +1,13 @@
 <template>
   <main class="menu">
-    <article class="form_window menu">
+    <article class="window menu">
       <h1 class="title">Профиль</h1>
       <div class="back">
         <img src="src/assets/example.png">
         <div class="back-profile">
-          <div class="output full-width" style="text-align: center; width: 100%">Lorem Ipsum</div>
-          <div class="output full-width" style="text-align: center; width: 100%">Lorem Ipsum</div>
-          <div class="output full-width" style="text-align: center; width: 100%">Lorem Ipsum</div>
+          <div class="output full-width">Lorem Ipsum</div>
+          <div class="output full-width">Lorem Ipsum</div>
+          <div class="output full-width">Lorem Ipsum</div>
         </div>
         <div><div class="output full-width"></div></div>
       </div>
@@ -21,17 +21,18 @@
 img{
   width: 200px;
   height: 200px;
-  margin-right: 20px;
 }
 .back{
-  display: flex;
-  flex-flow: row;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr;
+  grid-gap: 20px;
+  margin-bottom: 30px;
 }
 .back-profile{
-  display: flex;
-  flex-flow: column;
-  margin: 0 40px 0 0;
+
+}
+.window {
+  max-width: 1000px;
 }
 
 </style>
