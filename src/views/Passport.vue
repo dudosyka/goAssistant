@@ -9,7 +9,7 @@
           <div class="output-passport full-width">{{user.email}}</div>
           <div class="output-passport full-width">{{user.pts}}</div>
         </div>
-        <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/closegame">Назад</router-link>
+        <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/">Назад</router-link>
         <div class="score-table">
           <div class="output full-width score-td" v-for="score in user.games_history">
             <img v-bind:src="score.player.avatar">
