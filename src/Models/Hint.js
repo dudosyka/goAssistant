@@ -17,7 +17,7 @@ Hint.prototype.lateGame = function () {
 }
 
 Hint.prototype.quarter = function () {
-    get('/hints/best-moves', { token: storage('token'), centaur_token: ct, count: 1, game_id:  })
+    get('/hints/best-moves', { token: storage('token'), centaur_token: ct, count: 1, game_id: })
 }
 
 module.export = Hint;
