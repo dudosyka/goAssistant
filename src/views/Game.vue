@@ -51,6 +51,7 @@
 
 <script>
 import { w3cwebsocket as W3CWebSocket } from "websocket";
+import * as Hint from "../Models/Hint";
 
 export default {
     name: 'Home',
@@ -302,9 +303,10 @@ export default {
             new Helper("Финальная 1", 2, function() {}),
             new Helper("Финальная 2", 2, function() {})
         ];*/
+        let hint = new Hint.default(gameId);
         let helpers = [
             new Helper("В какой четверти играть?",0,function(){
-
+                
             }),
             new Helper("Лучший ход из 4",0,function(){
                 toggleSelector("Выберите 4 поля",4,function(){
@@ -314,17 +316,51 @@ export default {
             new Helper("Тепловая карта доски",1,function(){
 
             }),
-            new Helper("Зоны требующие защиту",1,function(){
-
+            new Helper("Зоны требующие защиту",1,async function(){
+                togglePlacement(true);
+                console.log("Fetching protect zones");
+                const result = await hint.bestMovesEnemy(4);
+                console.log("Hint fetched");
+                for(let i of result) {
+                    let coords = parseXY(i);
+                    addHintZone(coords[0],coords[1],2);
+                }
+                console.log(result)
+                togglePlacement();
             }),
-            new Helper("Лучший ход",1,function(){
-
+            new Helper("Лучший ход",1,async function(){
+                togglePlacement(true);
+                console.log("Fetching best move");
+                const result = await hint.bestMoves(1);
+                console.log("Hint fetched");
+                for(let i of result) {
+                    let coords = parseXY(i);
+                    addHint(coords[0],coords[1]);
+                }
+                console.log(result)
+                togglePlacement();
             }),
-            new Helper("Перевес в очках",2,function(){
-
+            new Helper("Перевес в очках",2,async function(){
+                togglePlacement(true);
+                console.log("Fetching superiority");
+                const result = await hint.superiority();
+                console.log("Hint fetched");
+                console.log(result)
+                showModal(`Перевес в очках`,`Текущий перевес в очках: <b>${result.score}</b><br>
+                                            На данный момент побеждают: <b>${result.winner=="W"?"Белые":"Черные"}</b>`);
+                togglePlacement();
             }),
-            new Helper("Лучшие ходы",2,function(){
-
+            new Helper("Лучшие ходы",2,async function(){
+                togglePlacement(true);
+                console.log("Fetching best moves (4)");
+                const result = await hint.bestMoves(4);
+                console.log("Hint fetched");
+                for(let i of result) {
+                    let coords = parseXY(i);
+                    addHint(coords[0],coords[1]);
+                }
+                console.log(result)
+                togglePlacement();
             }),
         ];
         let helpersBlocked = false;
@@ -338,6 +374,11 @@ export default {
         function parseXY(field) {
             const xAlign = "ABCDEFGHJKLMN";
             return [xAlign.indexOf(field[0]),(13-field.slice(1,3))];
+        }
+        function togglePlacement(clear) {
+            if(clear) clearHints();
+            canPlace = !canPlace;
+            updateHintStatus();
         }
         function normalizeMatrix(matrix) {
             for(let i in matrix) 
