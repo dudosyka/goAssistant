@@ -5,8 +5,9 @@
     </transition>
     <div id="nav">
       <router-link id="nav" to="/">Home</router-link> |
-      <router-link id="nav" to="/login">Login</router-link> <span v-if='!alreadyLogin'>|</span>
+      <router-link id="nav" to="/login">Login</router-link> |
       <router-link id="nav" to="/closegame">CloseGame</router-link> |
+      <router-link id="nav" to="/passport">Passport</router-link> |
     </div>
   </div>
 </template>
