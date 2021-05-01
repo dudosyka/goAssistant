@@ -4,7 +4,7 @@
     <div id="game"></div><br>
     <span id="specialMessages"></span>
   </div>
-  
+
   <div class="w3-sidebar w3-bar-block w3-white" style="width:250px;left:0;top:0px;line-height:2">
         <div class="w3-container w3-card-2 w3-center" style="padding: 10px">GoAssistant</div>
         <div style="overflow: auto;max-height: calc(100% - 25px);padding:10px;font-size:13px">
@@ -25,7 +25,7 @@
         <div id="moveHistory" style="overflow: auto;max-height: calc(100% - 25px);"></div>
     </div>
   </div>
-  
+
 </template>
 
 <style>
@@ -35,7 +35,7 @@
 </style>
 
 <script>
-
+import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 export default {
   name: 'Home',
@@ -43,7 +43,8 @@ export default {
   },
   data() {
       return {
-        game: null
+        game: null,
+        client: null,
       }
   },
   methods: {
@@ -51,11 +52,56 @@ export default {
         await get('/game/info/' + storage('curGameId') + "?token=" + storage('token'), null, data => {
             console.log(data);
         });
+    },
+    move(type) {
+        client.send(JSON.stringify([
+          7,// 7 - статус: отправка сообщения
+          "go/game", // в какой топик отправляется сообщение
+          {
+            command: type, // команда на отправку запроса "сдаться"
+            token: storage('token'), // токен игрока
+            game_id: storage('curGameId') // номер игры
+          }
+          ]));
+    },
+    sendMove(place) {
+        client.send(JSON.stringify([
+          7,// 7 - статус: отправка сообщения
+          "go/game", // в какой топик отправляется сообщение
+          {
+            command: "move", // команда на отправку запроса "сдаться"
+            token: storage('token'), // токен игрока
+            place: place.toString().toLowerCase(), //Формат[a-z][0-9](1,2)
+            game_id: storage('curGameId') // номер игры
+          }
+          ]));
+    },
+    sendPass() {
+        move('pass');
+    },
+    sendResign() {
+        move('resign');
     }
   },
   async created() {
+      this.client = new W3CWebSocket('ws://172.104.137.176:41239');
+      this.client.onopen = function () {
+          client.send(JSON.stringify([
+              7, // 7 - статус: отправка сообщения
+              "go/game", // в какой топик отправляется сообщение
+              {
+                command: "auth",  // команда на авторизацию подключения
+                token: storage('token'), // токен игрока
+                game_id: storage('curGameId') // номер игры
+                }
+            ])
+          );
+      }
+      this.client.onmessage = function (event) {
+          let data = JSON.parse(event.data);
+          console.log(data);
+      }
       await this.loadGame();
-      console.log(1);
        setTimeout(() => {
           let canPlace = true;
           let last = -1;
@@ -123,7 +169,7 @@ export default {
                     actualX = cellX + (corner == 1 || corner == 2 ? 1 : 0);
                     actualY = cellY + (corner == 2 || corner == 3 ? 1 : 0);
                 }
-                if(blocks[actualX][actualY] != 0) 
+                if(blocks[actualX][actualY] != 0)
                     return removeFantom();
                 if(fantom[0] != actualX || fantom[1] != actualY) {
                     removeFantom();
@@ -364,7 +410,7 @@ export default {
 
             e("recommendedHelpers").innerHTML = "";
             e("allHelpers").innerHTML = "";
-            
+
             for(let i of helpers) {
                 let helperButton = document.createElement("button");
                 helperButton.innerHTML = i.label;
