@@ -126,16 +126,29 @@ body {
   border-radius: 50%;
   transition: transform 0.3s;
 }
-.user img:hover {
-  cursor: pointer;
-  transform: translateX(10px) rotate(5deg);
-}
-.user-nick, .user-nick router-link  {
+
+.user-nick, .user-nick-link  {
   grid-area: nick;
   font-size: 30px;
   color: #fff;
   text-decoration: none;
+  position: relative;
+
+  transition: transform 0.3s;
 }
+.user-nick-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  border-bottom: 2px solid #fff;
+  transition: width 0.3s;
+}
+
 .user-nick:hover {
   transform: translateY(-5px);
+}
+.user-nick-link:hover::after {
+  width: 100%;
 }

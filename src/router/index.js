@@ -8,6 +8,8 @@ import CloseGame from '../views/CloseGame.vue'
 import JoinToCloseGame from '../views/JoinToCloseGame.vue'
 import NewCloseGame from '../views/NewCloseGame.vue'
 
+import Passport from '../views/Passport.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -40,6 +42,11 @@ const routes = [
     path: '/menu/closegame/newgame',
     name: 'NewCloseGame',
     component: NewCloseGame
+  },
+  {
+    path: '/passport',
+    name: 'Passport',
+    component: Passport
   },
 ]
 

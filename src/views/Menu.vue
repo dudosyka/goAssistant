@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <header class="user w3-card-4">
-      <h1 class="user-nick"><router-link to="/pasport">{{nick}}</router-link></h1>
+      <h1 class="user-nick"><router-link class="user-nick-link" to="/passqport">{{nick}}</router-link></h1>
       <img v-bind:src="ava" height="100%">
     </header>
     <main class="menu">
