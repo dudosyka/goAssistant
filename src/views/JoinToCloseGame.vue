@@ -24,10 +24,11 @@
     },
     methods: {
         join() {
-            console.log(1);
-            // post('/game/join/' + this.code, {token: storage('token')}, data => {
-            //     console.log(data);
-            // });
+            post('/game/join/' + this.code + "?token=" + storage('token'), {token: storage('token')}, data => {
+                console.log("DATA", data);
+                setStorage('curGameId', data.data.gameId);
+                // window.location = "/game";
+            });
         }
     },
   }

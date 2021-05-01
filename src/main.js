@@ -14,7 +14,7 @@ global.redirectTo = (name) => {
 global.request = (url, type, data, success) => {
     let bodyFormData = new FormData();
 
-    if (data !== null) {
+    if (data !== null) { 
         Object.keys(data).map(el => {
             bodyFormData.append(el, data[el]);
         });

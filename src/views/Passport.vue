@@ -1,13 +1,13 @@
 <template>
-  <main class="menu">
+  <main class="menu" v-if='user !== false'>
     <article class="window menu">
       <h1 class="title">Профиль</h1>
       <div class="back">
-        <img v-bind:src="ava">
+        <img v-bind:src="user.avatar">
         <div class="back-profile">
-          <div class="output full-width">{{nick}}</div>
-          <div class="output full-width">{{email}}</div>
-          <div class="output full-width">{{rait}}</div>
+          <div class="output full-width">{{user.nickname}}</div>
+          <div class="output full-width">{{user.email}}</div>
+          <div class="output full-width">{{user.pts}}</div>
         </div>
         <ul class="list">
           <li class="card">Lorem</li>
@@ -52,6 +52,7 @@ img{
     name: 'Passport',
     data() {
       return {
+          user: false,
           nick: 'ex@m1e',
           email: 'example@example.com',
           rait: 'NN',
@@ -68,7 +69,28 @@ img{
     methods: {
     },
     created() {
-        this.alreadyLogin = storage('token') != null;
+        get('/user/profile?token='+storage('token'), null, data => {
+            this.user = data.data.user;
+            /*
+                [UserObject]
+                avatar: "https://go-backend-denis.ambersoft.llc/uploads/608be2d875e90.png"
+                email: "a.hatson@ya.ru"
+                games_history: Array(7) [GameObject]
+                id: 233
+                nickname: "dudosyka"
+                position: 147
+                pts: -29
+                winrate: "2/5"
+            */
+            /*
+                [GameObject]
+                game_id: 1039
+                player: [UserObject]
+                score: 7 //Очки того, чей профиль (dudosyka заработал 7 очков)
+                scoreOpponent: -7 //Очки противника
+            */
+            console.log(this.user);
+        });
     }
   }
 </script>
