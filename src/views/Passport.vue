@@ -3,18 +3,18 @@
     <article class="window menu">
       <h1 class="title">Профиль</h1>
       <div class="back">
-        <img v-bind:src="user.avatar" class="avatar-image" src="https://www.castorama.ru/media/catalog/product/cache/image/1800x/040ec09b1e35df139433887a97daa66f/f/d/fd9d0a_382026_1.jpg">
+        <img v-bind:src="user.avatar" class="avatar-image">
         <div class="back-profile">
           <div class="output-passport full-width">{{user.nickname}}</div>
           <div class="output-passport full-width">{{user.email}}</div>
           <div class="output-passport full-width">{{user.pts}}</div>
         </div>
-        <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/">Назад</router-link>
+        <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/closegame">Назад</router-link>
         <div class="score-table">
-          <div class="output full-width score-td">
-            <img src="https://www.castorama.ru/media/catalog/product/cache/image/1800x/040ec09b1e35df139433887a97daa66f/f/d/fd9d0a_382026_1.jpg">
-            <div class="score-name">name</div>
-            <div>score/score</div>
+          <div class="output full-width score-td" v-for="score in user.games_history">
+            <img v-bind:src="score.player.avatar">
+            <div class="score-name">{{score.player.nickname.length > 15 ? score.player.nickname.slice(0,15) + "..." : score.player.nickname}}</div>
+            <div>{{score.score}} / {{score.scoreOpponent}}</div>
           </div>
         </div>
       </div>
@@ -107,7 +107,7 @@
           card: {
             ava: 'https://www.castorama.ru/media/catalog/product/cache/image/1800x/040ec09b1e35df139433887a97daa66f/2/e/2ef250_510229_1.jpg',
             nick: 'badexample',
-          }
+          },
       }
     },
     components: {
