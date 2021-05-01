@@ -415,6 +415,37 @@ export default {
                 }
                 togglePlacement();
             }),
+            new Helper("Тепловая карта зоны",1,async function(){
+                toggleSelector("Выберите поле, зона которого вас интересует",1,async function(){
+                    function getMaxOfArray(numArray) {
+                        return Math.max.apply(null, numArray);
+                    }
+                    e("specialMessages").innerHTML = "Получение данных...";
+                    togglePlacement(true);
+                    let quarter = defineQuarter(selectedPoints[0][0],selectedPoints[0][1])
+                    console.log("Fetching heatmap quarter");
+                    const result = await hint.heatmapQuarter(quarter);
+                    console.log("Hint fetched");
+                    console.log(result);
+                    let matrix = normalizeMatrix(result);
+                    console.log(matrix);
+                    let max = -1;
+                    for(let i of matrix) {
+                        let localMax = getMaxOfArray(i);
+                        if(localMax > max) max = localMax
+                    }
+                    for(let x in matrix) {
+                        for(let y in matrix[x]) {
+                            let opacity = 0.9/(max/matrix[x][y])
+                            if(opacity>0) opacity += 0.02;
+                            addHint(x,y,opacity,false);
+                        }
+                    }
+                    e("specialMessages").innerHTML = "";
+                    clearSelectors();
+                    togglePlacement();
+                });
+            }),
             new Helper("Перевес в очках",2,async function(){
                 togglePlacement(true);
                 console.log("Fetching superiority");
