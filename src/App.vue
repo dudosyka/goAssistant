@@ -23,15 +23,12 @@
 
 <script>
   export default {
-<<<<<<< HEAD
     data() {
       return {
 
       }
     },
     computed: {
-
-=======
     name: 'Menu',
     data() {
       return {
@@ -45,7 +42,7 @@
     },
     created() {
         this.alreadyLogin = storage('token') != null;
->>>>>>> master
     }
+  }
   }
 </script>
