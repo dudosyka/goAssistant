@@ -1,0 +1,15 @@
+.circle {
+    line-height: unset!important;
+}
+.moveDiv {
+    padding: 8px!important;
+    display: flex!important;
+    justify-content: space-between;
+}
+.helperButton {
+    width:100%;
+}
+.helperButtonSmall {
+    width:100%;
+    padding: 2px;
+}

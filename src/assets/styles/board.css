@@ -65,13 +65,24 @@
 .block_-1 {
     background-color: white;
 }
+.block_fantom {
+    opacity: 0.4;
+}
 .block_hint {
     background-color: red;
-    opacity: 0.3;
+    opacity: 0.4;
+}
+.block_selector {
+    background-color: aqua;
+    opacity: 0.4;
 }
 #game {
     display: inline-flex;
 }
 .tr {
     transition: 0.3s;
+}
+#specialMessages {
+    font-size: 20px;
+    color:#fff
 }
