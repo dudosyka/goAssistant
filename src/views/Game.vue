@@ -9,8 +9,8 @@
         <div class="w3-sidebar w3-bar-block w3-white" style="width:250px;left:0;top:0px;line-height:2;">
             <div class="w3-container w3-card-2 w3-center" style="padding: 10px">GoAssistant</div>
             <div style="overflow: auto;max-height: calc(100% - 25px);padding:10px;font-size:13px;">
-                <div class="moveDiv"><i class="far circle fa-circle w3-text-black"></i> <b id="whitePlayerName">Загрузка...</b><span id="whiteTimer">--:--</span></div>
-                <div class="moveDiv"><i class="fas circle fa-circle w3-text-black"></i> <b id="blackPlayerName">Загрузка...</b><span id="blackTimer">--:--</span></div>
+                <div class="moveDiv"><i class="far circle fa-circle w3-text-black"></i> <b id="whitePlayerName" class="textLimiter">Загрузка...</b><span id="whiteTimer">--:--</span></div>
+                <div class="moveDiv"><i class="fas circle fa-circle w3-text-black"></i> <b id="blackPlayerName" class="textLimiter">Загрузка...</b><span id="blackTimer">--:--</span></div>
 
                 <span>Камней на поле: <b id="blockCount">0</b></span><br>
                 <span>Стадия игры: <b id="gameStage">N/A</b></span><br>
@@ -263,7 +263,23 @@ export default {
                 this.enabled = true;
             }
         };
-        let helpers = [
+        function toggleSelector(label,limit,callback) {
+            selectorMode = !selectorMode;
+            if (selectorMode) {
+                clearSelectors();
+                selectedPoints = [];
+                e("specialMessages").innerHTML = label;
+            } else {
+                e("specialMessages").innerHTML = "";
+                clearSelectors();
+            }
+            selectorLimit = limit;
+            selectorCallback = function(){
+                e("specialMessages").innerHTML = "";
+                callback();
+            };
+        }
+        /*let helpers = [
             new Helper("Начальная 1", 0, function() {}),
             new Helper("Начальная 2", 0, function() {}),
             new Helper("SelectorMode", 0, function() {
@@ -285,6 +301,31 @@ export default {
             new Helper("Основная 2", 1, function() {}),
             new Helper("Финальная 1", 2, function() {}),
             new Helper("Финальная 2", 2, function() {})
+        ];*/
+        let helpers = [
+            new Helper("В какой четверти играть?",0,function(){
+
+            }),
+            new Helper("Лучший ход из 4",0,function(){
+                toggleSelector("Выберите 4 поля",4,function(){
+                    
+                })
+            }),
+            new Helper("Тепловая карта доски",1,function(){
+
+            }),
+            new Helper("Зоны требующие защиту",1,function(){
+
+            }),
+            new Helper("Лучший ход",1,function(){
+
+            }),
+            new Helper("Перевес в очках",2,function(){
+
+            }),
+            new Helper("Лучшие ходы",2,function(){
+
+            }),
         ];
         let helpersBlocked = false;
         let allHelpersShown = false;
@@ -293,6 +334,10 @@ export default {
         function parseField(x, y) {
             const xAlign = "ABCDEFGHJKLMN";
             return xAlign[x] + (13 - y);
+        }
+        function parseXY(field) {
+            const xAlign = "ABCDEFGHJKLMN";
+            return [xAlign.indexOf(field[0]),(13-field.slice(1,3))];
         }
         function normalizeMatrix(matrix) {
             for(let i in matrix) 
@@ -374,6 +419,7 @@ export default {
             console.log("Sent move");
             console.log(hints);
             clearHints();
+            clearSelectors();
         }
 
         function onCellHover(event, x, y) {
@@ -428,7 +474,7 @@ export default {
                 block.setAttribute("class", "block block_2corner block_" + c);
                 e("x" + (x - 1) + "y" + (y - 1)).appendChild(block);
             }
-            if (!o && c!=colors.HINT) putted.push("block" + x + "_" + y);
+            if (!o && c!=colors.HINT && c!=colors.SELECTOR) putted.push("block" + x + "_" + y);
 
             function setOnClick() {
                 const X = x;
@@ -505,7 +551,7 @@ export default {
         }
         //storybar
         function addMoveToStory(color, player, position, loaded) {
-            e("moveHistory").innerHTML += movePrefab.replace("{MOVE}", `<i class="fas circle fa-circle w3-text-${color==1?'black':'white'}"></i> <span>${player}</span> <b>${position==null?'Пас':position}</b>`);
+            e("moveHistory").innerHTML += movePrefab.replace("{MOVE}", `<i class="fas circle fa-circle w3-text-${color==1?'black':'white'}"></i> <span  class="textLimiter">${player}</span> <b>${position==null?'Пас':position}</b>`);
             moveStory.push([color,player,position]);
             if(!loaded) {
                 localStorage.setItem("story", JSON.stringify(moveStory));

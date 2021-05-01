@@ -18,3 +18,8 @@
     padding: 2px;
     background-color: #dec8ff;
 }
+.textLimiter {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
