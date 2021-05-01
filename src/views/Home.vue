@@ -39,6 +39,8 @@
 </style>
 
 <script>
+import * as Hint from "../Models/Hint";
+
   export default {
     name: 'Menu',
     data() {
@@ -62,6 +64,7 @@
                 }
 
                 if (start)
+
                     startGame(data.data.gameId);
             });
         },
@@ -78,7 +81,19 @@
             })
         }
     },
-    created() {
+    async created() {
+        let hint = new Hint.default(11494);
+        // const playerBestMove = await hint.bestMoves(1);
+        // const enemyBestMove = await hint.bestMovesEnemy(3);
+        // const bestMovesOf = await hint.bestMovesOf(playerBestMove);
+        const superiority = await hint.superiority();
+        const winner = await hint.winner();
+        // console.log(playerBestMove);
+        // console.log(enemyBestMove);
+        // console.log(bestMovesOf);
+        console.log(superiority);
+        console.log(winner);
+        // console.log('res', hint);
         this.continueGame(false);
     }
   }

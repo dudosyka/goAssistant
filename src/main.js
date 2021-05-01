@@ -14,7 +14,7 @@ global.redirectTo = (name) => {
 global.request = (url, type, data, success) => {
     let bodyFormData = new FormData();
 
-    if (data !== null) { 
+    if (data !== null) {
         Object.keys(data).map(el => {
             bodyFormData.append(el, data[el]);
         });
@@ -35,6 +35,8 @@ global.request = (url, type, data, success) => {
         err => { console.log(err); }
     );
 }
+//57047fb67c9b231f14b0d18e37f6b85121c96dab
+//"69b075bb943de653d1508522b450ec78710951c3"
 
 global.get = async (url, data = null, success) => {
     return request(url, "get", data, success);
