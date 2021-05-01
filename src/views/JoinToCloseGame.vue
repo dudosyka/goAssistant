@@ -1,12 +1,15 @@
 <template>
   <main class="menu">
-  <aside class="modal loading" v-show="search">
-    <header class="modal">
-      <h1 class="modal">Ожидание соперника</h1>
-      <span></span>
-      <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-    </header>
-  </aside>
+  <!-- LOADER !-->
+    <aside class="modal loading" v-show="search">
+      <header class="modal">
+        <h1 class="modal">Ожидание соперника</h1>
+        <span></span>
+        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+      </header>
+    </aside>
+  <!-- LOADER !-->
+
     <article class="form_window menu">
       <h1 class="title">Укажите код гобана</h1>
       <div class="">
@@ -15,6 +18,8 @@
         <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/closegame">Назад</router-link>
       </div>
     </article>
+
+    <!-- MODAL !-->
     <transition name="top-fade">
       <aside class="modal_bg" v-show="modal">
         <div class="modal">
@@ -27,6 +32,8 @@
         </div>
       </aside>
     </transition>
+    <!-- MODAL !-->
+
   </main>
 </template>
 
@@ -37,6 +44,7 @@
       return {
         code: "",
         modal: false,
+        search: false
       }
     },
     components: {

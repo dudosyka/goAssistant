@@ -1,12 +1,15 @@
 <template>
   <main class="menu">
-    <aside class="modal loading" v-show="showLoader">
+  <!-- LOADER !-->
+    <aside class="modal loading" v-show="search">
       <header class="modal">
         <h1 class="modal">Ожидание соперника</h1>
         <span></span>
         <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
       </header>
     </aside>
+  <!-- LOADER !-->
+
     <article class="form_window menu">
       <div class="">
         <button @click='continueGame()' class="button full-width w3-button w3-card-4 tr w3-hover-white point" v-if="alreadyStart">Продолжить игру</button>
