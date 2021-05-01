@@ -18,7 +18,7 @@
     name: 'NewCloseGame',
     data() {
       return {
-        code: 'number'
+        code: 'code'
       }
     },
     components: {

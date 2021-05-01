@@ -56,6 +56,9 @@ body {
   cursor: not-allowed;
   transform: none;
 }
+.disabled {
+  transform: none !important;
+}
 
 .button::before {
   position: absolute;
@@ -123,6 +126,15 @@ body {
 }
 .loocker::before {
   content: '🔐'
+}
+.point::before {
+  content: '👉'
+}
+.god::before {
+  content: '🧘'
+}
+.join::before {
+  content: '🤝'
 }
 
 .row {
