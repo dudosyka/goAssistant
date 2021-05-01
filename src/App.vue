@@ -23,12 +23,6 @@
 
 <script>
   export default {
-    data() {
-      return {
-
-      }
-    },
-    computed: {
     name: 'Menu',
     data() {
       return {
@@ -43,6 +37,5 @@
     created() {
         this.alreadyLogin = storage('token') != null;
     }
-  }
   }
 </script>
