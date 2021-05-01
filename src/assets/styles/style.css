@@ -92,6 +92,10 @@ body {
   font-size: 40px;
   color: #1f1233;
   margin-bottom: 10px;
+  text-align: center;
+}
+.output:last-child {
+  margin: 0;
 }
 
 .full-width {
@@ -184,40 +188,15 @@ body {
   margin-bottom: 20px;
 }
 
-.button-light {
-  border: none;
-  background: #fff;
-  width: 100%;
-  font-size: 40px;
-  color: #1f1233;
-  padding: 20px;
-  margin-bottom: 15px;
-  transition: transform 0.3s;
-}
-.button-light:hover {
-  cursor: pointer;
-  transform: scale(1.05) translateX(-5px);
-}
-.button-light:disabled {
-  transform: none;
-}
-
-.back-button {
-  position: relative;
-}
 .back-button::before {
   content: "⟵";
   position: absolute;
   top: 50%; transform: translateY(-50%);
-  left: 50px;
+  left: 40px;
   transition: transform 0.3s;
 }
 .back-button:hover::before {
   transform: translateX(-20px) translateY(-50%);
-}
-
-.shadow {
-  box-shadow: 0px 0px 20px 10px #1f1233;
 }
 
 .tr {
