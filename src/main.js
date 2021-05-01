@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import * as axios from 'axios'
 
 console.log(localStorage);
 
@@ -19,7 +20,7 @@ global.request = (url, type, data, success) => {
         });
     }
 
-    axios({
+    return axios({
       method: type,
       url: "https://go-backend-denis.ambersoft.llc" + url,
       data: bodyFormData,
@@ -35,12 +36,21 @@ global.request = (url, type, data, success) => {
     );
 }
 
-global.get = (url, data = null, success) => {
-    request(url, "get", data, success);
+global.get = async (url, data = null, success) => {
+    return request(url, "get", data, success);
 }
 
-global.post = (url, data = null, success) => {
-    request(url, "post", data, success);
+global.post = async (url, data = null, success) => {
+    return request(url, "post", data, success);
+}
+
+global.storage = name => localStorage.getItem(name);
+
+global.setStorage = (name, val) => localStorage.setItem(name, val);
+
+global.startGame = (gameId) => {
+    setStorage('curGameId', gameId);
+    window.location = "/game";
 }
 
 router.afterEach(async (to, from) => {

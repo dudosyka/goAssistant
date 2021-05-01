@@ -17,8 +17,6 @@
     </main>
 </template>
 <script>
-  import axios from "axios"
-
   export default {
     name: 'Login',
     data() {
@@ -41,7 +39,6 @@
         }
     },
     created() {
-        this.statistic();
     }
   }
 </script>
