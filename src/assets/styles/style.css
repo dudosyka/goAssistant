@@ -30,9 +30,11 @@ body {
   border: none;
 
   background-color: #fff;
+  position: relative;
 
   margin-bottom: 15px;
   padding: 20px;
+  padding-left: 40px;
 
   font-size: 40px;
   color: #1f1233;
@@ -53,6 +55,13 @@ body {
 .button:disabled:hover, .disabled {
   cursor: not-allowed;
   transform: none;
+}
+
+.button::before {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  left: 10px;
+  content-visibility: visible;
 }
 
 .input {
@@ -104,6 +113,17 @@ body {
 }
 
 /* End patters */
+
+/* Emoji */
+.hi::before {
+  content: '👋'
+}
+.lamp::before {
+  content: '💡'
+}
+.loocker::before {
+  content: '🔐'
+}
 
 .row {
   display: grid;
