@@ -25,9 +25,16 @@
     methods: {
         join() {
             post('/game/join/' + this.code + "?token=" + storage('token'), {token: storage('token')}, data => {
+                get("/game/current?token=" + storage('token'), null, data => {
+                  //debugger;
+                    if (data.data.gameId === null) {
+                        window.location = "/"
+                    } else {
+                      setStorage('curGameId', data.data.gameId);
+                      window.location = "/game";
+                    }
+                });
                 console.log("DATA", data);
-                setStorage('curGameId', data.data.gameId);
-                // window.location = "/game";
             });
         }
     },

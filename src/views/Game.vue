@@ -211,6 +211,9 @@ export default {
                 console.log(e)
             }
             console.log(data);
+            try {
+                if(data[4].code == 500) window.location.refresh();
+            } catch(e) {}
         }
         this.client = client;
         let data = await this.loadGame();
