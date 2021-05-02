@@ -7,10 +7,10 @@
             <span id="specialMessages"></span>
         </div>
 
-        <div class="w3-sidebar w3-bar-block w3-white" style="width:270px;left:0;top:0px;line-height:2;">
+        <div class="w3-sidebar w3-bar-block w3-white" style="width:270px;left:0;top:0px;line-height:2;overflow:hidden;">
             <div class="w3-container w3-card-2 w3-center" style="padding: 10px">GoAssistant</div>
 
-            <div class="bar">
+            <div class="bar" style="overflow:auto">
               <div class="section">
                 <div class="moveDiv">&#9898; <b id="whitePlayerName" class="textLimiter">Загрузка...</b><span class="time-icon">⏳</span><span id="whiteTimer">--:--</span></div>
                 <div class="moveDiv">&#9899; <b id="blackPlayerName" class="textLimiter">Загрузка...</b><span class="time-icon">⏳</span><span id="blackTimer">--:--</span></div>
