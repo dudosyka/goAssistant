@@ -17,7 +17,7 @@
               </div>
 
               <div class="section">
-                <span class="opposite"><div><span class="icon">&#128028; </span>Камней на поле: </div><b id="blockCount">0</b></span><br>
+                <span class="opposite"><div>Камней на поле: </div><b id="blockCount">0</b></span><br>
                 <span class="opposite"><div>{{stage}} Стадия игры: </div><b id="gameStage">N/A</b></span>
               </div>
 
@@ -345,6 +345,37 @@ export default {
                     clearSelectors();
                 })
             }),
+            new Helper("Тепловая карта 2 зон",0,async function(){
+                toggleSelector("Выберите 2 поля, зоны которых вас интересуют",2,async function(){
+                    function getMaxOfArray(numArray) {
+                        return Math.max.apply(null, numArray);
+                    }
+                    e("specialMessages").innerHTML = "Получение данных...";
+                    togglePlacement(true);
+                    let quarter = [defineQuarter(selectedPoints[0][0],selectedPoints[0][1]),defineQuarter(selectedPoints[1][0],selectedPoints[1][1])];
+                    console.log("Fetching heatmap quarter");
+                    const result = await hint.heatmapQuarters(quarter);
+                    console.log("Hint fetched");
+                    console.log(result);
+                    let matrix = normalizeMatrix(result);
+                    console.log(matrix);
+                    let max = -1;
+                    for(let i of matrix) {
+                        let localMax = getMaxOfArray(i);
+                        if(localMax > max) max = localMax
+                    }
+                    for(let x in matrix) {
+                        for(let y in matrix[x]) {
+                            let opacity = 0.9/(max/matrix[x][y])
+                            if(opacity>0) opacity += 0.02;
+                            addHint(x,y,opacity,false);
+                        }
+                    }
+                    e("specialMessages").innerHTML = "";
+                    clearSelectors();
+                    togglePlacement();
+                });
+            }),
             new Helper("Тепловая карта доски",1,async function(){
                 function getMaxOfArray(numArray) {
                     return Math.max.apply(null, numArray);
@@ -368,11 +399,6 @@ export default {
                         addHint(x,y,opacity);
                     }
                 }
-                /*for(let x=0;x<size;x++) {
-                    for(let y=0;y<size;y++) {
-                        if(defineQuarter(x,y)==result) addHint(x,y);
-                    }
-                }*/
                 togglePlacement();
             }),
             new Helper("Зоны требующие защиту",1,async function(){
@@ -387,14 +413,14 @@ export default {
                 console.log(result)
                 togglePlacement();
             }),
-            new Helper("Лучший ход",1,async function(){
+            new Helper("Зона лучшего хода",1,async function(){
                 togglePlacement(true);
                 console.log("Fetching best move");
                 const result = await hint.bestMoves(1);
                 console.log("Hint fetched");
                 for(let i of result) {
                     let coords = parseXY(i);
-                    addHint(coords[0],coords[1]);
+                    addHintZone(coords[0],coords[1],3);
                 }
                 console.log(result)
                 togglePlacement();
@@ -405,13 +431,13 @@ export default {
                 const result = await hint.futureMoves(10);
                 console.log("Hint fetched");
                 console.log(result);
-                let baseOpacity = 0.9;
+                let baseOpacity = 0.8;
                 let count=0;
                 for(let i of result.data.hint) {
                     count++;
                     let coords = parseXY(i.move);
-                    addHint(coords[0],coords[1],baseOpacity,count%2==1);
-                    baseOpacity *= 0.8
+                    addHint(coords[0],coords[1],baseOpacity,count%2==1,count);
+                    baseOpacity *= 0.95
                 }
                 togglePlacement();
             }),
@@ -446,13 +472,26 @@ export default {
                     togglePlacement();
                 });
             }),
+            new Helper("Четверть игры противника",1,async function(){
+                togglePlacement(true);
+                console.log("Fetching best enemy quarter");
+                const result = await hint.heatmapEnemyBestZone();
+                console.log("Hint fetched");
+                console.log(result)
+                for(let x=0;x<size;x++) {
+                    for(let y=0;y<size;y++) {
+                        if(defineQuarter(x,y)==result) addHint(x,y);
+                    }
+                }
+                togglePlacement();
+            }),
             new Helper("Перевес в очках",2,async function(){
                 togglePlacement(true);
                 console.log("Fetching superiority");
                 const result = await hint.superiority();
                 console.log("Hint fetched");
                 console.log(result)
-                showModal(`Перевес в очках`,`Текущий перевес в очках: <b>${result.score}</b><br>
+                showModal(`Перевес в очках`,`Текущий перевес в очках: <b>${result.score}</b> (без учета подсказок)<br>
                                             На данный момент побеждают: <b>${result.winner=="W"?"Белые":"Черные"}</b>`);
                 togglePlacement();
             }),
@@ -607,7 +646,7 @@ export default {
                 generateBlock(actualX, actualY, fantomColor, "fantom");
             }
         }
-        function generateBlock(x, y, c, o, s) {
+        function generateBlock(x, y, c, o, s, I) {
             let block = document.createElement("div");
             block.setAttribute("id", "block" + x + "_" + y);
             if (o == "fantom") {
@@ -660,6 +699,7 @@ export default {
             }
             if (c == 'hint') {
                 block.setAttribute("style", "opacity:" + o);
+                if(I) block.innerHTML = I;
                 if(s) block.setAttribute("class", block.getAttribute("class").replace("block_hint","block_hint_special"))
                 setOnHover();
                 return setOnClick();
@@ -671,10 +711,10 @@ export default {
             }
         }
         //hints stuff
-        function addHint(x, y, opacity, special) {
+        function addHint(x, y, opacity, special, inside) {
             if (blocks[x][y] != 0) return;
             hints.push([x, y]);
-            generateBlock(x, y, colors.HINT, opacity, special);
+            generateBlock(x, y, colors.HINT, opacity, special, inside);
         }
         function addHintZone(x,y,radius,opacity) {
             console.log(parseField(x,y));
