@@ -7,8 +7,8 @@
         <div class="row">
           <div>
             <section class="form_login" v-show="!lever">
-              <input v-model='email' type="mail" class="input" placeholder="Email">
-              <input v-model='password' type="text" class="input" placeholder="Password" style="margin:0;">
+              <input v-model='email' type="email" class="input" placeholder="Email">
+              <input v-model='password' type="password" class="input" placeholder="Password" style="margin:0;">
             </section>
             <section class="form_signup" v-show="lever">
               <input v-model='email' type="text" class="input" placeholder="Email">

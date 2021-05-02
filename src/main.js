@@ -58,16 +58,19 @@ global.showLoader = false;
 global.getCurUser = async () => {
 	if (storage('curUserData') !== null)
 	{
-		return storage('curUserData');
+		return (new Promise((resolve, reject) => {
+			resolve(storage('curUserData'));
+		}));
 	}
 	else
 	{
 		return get('/user/profile?token=' + storage('token'), null, data => {
-			console.log('DATATATATATAT', data);
-			return {
-				avatar: data.data.user.avatar, 
+			const obj = {
+				avatar: data.data.user.avatar,
 				nickname: data.data.user.nickname
 			};
+			setStorage('curUserData', obj)
+			return obj;
 		});
 	}
 }
@@ -77,7 +80,7 @@ router.afterEach(async (to, from) => {
     isLogin = (token !== null);
 
 	if (isLogin)
-		isLogin = (token != "null");
+		isLogin = (token != "null" && token != "");
 	
 	//console.log(token != "null");
 
