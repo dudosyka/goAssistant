@@ -104,6 +104,22 @@ Hint.prototype.futureMoves = async function (deep) {
 Прогноз игры 10 ходов ++
 Прогноз игры 6 ходов ++
 */
+Hint.prototype.bestEnemyMovesOf = async function (moves) {
+    return await get('/hints/show-best-enemy?token='+storage("token")+'&centaur_token=' + ct + "&moves=" + moves.join() + "&game_id=" + this.gameId, null, data => {
+        return data;
+    });
+}
+/*
+none
+*/
+Hint.prototype.worstEnemyMove = async function (move) {
+    return await get('/hints/worst-enemy-move?token='+storage("token")+'&centaur_token=' + ct + "&move=" + move + "&game_id=" + this.gameId, null, data => {
+        return data;
+    });
+}
+/*
+худший ход противника??? ++
+*/
 
 
 export default Hint;
