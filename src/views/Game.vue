@@ -12,12 +12,16 @@
 
             <div class="bar" style="overflow:auto">
               <div class="section">
-                <div class="moveDiv">&#9898; <b id="whitePlayerName" class="textLimiter">Загрузка...</b><span class="time-icon">⏳</span><span id="whiteTimer">--:--</span></div>
                 <div class="moveDiv">&#9899; <b id="blackPlayerName" class="textLimiter">Загрузка...</b><span class="time-icon">⏳</span><span id="blackTimer">--:--</span></div>
+                <div class="moveDiv">&#9898; <b id="whitePlayerName" class="textLimiter">Загрузка...</b><span class="time-icon">⏳</span><span id="whiteTimer">--:--</span></div>
               </div>
 
               <div class="section">
-                <span class="opposite"><div>Камней на поле: </div><b id="blockCount">0</b></span><br>
+                <span class="opposite"><div>Камней на поле: </div><b id="blockCount">0</b></span>
+                <div style="margin-top:10px;margin-bottom:10px">
+                    <div>Потрачено на подсказки: </div>
+                    <span class="opposite"><div>&#9899; <b id="blackHints">0</b> очков</div><div><b id="whiteHints">0</b> очков &#9898;</div></span>
+                </div>
                 <span class="opposite"><div>{{stage}} Стадия игры: </div><b id="gameStage">N/A</b></span>
               </div>
 
@@ -169,6 +173,7 @@ export default {
                     }
                     if(firstMapLoad) {
                         loadStory();
+                        getHintInfo();
                         firstMapLoad = false;
                     }
                 }
@@ -320,8 +325,16 @@ export default {
             await invoke();
             console.log("Hint fetched");
             togglePlacement();
+            getHintInfo();
         }
         function getMaxOfArray(numArray) {return Math.max.apply(null, numArray);}
+        async function getHintInfo() {
+            let result = await hint.amount();
+            let creditBlack = result.data.credit_1;
+            let creditWhite = result.data.credit_2;
+            e("whiteHints").innerHTML = creditWhite;
+            e("blackHints").innerHTML = creditBlack;
+        }
         let hint = new Hint.default(gameId);
         let highlightHints = false;
         let helpers = [
