@@ -187,6 +187,7 @@ export default {
                     addMoveToStory(color, data.payload.move.split("(")[0], data.payload.place, false);
                     currentTurn = color==colors.BLACK?colors.WHITE:colors.BLACK;
                     if(playerColor == currentTurn) canPlace = true;
+                    else canPlace = false;
                     updateHintStatus();
                 }
                 if(data.payload.type == "endGame") {
@@ -215,8 +216,13 @@ export default {
                 if(data.payload.type == "notify") {
                     try {
                         if(data.error.length > 0) {
-                            canPlace = true;
-                            updateHintStatus();
+                            if(error.includes("your turn1")) {
+                                canPlace = false;
+                                updateHintStatus();
+                            } else {
+                                canPlace = true;
+                                updateHintStatus();
+                            }
                         }
                     } catch(e) {}
                 }
@@ -334,6 +340,21 @@ export default {
             let creditWhite = result.data.credit_2;
             e("whiteHints").innerHTML = creditWhite;
             e("blackHints").innerHTML = creditBlack;
+        }
+        async function getGameStory() {
+            let result = await hint.gameInfo();
+            for(let i of result.data.moves.split(";")) {
+                if(i.length<5) continue;
+                let color = i[0]=="W"?colors.WHITE:colors.BLACK;
+                let alphabet = "abcdefghijklm";
+                let x = alphabet.indexOf(i[2]);
+                if(x<0) {
+                    addMoveToStory(color,color==colors.WHITE?whitePlayerName:blackPlayerName,null);
+                    continue;
+                }
+                let y = alphabet.indexOf(i[3]);
+                addMoveToStory(color,color==colors.WHITE?whitePlayerName:blackPlayerName,parseField(x,y));
+            }
         }
         let hint = new Hint.default(gameId);
         let highlightHints = false;
@@ -774,40 +795,10 @@ export default {
         function addMoveToStory(color, player, position, loaded) {
             e("moveHistory").innerHTML += movePrefab.replace("{MOVE}", `<i class="fas circle fa-circle w3-text-${color==1?'black':'white'}"></i> <span  class="textLimiter">${player}</span> <b>${position==null?'Пас':position}</b>`);
             moveStory.push([color,player,position]);
-            if(!loaded) {
-                localStorage.setItem("story", JSON.stringify(moveStory));
-                localStorage.setItem("storyMatrix", JSON.stringify(blocks));
-                localStorage.setItem("storyTurn", currentTurn);
-            }
             e("moveHistory").scrollTop = e("moveHistory").scrollHeight;
         }
         function loadStory() {
-            if(localStorage.getItem("savedStory")) {
-                if(localStorage.getItem("savedStory") == gameId) {
-                    for(let i of JSON.parse(localStorage.getItem("story")))
-                        addMoveToStory(i[0],i[1],i[2],true);
-                    if(firstMapLoad && currentTurn != localStorage.getItem("storyTurn")) {
-                        /*let turnInStory = localStorage.getItem("storyTurn");
-                        let matrix = localStorage.getItem("storyMatrix");
-                        for(let x in matrix) {
-                            for(let y in matrix[x]) {
-                                if(matrix[x][y] != blocks[x][y] && matrix[x][y] != 0) {
-                                    addMoveToStory(matrix[x][y],matrix[x][y]==colors.WHITE?whitePlayerName:blackPlayerName,parseField(x,y),false);
-                                    turnInStory = matrix[x][y]==colors.WHITE?colors.BLACK:colors.WHITE;
-                                }
-                            }
-                        }
-                        if(turnInStory != currentTurn) {
-                            addMoveToStory(turnInStory,turnInStory==colors.WHITE?whitePlayerName:blackPlayerName,null,false)
-                        }*/
-                    }
-                    return;
-                }
-            }
-            localStorage.setItem("savedStory",gameId);
-            localStorage.setItem("story", JSON.stringify(moveStory));
-            localStorage.setItem("storyMatrix", JSON.stringify(blocks));
-            localStorage.setItem("storyTurn", currentTurn);
+            return getGameStory();
         }
         //helper stuff
         function stageDefinder() {
