@@ -1,10 +1,11 @@
 body {
   margin: 0;
   font-family: sans-serif;
-  background-color: #543389;
-  background-image: url('../../assets/logo.png');
-  background-repeat: no-repeat;
-  background-size: 100px;
+  background-color: #543389 !important;
+  background-image: url('../../assets/logo-bg.png') !important;
+  background-repeat: no-repeat !important;
+  background-size: 100px !important;
+  background-position: left 20px top 20px !important;
 
 }
 html {
