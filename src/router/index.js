@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Game from '../views/Game.vue'
-import GameHistory from '../views/GameHistory'
+import GameHistory from '../views/GameHistory.vue'
 
 import CloseGame from '../views/CloseGame.vue'
 import JoinToCloseGame from '../views/JoinToCloseGame.vue'

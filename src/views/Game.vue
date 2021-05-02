@@ -807,7 +807,7 @@ export default {
             e("blockCount").innerHTML = blockCount;
             let currentStage = 0;
             if (blockCount > 180 * 0.15) currentStage = 1;
-            if (blockCount > 180 * 0.8) currentStage = 2
+            if (blockCount > 180 * 0.6) currentStage = 2
             if(turnBlackEnd > -1 && turnWhiteEnd > -1) {
                 let time = (new Date()).getTime();
                 if(time-turnBlackEnd > 0 || time-turnWhiteEnd > 0) {

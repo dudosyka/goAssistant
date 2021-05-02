@@ -46,6 +46,9 @@
   display: flex !important;
   justify-content: space-between;
 }
+.clickableMove {
+  cursor:pointer;
+}
 
 
 .helperButton {
