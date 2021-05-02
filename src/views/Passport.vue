@@ -9,6 +9,7 @@
           <div class="output-passport full-width">{{user.email}}</div>
           <div class="output-passport full-width">{{user.pts}}</div>
         </div>
+		<button @click="logout()">Logout</button>
         <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/">Назад</router-link>
         <div class="score-table">
           <div class="output full-width score-td" v-for="score in user.games_history">
@@ -114,6 +115,10 @@
 
     },
     methods: {
+		logout() {
+			setStorage('token', null);
+			window.location = window.location;
+		}
     },
     created() {
         get('/user/profile?token='+storage('token'), null, data => {

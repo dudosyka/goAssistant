@@ -1,9 +1,9 @@
 <template>
   <main class="menu">
   <!-- LOADER !-->
-    <aside class="modal loading" v-show="search">
+    <aside class="modal loading" v-show="showLoader">
       <header class="modal">
-        <h1 class="modal">Ожидание соперника</h1>
+        <h1 class="modal">Подключение к боту</h1>
         <span></span>
         <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
       </header>
@@ -46,7 +46,8 @@ import * as Hint from "../Models/Hint";
           alreadyStart: false,
           ava: 'https://www.castorama.ru/media/catalog/product/cache/image/1800x/040ec09b1e35df139433887a97daa66f/2/e/2ef250_510229_1.jpg',
           nick: 'ex@mple',
-          search: false
+          search: false,
+		  showLoader: false,
 
       }
     },
@@ -79,6 +80,7 @@ import * as Hint from "../Models/Hint";
             })
         },
         startGameWithBot() {
+			console.log(12121);
           this.showLoader = true;
             post("/game/create/bot?token=" + storage('token'), null, data => {
               this.showLoader = false;
@@ -88,13 +90,13 @@ import * as Hint from "../Models/Hint";
         }
     },
     async created() {
-        let hint = new Hint.default(11494);
+        //let hint = new Hint.default(11494);
         // const playerBestMove = await hint.bestMoves(1);
         // const enemyBestMove = await hint.bestMovesEnemy(3);
         // const bestMovesOf = await hint.bestMovesOf(playerBestMove);
         // const superiority = await hint.superiority();
         // const winner = await hint.winner();
-        const heatmapQuarter = await hint.heatmapQuarter(1);
+        //const heatmapQuarter = await hint.heatmapQuarter(1);
         // const heatmapQuarters = await hint.heatmapQuarters([1,4]);
         // const heatmapBestZone = await hint.heatmapBestZone();
         // const heatmapEnemyBestZone = await hint.heatmapEnemyBestZone();
@@ -103,7 +105,7 @@ import * as Hint from "../Models/Hint";
         // console.log(bestMovesOf);
         // console.log(superiority);
         // console.log(winner);
-        console.log(heatmapQuarter);
+        //console.log(heatmapQuarter);
         // console.log(heatmapQuarters);
         // console.log(heatmapBestZone);
         // console.log(heatmapEnemyBestZone);

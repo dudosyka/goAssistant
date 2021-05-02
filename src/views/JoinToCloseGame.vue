@@ -3,7 +3,7 @@
   <!-- LOADER !-->
     <aside class="modal loading" v-show="search">
       <header class="modal">
-        <h1 class="modal">Ожидание соперника</h1>
+        <h1 class="modal">Ожидание присоединения</h1>
         <span></span>
         <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
       </header>
@@ -52,7 +52,7 @@
     },
     methods: {
         join() {
-
+            this.search = true;
             post('/game/join/' + this.code + "?token=" + storage('token'), {token: storage('token')}, data => {
                 get("/game/current?token=" + storage('token'), null, data => {
                     if (data.data.gameId === null) {
