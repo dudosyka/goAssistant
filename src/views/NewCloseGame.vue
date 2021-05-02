@@ -1,5 +1,5 @@
 <template>
-  <main class="menu">
+  <main v-on:keyup.enter='startGame()' class="menu">
     <!-- LOADER !-->
       <aside class="modal loading" v-show="search">
         <header class="modal">

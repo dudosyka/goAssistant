@@ -59,8 +59,9 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
     },
     methods: {
 		logout() {
-			setStorage('token', null);
-			window.location = window.location;
+			logout();
+			//setStorage('token', null);
+			//window.location = window.location;
 		},
 
         continueGame(start = true, silence = true) {

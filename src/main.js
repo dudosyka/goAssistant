@@ -56,7 +56,8 @@ global.startGame = (gameId) => {
 global.showLoader = false;
 
 global.getCurUser = async () => {
-	if (storage('curUserData') !== null)
+	const data = storage('curUserData')
+	if (data !== null && data !== "" && data !== "null")
 	{
 		return (new Promise((resolve, reject) => {
 			resolve(JSON.parse(storage('curUserData')));
@@ -73,6 +74,12 @@ global.getCurUser = async () => {
 			return obj;
 		});
 	}
+}
+
+global.logout = function () {
+	setStorage('curUserData', "");
+	setStorage('token', null);
+	window.location = window.location;
 }
 
 router.afterEach(async (to, from) => {

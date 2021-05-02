@@ -5,14 +5,14 @@
       <div class="back">
         <img v-bind:src="user.avatar" class="avatar-image">
         <div class="back-profile">
-          <div class="output-passport full-width">{{user.nickname}}</div>
-          <div class="output-passport full-width">{{user.email}}</div>
-          <div class="output-passport full-width">{{user.pts}}</div>
+          <div class="output-passport full-width">Ник: {{user.nickname}}</div>
+          <div class="output-passport full-width">Почта: {{user.email}}</div>
+          <div class="output-passport full-width">{{user.pts}} pts</div>
         </div>
 		<!--button @click="logout()">Logout</button-->
         <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/">Назад</router-link>
         <div class="score-table">
-          <div class="output full-width score-td" v-for="score in user.games_history">
+          <div class="output full-width score-td" v-for="score in user.games_history.reverse()">
             <img v-bind:src="score.player.avatar">
             <div class="score-name">{{score.player.nickname.length > 15 ? score.player.nickname.slice(0,15) + "..." : score.player.nickname}}</div>
             <div>{{score.score}} / {{score.scoreOpponent}}</div>

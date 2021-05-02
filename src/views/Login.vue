@@ -7,12 +7,12 @@
         <div class="row">
           <div>
             <section class="form_login" v-show="!lever">
-              <input v-model='email' type="email" class="input" placeholder="Email" :invalid="valid.email">
-              <input v-model='password' type="password" class="input" placeholder="Password" style="margin:0;" :invalid="valid.pass">
+              <input v-on:keyup.enter='auth()' v-model='email' type="email" class="input" placeholder="Email" :invalid="valid.email">
+              <input v-on:keyup.enter='auth()' v-model='password' type="password" class="input" placeholder="Password" style="margin:0;" :invalid="valid.pass">
             </section>
             <section class="form_signup" v-show="lever">
-              <input v-model='email' type="text" class="input" placeholder="Email" :invalid="valid.email">
-              <input v-model='nickname' type="text" class="input" placeholder="Nickname" style="margin:0;" :invalid="valid.nick">
+              <input v-on:keyup.enter='auth()' v-model='email' type="text" class="input" placeholder="Email" :invalid="valid.email">
+              <input v-on:keyup.enter='auth()' v-model='nickname' type="text" class="input" placeholder="Nickname" style="margin:0;" :invalid="valid.nick">
             </section>
           </div>
           <button @click='auth()' class="button w3-button w3-card-4 tr w3-hover-white">&#10148;</button>
