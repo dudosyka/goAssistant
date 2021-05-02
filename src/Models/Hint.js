@@ -120,7 +120,7 @@ Hint.prototype.worstEnemyMove = async function (move) {
 /*
 худший ход противника??? ++
 */
-Hint.prototype.amount = async function () {
+Hint.prototype.gameInfo = async function () {
     return await get('/game/info/'+this.gameId+'?token='+storage("token"), null, data => {
         return data;
     });
