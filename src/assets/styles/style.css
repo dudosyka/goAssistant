@@ -2,11 +2,10 @@ body {
   margin: 0;
   font-family: sans-serif;
   background-color: #543389 !important;
-  background-image: url('../../assets/logo-bg.png') !important;
+  background-image: url('../../assets/logo-bg.png'), url('../../assets/logo.png') !important;
   background-repeat: no-repeat !important;
-  background-size: 100px !important;
-  background-position: left 20px top 20px !important;
-
+  background-size: 100px, 60% !important;
+  background-position: left 20px top 20px, left 90% top 25vh !important;
 }
 html {
   overflow: hidden;
@@ -330,6 +329,9 @@ html {
   display: grid;
   grid-template-columns: 1fr 700px 1fr;
   grid-gap: 100px;
+  backdrop-filter: blur(10px);
+  width: 100vw;
+  padding: 70px;
 }
 .form_title {
   font-size: 40px;
