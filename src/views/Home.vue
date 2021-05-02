@@ -21,7 +21,7 @@
           <button class="button full-width w3-button w3-card-4 tr w3-hover-white door" style="font-size: 20px;">Выйти</button>
         </div>
 
-        <div class="">
+        <div style='min-width: fit-content' class="">
           <button @click='continueGame()' class="button full-width w3-button w3-card-4 tr w3-hover-white point" v-if="alreadyStart">Продолжить игру</button>
           <button @click='randomGame()' class="button full-width w3-button w3-card-4 tr w3-hover-white hi" :disabled="alreadyStart">Игра со случайным соперником</button>
           <button @click='startGameWithBot()' class="button full-width w3-button w3-card-4 tr w3-hover-white lamp" :disabled="alreadyStart">Игра с ИИ</button>
@@ -55,8 +55,9 @@ import * as Hint from "../Models/Hint";
 
     },
     methods: {
-        continueGame(start = true) {
-          this.showLoader = true;
+        continueGame(start = true, silence = true) {
+			if (!silence)
+				this.showLoader = true;
             get("/game/current?token=" + storage('token'), null, data => {
                 this.showLoader = false;
                 if (data.data.gameId !== null) {
@@ -113,7 +114,7 @@ import * as Hint from "../Models/Hint";
         // console.log(heatmapBestZone);
         // console.log(heatmapEnemyBestZone);
         // console.log('res', hint);
-        this.continueGame(false);
+        this.continueGame(false, true);
 
     }
 
