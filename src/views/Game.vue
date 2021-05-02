@@ -136,6 +136,7 @@ export default {
             );
         }
         let firstMapLoad = true;
+        let falseEnemy = false;
         client.onmessage = function (event) {
             let data = JSON.parse(event.data);
             try {
@@ -160,6 +161,10 @@ export default {
                     console.log("Current map parsed.");
                     let playerName = data.payload.you.nickname;
                     let opponentName = data.payload.opponent.nickname;
+                    if(opponentName == "Противник" && data.payload.opponent.avatar.length < 1) {
+                        instance.sendResign();
+                        return falseEnemy = true;
+                    }
                     if(playerColor == colors.WHITE) {
                         whitePlayerName = playerName;
                         blackPlayerName = opponentName;
@@ -191,6 +196,7 @@ export default {
                     updateHintStatus();
                 }
                 if(data.payload.type == "endGame") {
+                    if(falseEnemy) return window.location.href = "/"
                     forceStage = 3;
                     stageDefinder();
                     let score = data.payload.finalScore; //string
