@@ -55,6 +55,23 @@ global.startGame = (gameId) => {
 
 global.showLoader = false;
 
+global.getCurUser = async () => {
+	if (storage('curUserData') !== null)
+	{
+		return storage('curUserData');
+	}
+	else
+	{
+		return get('/user/profile?token=' + storage('token'), null, data => {
+			console.log('DATATATATATAT', data);
+			return {
+				avatar: data.data.user.avatar, 
+				nickname: data.data.user.nickname
+			};
+		});
+	}
+}
+
 router.afterEach(async (to, from) => {
     let isLogin = true;
     isLogin = (token !== null);

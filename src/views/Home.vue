@@ -80,7 +80,6 @@ import * as Hint from "../Models/Hint";
             })
         },
         startGameWithBot() {
-			console.log(12121);
           this.showLoader = true;
             post("/game/create/bot?token=" + storage('token'), null, data => {
               this.showLoader = false;
@@ -90,6 +89,10 @@ import * as Hint from "../Models/Hint";
         }
     },
     async created() {
+		getCurUser().then(data => { 
+			this.ava = data.avatar;
+			this.nick = data.nickname;
+		});
         //let hint = new Hint.default(11494);
         // const playerBestMove = await hint.bestMoves(1);
         // const enemyBestMove = await hint.bestMovesEnemy(3);
@@ -111,6 +114,8 @@ import * as Hint from "../Models/Hint";
         // console.log(heatmapEnemyBestZone);
         // console.log('res', hint);
         this.continueGame(false);
+
     }
+
   }
 </script>
