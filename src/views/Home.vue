@@ -3,7 +3,7 @@
   <!-- LOADER !-->
     <aside class="modal loading" v-show="showLoader">
       <header class="modal">
-        <h1 class="modal">Подключение к боту</h1>
+        <h1 class="modal">{{ loaderMsg }}</h1>
         <span></span>
         <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
       </header>
@@ -18,7 +18,7 @@
             <span>{{nick}}</span>
 
           </router-link><br>
-          <button class="button full-width w3-button w3-card-4 tr w3-hover-white door" style="font-size: 20px;">Выйти</button>
+          <button @click='logout()' class="button full-width w3-button w3-card-4 tr w3-hover-white door" style="font-size: 20px;">Выйти</button>
         </div>
 
         <div style='min-width: fit-content' class="">
@@ -38,6 +38,8 @@
 
 <script>
 import * as Hint from "../Models/Hint";
+import { w3cwebsocket as W3CWebSocket } from "websocket";
+
 
   export default {
     name: 'Menu',
@@ -48,6 +50,7 @@ import * as Hint from "../Models/Hint";
           nick: 'ex@mple',
           search: false,
 		  showLoader: false,
+		  client: false,
 
       }
     },
@@ -55,7 +58,13 @@ import * as Hint from "../Models/Hint";
 
     },
     methods: {
+		logout() {
+			setStorage('token', null);
+			window.location = window.location;
+		},
+
         continueGame(start = true, silence = true) {
+			this.loaderMsg = "Загрузка партии";
 			if (!silence)
 				this.showLoader = true;
             get("/game/current?token=" + storage('token'), null, data => {
@@ -73,14 +82,47 @@ import * as Hint from "../Models/Hint";
             });
         },
         randomGame() {
+		  this.loaderMsg = "Поиск противника";		  
           this.showLoader = true;
             post("/game/create/random?token=" + storage('token'), null, data => {
-              this.showLoader = false;
+              //this.showLoader = false;
                 setStorage('curGameId', data.data.gameId);
-                startGame(data.data.gameId);
-            })
+				const client = new W3CWebSocket('ws://172.104.137.176:41239');
+
+				client.onopen = function () {
+					console.log("WebSocket opened");
+					 client.send(JSON.stringify([5, 'go/game']));
+					 client.send(JSON.stringify([
+          7, // 7 - статус: отправка сообщения
+          "go/game", // в какой топик отправляется сообщение
+          {
+            command: "auth",  // команда на авторизацию подключения
+            token: storage('token'), // токен игрока
+            game_id: data.data.gameId // номер игры
+          }
+          ]));
+				}
+
+				client.onmessage = function (event) {
+					let payload = JSON.parse(event.data).payload;
+					if (payload.type == "userConnected")
+					{
+						get('/user/profile'+"?token="+storage('token'), null, user => {
+							console.log('DATA_user', user);
+							if (user.data.user.id !== payload.userId) {
+								startGame(data.data.gameId);
+								window.location = '/game';
+							}
+						});
+						console.log(11);
+					}
+					console.log(data);
+				} 
+                //startGame(data.data.gameId);
+            });
         },
         startGameWithBot() {
+		this.loaderMsg = "Подключение к боту";
           this.showLoader = true;
             post("/game/create/bot?token=" + storage('token'), null, data => {
               this.showLoader = false;
