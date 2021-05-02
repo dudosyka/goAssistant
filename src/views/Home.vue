@@ -100,13 +100,13 @@ import * as Hint from "../Models/Hint";
         }
     },
     async created() {
-        // let hint = new Hint.default(11494);
+        let hint = new Hint.default(11494);
         // const playerBestMove = await hint.bestMoves(1);
         // const enemyBestMove = await hint.bestMovesEnemy(3);
         // const bestMovesOf = await hint.bestMovesOf(playerBestMove);
         // const superiority = await hint.superiority();
         // const winner = await hint.winner();
-        // const heatmapQuarter = await hint.heatmapQuarter(1);
+        const heatmapQuarter = await hint.heatmapQuarter(1);
         // const heatmapQuarters = await hint.heatmapQuarters([1,4]);
         // const heatmapBestZone = await hint.heatmapBestZone();
         // const heatmapEnemyBestZone = await hint.heatmapEnemyBestZone();
@@ -115,7 +115,7 @@ import * as Hint from "../Models/Hint";
         // console.log(bestMovesOf);
         // console.log(superiority);
         // console.log(winner);
-        // console.log(heatmapQuarter);
+        console.log(heatmapQuarter);
         // console.log(heatmapQuarters);
         // console.log(heatmapBestZone);
         // console.log(heatmapEnemyBestZone);
