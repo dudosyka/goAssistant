@@ -59,7 +59,7 @@ global.getCurUser = async () => {
 	if (storage('curUserData') !== null)
 	{
 		return (new Promise((resolve, reject) => {
-			resolve(storage('curUserData'));
+			resolve(JSON.parse(storage('curUserData')));
 		}));
 	}
 	else
@@ -69,7 +69,7 @@ global.getCurUser = async () => {
 				avatar: data.data.user.avatar,
 				nickname: data.data.user.nickname
 			};
-			setStorage('curUserData', obj)
+			setStorage('curUserData', JSON.stringify(obj));
 			return obj;
 		});
 	}

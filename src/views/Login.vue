@@ -2,13 +2,13 @@
     <main class="menu">
       <article class="form_window">
         <header class="form_title">
-          <button v-on:click="lever = 0">Войти</button> \ <button v-on:click="lever = 1">Зарегистрироваться</button>
+          <button v-on:click="lever = 0" :class="lever == 0 ? 'attention' : ''">Войти</button> \ <button v-on:click="lever = 1" :class="lever == 1 ? 'attention' : '' ">Зарегистрироваться</button>
         </header>
         <div class="row">
           <div>
             <section class="form_login" v-show="!lever">
               <input v-model='email' type="email" class="input" placeholder="Email" :invalid="valid.email">
-              <input v-model='password' type="passsword" class="input" placeholder="Password" style="margin:0;" :invalid="valid.pass">
+              <input v-model='password' type="password" class="input" placeholder="Password" style="margin:0;" :invalid="valid.pass">
             </section>
             <section class="form_signup" v-show="lever">
               <input v-model='email' type="text" class="input" placeholder="Email" :invalid="valid.email">
@@ -48,8 +48,16 @@
         auth() {
 			if (!this.lever) {
 				post('/user/login', { email: this.email, password: this.password }, data => {
-					setStorage("token", data.data.token);
-					window.location = window.location;
+					if (data.data.error != "")
+					{
+						this.valid.email = true;
+						this.valid.pass = true;
+					}
+					else
+					{
+						setStorage("token", data.data.token);
+						window.location = window.location;
+					}
 				});
 			}
 			else {

@@ -133,6 +133,7 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
     },
     async created() {
 		getCurUser().then(data => {
+			console.log(data);
 			this.ava = data.avatar;
 			this.nick = data.nickname;
 		});
