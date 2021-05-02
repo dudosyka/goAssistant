@@ -35,12 +35,11 @@
             <div id="moveHistory" style="overflow: auto;max-height: calc(100% - 25px);padding-bottom:18px;"></div>
         </div>
 
-        <!--
         <div id="modal" class="w3-modal">
             <div class="w3-modal-content w3-animate-top w3-card-4">
                 <header class="w3-container w3-purple">
-                    span onclick="document.getElementById('modalMessage').style.display='none'"
-                    class="w3-button w3-display-topright">&times;</span
+                    <span onclick="document.getElementById('modalMessage').style.display='none'"
+                    class="w3-button w3-display-topright">&times;</span>
                 <h2 id="modalHeader">-</h2>
             </header>
             <div class="w3-container">
@@ -50,9 +49,8 @@
             </footer>
           </div>
         </div>
-        !-->
 
-        <transition name="top-fade">
+        <!--transition name="top-fade">
           <aside class="modal_bg" id="modal" style="display: none">
             <div class="modal" style="margin: auto">
               <header class="modal">
@@ -64,7 +62,7 @@
               </header>
             </div>
           </aside>
-        </transition>
+        </transition-->
     </div>
 </template>
 
@@ -283,11 +281,12 @@ export default {
         const movePrefab = `<div class="w3-bar-item w3-card-4 main_color beetwin ">{MOVE}</div>`;
 
         class Helper {
-            constructor(label, stage, sender) {
+            constructor(label, stage, sender, loseHinted) {
                 this.label = label;
                 this.stage = stage;
                 this.sender = sender;
                 this.enabled = true;
+                this.loseHinted = loseHinted;
             }
         };
         function toggleSelector(label,limit,callback) {
@@ -329,200 +328,200 @@ export default {
             new Helper("Финальная 1", 2, function() {}),
             new Helper("Финальная 2", 2, function() {})
         ];*/
+        async function baseHint(hintName, invoke) {
+            togglePlacement(true);
+            console.log("Fetching "+hintName);
+            await invoke();
+            console.log("Hint fetched");
+            togglePlacement();
+        }
+        function getMaxOfArray(numArray) {return Math.max.apply(null, numArray);}
         let hint = new Hint.default(gameId);
+        let highlightHints = false;
         let helpers = [
-            new Helper("В какой четверти играть?",0,async function(){
-                togglePlacement(true);
-                console.log("Fetching best quarter");
-                const result = await hint.heatmapBestZone();
-                console.log("Hint fetched");
-                console.log(result)
-                for(let x=0;x<size;x++) {
-                    for(let y=0;y<size;y++) {
-                        if(defineQuarter(x,y)==result) addHint(x,y);
+            new Helper("Лучшая четверть для игры",0,function(){
+                baseHint("best quarter", async function() {
+                    const result = await hint.heatmapBestZone();
+                    for(let x=0;x<size;x++) {
+                        for(let y=0;y<size;y++) {
+                            if(defineQuarter(x,y)==result) addHint(x,y);
+                        }
                     }
-                }
-                togglePlacement();
-            }),
-            new Helper("Лучший ход из 4",0,function(){
-                toggleSelector("Выберите 4 поля",4,async function(){
-                    togglePlacement(true);
-                    console.log("Fetching best move of selected");
-                    let converted = [];
-                    for(let i of selectedPoints) {
-                        converted.push(parseField(i[0],i[1]));
-                    }
-                    const result = await hint.bestMovesOf(converted);
-                    console.log(result);
-                    console.log("Hint fetched");
-                    let coords = parseXY(result.data.hint);
-                    addHint(coords[0],coords[1]);
-                    togglePlacement();
-                    clearSelectors();
                 })
-            }),
+            },false),
+            new Helper("Четверть игры противника",1,async function(){
+                baseHint("best enemy quarter",async function() {
+                    const result = await hint.heatmapEnemyBestZone();
+                    for(let x=0;x<size;x++) {
+                        for(let y=0;y<size;y++) {
+                            if(defineQuarter(x,y)==result) addHint(x,y);
+                        }
+                    }
+                });
+            },false),
+            new Helper("Лучший ход из выбранных",0,function(){
+                toggleSelector("Выберите 4 поля",4,function(){
+                    baseHint("best selected move", async function() {
+                        let converted = [];
+                        for(let i of selectedPoints) {
+                            converted.push(parseField(i[0],i[1]));
+                        }
+                        const result = await hint.bestMovesOf(converted);
+                        let coords = parseXY(result.data.hint);
+                        if(coords[0] < 0)
+                            showModal(`Лучший ход из 4`,`Выбранные вами ходы равносильны и не повлияют на игру - можете играть в любом поле`,false);
+                        else addHint(coords[0],coords[1]);
+                        clearSelectors();
+                    });
+                })
+            },false),
+            new Helper("Зона лучшего хода",1,async function(){
+                baseHint("best move",async function() {
+                    const result = await hint.bestMoves(1);
+                    for(let i of result) {
+                        let coords = parseXY(i);
+                        addHintZone(coords[0],coords[1],3);
+                    }
+                });
+            },false),
+            new Helper("Зоны 2 лучших ходов",1,async function(){
+                baseHint("best moves (2)",async function() {
+                    const result = await hint.bestMoves(2);
+                    for(let i of result) {
+                        let coords = parseXY(i);
+                        addHintZone(coords[0],coords[1],2);
+                    }
+                });
+            },true),
+            new Helper("4 лучших хода",2,async function(){
+                baseHint("best moves (4)",async function() {
+                    const result = await hint.bestMoves(4);
+                    for(let i of result) {
+                        let coords = parseXY(i);
+                        addHint(coords[0],coords[1]);
+                    }
+                });
+            },true),
+            new Helper("Тепловая карта доски",1,async function(){
+                baseHint("heatmap",async function() {
+                    const result = await hint.fullHeatmap();
+                    let matrix = normalizeMatrix(result);
+                    let max = -1;
+                    for(let i of matrix) {
+                        let localMax = getMaxOfArray(i);
+                        if(localMax > max) max = localMax
+                    }
+                    for(let x in matrix) {
+                        for(let y in matrix[x]) {
+                            let opacity = 0.9/(max/matrix[x][y])
+                            if(opacity>0) opacity += 0.02;
+                            addHint(x,y,opacity);
+                        }
+                    }
+                });
+            },false),
             new Helper("Тепловая карта 2 зон",0,async function(){
                 toggleSelector("Выберите 2 поля, зоны которых вас интересуют",2,async function(){
-                    function getMaxOfArray(numArray) {
-                        return Math.max.apply(null, numArray);
-                    }
-                    e("specialMessages").innerHTML = "Получение данных...";
-                    togglePlacement(true);
-                    let quarter = [defineQuarter(selectedPoints[0][0],selectedPoints[0][1]),defineQuarter(selectedPoints[1][0],selectedPoints[1][1])];
-                    console.log("Fetching heatmap quarter");
-                    const result = await hint.heatmapQuarters(quarter);
-                    console.log("Hint fetched");
-                    console.log(result);
-                    let matrix = normalizeMatrix(result);
-                    console.log(matrix);
-                    let max = -1;
-                    for(let i of matrix) {
-                        let localMax = getMaxOfArray(i);
-                        if(localMax > max) max = localMax
-                    }
-                    for(let x in matrix) {
-                        for(let y in matrix[x]) {
-                            let opacity = 0.9/(max/matrix[x][y])
-                            if(opacity>0) opacity += 0.02;
-                            addHint(x,y,opacity,false);
+                    baseHint("heatmap quarter",async function() {
+                        e("specialMessages").innerHTML = "Получение данных...";
+                        let quarter = [defineQuarter(selectedPoints[0][0],selectedPoints[0][1]),defineQuarter(selectedPoints[1][0],selectedPoints[1][1])];
+                        const result = await hint.heatmapQuarters(quarter);
+                        let matrix = normalizeMatrix(result);
+                        let max = -1;
+                        for(let i of matrix) {
+                            let localMax = getMaxOfArray(i);
+                            if(localMax > max) max = localMax
                         }
-                    }
-                    e("specialMessages").innerHTML = "";
-                    clearSelectors();
-                    togglePlacement();
+                        for(let x in matrix) {
+                            for(let y in matrix[x]) {
+                                let opacity = 0.9/(max/matrix[x][y])
+                                if(opacity>0) opacity += 0.02;
+                                addHint(x,y,opacity,false);
+                            }
+                        }
+                        e("specialMessages").innerHTML = "";
+                        clearSelectors();
+                    });
                 });
-            }),
-            new Helper("Тепловая карта доски",1,async function(){
-                function getMaxOfArray(numArray) {
-                    return Math.max.apply(null, numArray);
-                }
-                togglePlacement(true);
-                console.log("Fetching heatmap");
-                const result = await hint.fullHeatmap();
-                console.log("Hint fetched");
-                console.log(result)
-                let matrix = normalizeMatrix(result);
-                console.log(matrix);
-                let max = -1;
-                for(let i of matrix) {
-                    let localMax = getMaxOfArray(i);
-                    if(localMax > max) max = localMax
-                }
-                for(let x in matrix) {
-                    for(let y in matrix[x]) {
-                        let opacity = 0.9/(max/matrix[x][y])
-                        if(opacity>0) opacity += 0.02;
-                        addHint(x,y,opacity);
-                    }
-                }
-                togglePlacement();
-            }),
-            new Helper("Зоны требующие защиту",1,async function(){
-                togglePlacement(true);
-                console.log("Fetching protect zones");
-                const result = await hint.bestMovesEnemy(4);
-                console.log("Hint fetched");
-                for(let i of result) {
-                    let coords = parseXY(i);
-                    addHintZone(coords[0],coords[1],2);
-                }
-                console.log(result)
-                togglePlacement();
-            }),
-            new Helper("Зона лучшего хода",1,async function(){
-                togglePlacement(true);
-                console.log("Fetching best move");
-                const result = await hint.bestMoves(1);
-                console.log("Hint fetched");
-                for(let i of result) {
-                    let coords = parseXY(i);
-                    addHintZone(coords[0],coords[1],3);
-                }
-                console.log(result)
-                togglePlacement();
-            }),
-            new Helper("Прогноз игры",1,async function(){
-                togglePlacement(true);
-                console.log("Fetching future moves");
-                const result = await hint.futureMoves(10);
-                console.log("Hint fetched");
-                console.log(result);
-                let baseOpacity = 0.8;
-                let count=0;
-                for(let i of result.data.hint) {
-                    count++;
-                    let coords = parseXY(i.move);
-                    addHint(coords[0],coords[1],baseOpacity,count%2==1,count);
-                    baseOpacity *= 0.95
-                }
-                togglePlacement();
-            }),
+            },true),
             new Helper("Тепловая карта зоны",1,async function(){
                 toggleSelector("Выберите поле, зона которого вас интересует",1,async function(){
-                    function getMaxOfArray(numArray) {
-                        return Math.max.apply(null, numArray);
-                    }
-                    e("specialMessages").innerHTML = "Получение данных...";
-                    togglePlacement(true);
-                    let quarter = defineQuarter(selectedPoints[0][0],selectedPoints[0][1])
-                    console.log("Fetching heatmap quarter");
-                    const result = await hint.heatmapQuarter(quarter);
-                    console.log("Hint fetched");
-                    console.log(result);
-                    let matrix = normalizeMatrix(result);
-                    console.log(matrix);
-                    let max = -1;
-                    for(let i of matrix) {
-                        let localMax = getMaxOfArray(i);
-                        if(localMax > max) max = localMax
-                    }
-                    for(let x in matrix) {
-                        for(let y in matrix[x]) {
-                            let opacity = 0.9/(max/matrix[x][y])
-                            if(opacity>0) opacity += 0.02;
-                            addHint(x,y,opacity,false);
+                    baseHint("heatmap quarter",async function() {
+                        e("specialMessages").innerHTML = "Получение данных...";
+                        let quarter = defineQuarter(selectedPoints[0][0],selectedPoints[0][1]);
+                        const result = await hint.heatmapQuarter(quarter);
+                        let matrix = normalizeMatrix(result);
+                        let max = -1;
+                        for(let i of matrix) {
+                            let localMax = getMaxOfArray(i);
+                            if(localMax > max) max = localMax
                         }
-                    }
-                    e("specialMessages").innerHTML = "";
-                    clearSelectors();
-                    togglePlacement();
+                        for(let x in matrix) {
+                            for(let y in matrix[x]) {
+                                let opacity = 0.9/(max/matrix[x][y])
+                                if(opacity>0) opacity += 0.02;
+                                addHint(x,y,opacity,false);
+                            }
+                        }
+                        e("specialMessages").innerHTML = "";
+                        clearSelectors();
+                    })
                 });
-            }),
-            new Helper("Четверть игры противника",1,async function(){
-                togglePlacement(true);
-                console.log("Fetching best enemy quarter");
-                const result = await hint.heatmapEnemyBestZone();
-                console.log("Hint fetched");
-                console.log(result)
-                for(let x=0;x<size;x++) {
-                    for(let y=0;y<size;y++) {
-                        if(defineQuarter(x,y)==result) addHint(x,y);
+            },true),
+            new Helper("Самая опасная зона",1,async function(){
+                baseHint("protect zones (1)",async function() {
+                    const result = await hint.bestMovesEnemy(1);
+                    for(let i of result) {
+                        let coords = parseXY(i);
+                        addHintZone(coords[0],coords[1],3);
                     }
-                }
-                togglePlacement();
-            }),
+                });
+            },false),
+            new Helper("4 опасных зоны",1,async function(){
+                baseHint("protect zones (4)",async function() {
+                    const result = await hint.bestMovesEnemy(4);
+                    for(let i of result) {
+                        let coords = parseXY(i);
+                        addHintZone(coords[0],coords[1],2);
+                    }
+                });
+            },true),
+            new Helper("Прогноз игры (10 ходов)",1,async function(){
+                baseHint("future moves (10)",async function() {
+                    const result = await hint.futureMoves(10);
+                    let baseOpacity = 0.8;
+                    let count=0;
+                    for(let i of result.data.hint) {
+                        count++;
+                        let coords = parseXY(i.move);
+                        addHint(coords[0],coords[1],baseOpacity,count%2==1,count);
+                        baseOpacity *= 0.95
+                    }
+                });
+            },true),
+            new Helper("Прогноз игры (6 ходов)",2,async function(){
+                baseHint("future moves (6)",async function() {
+                    const result = await hint.futureMoves(6);
+                    let baseOpacity = 0.8;
+                    let count=0;
+                    for(let i of result.data.hint) {
+                        count++;
+                        let coords = parseXY(i.move);
+                        addHint(coords[0],coords[1],baseOpacity,count%2==1,count);
+                        baseOpacity *= 0.95
+                    }
+                });
+            },false),
             new Helper("Перевес в очках",2,async function(){
-                togglePlacement(true);
-                console.log("Fetching superiority");
-                const result = await hint.superiority();
-                console.log("Hint fetched");
-                console.log(result)
-                showModal(`Перевес в очках`,`Текущий перевес в очках: <b>${result.score}</b> (без учета подсказок)<br>
-                                            На данный момент побеждают: <b>${result.winner=="W"?"Белые":"Черные"}</b>`);
-                togglePlacement();
-            }),
-            new Helper("Лучшие ходы",2,async function(){
-                togglePlacement(true);
-                console.log("Fetching best moves (4)");
-                const result = await hint.bestMoves(4);
-                console.log("Hint fetched");
-                for(let i of result) {
-                    let coords = parseXY(i);
-                    addHint(coords[0],coords[1]);
-                }
-                console.log(result)
-                togglePlacement();
-            }),
+                baseHint("superiority",async function() {
+                    const result = await hint.superiority();
+                    highlightHints = !((result.winner=="W"?colors.WHITE:colors.BLACK)==playerColor);
+                    showModal(`Перевес в очках`,`Текущий перевес в очках: <b>${result.score}</b> (без учета подсказок)<br>
+                                                На данный момент побеждают: <b>${result.winner=="W"?"Белые":"Черные"}</b><br>${highlightHints?`
+                                                Вы находитесь в проигрышной ситуации, для удобства были подсвечены самые полезные подсказки - настоятельно рекомендуем вам их использовать для победы.`:`
+                                                Вы находитесь в выигрышной ситуации, используйте подсказки для отражения последующих атак и победите в этой игре!`}`);
+                });
+            },false),
         ];
         let helpersBlocked = false;
         let allHelpersShown = false;
@@ -733,7 +732,6 @@ export default {
             generateBlock(x, y, colors.HINT, opacity, special, inside);
         }
         function addHintZone(x,y,radius,opacity) {
-            console.log(parseField(x,y));
             x = x+Math.round(Math.random()*radius)*(Math.random>0.5?1:-1)
             y = y+Math.round(Math.random()*radius)*(Math.random>0.5?1:-1)
             if(x<0) x=0;
@@ -805,6 +803,7 @@ export default {
         //helper stuff
         function stageDefinder() {
             const stages = ["Начальная", "Основная", "Финальная", "Игра окончена"];
+            const emoji = ["🟢","🟡","🔴","🏁"];
             e("blockCount").innerHTML = blockCount;
             let currentStage = 0;
             if (blockCount > 180 * 0.15) currentStage = 1;
@@ -817,6 +816,7 @@ export default {
             }
             if(forceStage > -1) currentStage = forceStage;
             e("gameStage").innerHTML = stages[currentStage];
+            instance.stage = emoji[currentStage];
 
             e("recommendedHelpers").innerHTML = "";
             e("allHelpers").innerHTML = "";
@@ -826,12 +826,12 @@ export default {
                     if(!i.enabled) helperButton.setAttribute("disabled","true");
                     helperButton.innerHTML = i.label;
                     helperButton.onclick = i.sender;
-                    if (helpersBlocked) helperButton.setAttribute("disabled", "true")
+                    if (helpersBlocked) helperButton.setAttribute("disabled", "true");
                     if (i.stage == currentStage) {
-                        helperButton.setAttribute("class", "w3-button w3-purple w3-hover-cyan tr helperButton");
+                        helperButton.setAttribute("class", "w3-button w3-hover-cyan tr helperButton"+(highlightHints&&i.loseHinted?" helperButtonCritical":""));
                         e("recommendedHelpers").appendChild(helperButton);
                     } else {
-                        helperButton.setAttribute("class", "w3-button w3-hover-black tr helperButtonSmall");
+                        helperButton.setAttribute("class", "w3-button w3-hover-black tr helperButtonSmall"+(highlightHints&&i.loseHinted?" helperButtonSmallCritical":""));
                         e("allHelpers").appendChild(helperButton);
                     }
                 }
@@ -854,7 +854,7 @@ export default {
         }
         //modal
         function showModal(header,text,footer) {
-            if(!footer) footer = `<button class="w3-button w3-red w3-hover-orange tr" onclick="document.getElementById('modal').style.display='none'">Закрыть</button>`;
+            if(!footer) footer = `<button class="w3-button w3-white w3-hover-white w3-card-4 tr" onclick="document.getElementById('modal').style.display='none'">Закрыть</button>`;
             e('modal').style.display='block';
             e('modalHeader').innerHTML = header;
             e('modalText').innerHTML = text;

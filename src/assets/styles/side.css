@@ -51,8 +51,12 @@
 .helperButton {
     width:100%;
     border-bottom: 3px solid #fff;
-    background: #5d4483 !important;
+    background: #5d4483;
     font-size: 15px;
+    color: white
+}
+.helperButtonCritical {
+  background: #447b83!important;
 }
 .helperButton:last-child {
     border:none;
@@ -66,6 +70,9 @@
     width:100%;
     padding: 2px;
     background-color: #dec8ff;
+}
+.helperButtonSmallCritical {
+  background: #cfffc8!important;
 }
 #recommendedHelpersLabel {
   white-space: nowrap;
