@@ -45,6 +45,8 @@
 .beetwin {
   display: flex !important;
   justify-content: space-between;
+  -webkit-user-select: none;
+  -moz-user-select: none;
 }
 .clickableMove {
   cursor:pointer;
