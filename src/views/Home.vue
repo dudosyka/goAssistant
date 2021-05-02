@@ -10,42 +10,30 @@
     </aside>
   <!-- LOADER !-->
 
-    <article class="form_window menu">
-      <div class="">
-        <button @click='continueGame()' class="button full-width w3-button w3-card-4 tr w3-hover-white point" v-if="alreadyStart">Продолжить игру</button>
-        <button @click='randomGame()' class="button full-width w3-button w3-card-4 tr w3-hover-white hi" :disabled="alreadyStart">Игра со случайным соперником</button>
-        <button @click='startGameWithBot()' class="button full-width w3-button w3-card-4 tr w3-hover-white lamp" :disabled="alreadyStart">Игра с ИИ</button>
-        <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white loocker" to="/closegame" tag="button" :disabled="alreadyStart">Частная игра</router-link>
+    <article class="menu">
+      <div class="main-layout">
+        <div class="profil w3-card-4">
+          <router-link to="/passport" class="bookmarck">
+            <img v-bind:src="ava"><br>
+            <span>{{nick}}</span>
+
+          </router-link><br>
+          <button class="button full-width w3-button w3-card-4 tr w3-hover-white door" style="font-size: 20px;">Выйти</button>
+        </div>
+
+        <div class="">
+          <button @click='continueGame()' class="button full-width w3-button w3-card-4 tr w3-hover-white point" v-if="alreadyStart">Продолжить игру</button>
+          <button @click='randomGame()' class="button full-width w3-button w3-card-4 tr w3-hover-white hi" :disabled="alreadyStart">Игра со случайным соперником</button>
+          <button @click='startGameWithBot()' class="button full-width w3-button w3-card-4 tr w3-hover-white lamp" :disabled="alreadyStart">Игра с ИИ</button>
+          <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white loocker" to="/closegame" tag="button" :disabled="alreadyStart">Частная игра</router-link>
+        </div>
       </div>
     </article>
-    <router-link to="/passport" class="bookmarck tr">
-      <img v-bind:src="ava">
-      <span>{{nick}}</span>
-    </router-link>
   </main>
 </template>
 
 <style scoped>
-  .bookmarck {
-    transform: translateX(-120px) rotate(90deg);
-    position: fixed;
-    left: 0;
-    padding: 10px 30px 50px 30px;
-    background: #1f1233;
-    border-radius: 5px;
-  }
-  .bookmarck:hover {
-    transform: translateX(-80px) rotate(90deg) scale(1.05);
-  }
-  .bookmarck img {
-    width: 50px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-  .bookmarck span {
-    color: #fff;
-    font-size: 20px;
-  }
+
 </style>
 
 <script>
