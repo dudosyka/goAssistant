@@ -36,10 +36,18 @@
     },
     methods: {
         auth() {
-            post('/user/register', { email: this.email, nickname: this.nickname }, data => {
-                localStorage.setItem('token', data.data.token);
-                window.location = window.location;
-            });
+			if (!this.lever) {
+				post('/user/login', { email: this.email, password: this.password }, data => {
+					setStorage("token", data.data.token);
+					window.location = window.location;
+				});
+			}
+			else {
+				post('/user/register', { email: this.email, nickname: this.nickname }, data => {
+					localStorage.setItem('token', data.data.token);
+					window.location = window.location;
+				});
+			}
         }
     },
     created() {

@@ -13,7 +13,7 @@
       <h1 class="title">Код вашего гобана</h1>
       <div class="">
         <div class="output full-width" style="text-align: center; width: 100%">{{code}}</div>
-        <button @click='startGame()' class="button full-width w3-button w3-card-4 tr w3-hover-white">Начать игру</button>
+        <button @click='startGame()' :disabled='search == true' class="button full-width w3-button w3-card-4 tr w3-hover-white">Начать игру</button>
         <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/closegame">Назад</router-link>
       </div>
     </article>
@@ -67,6 +67,8 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
     },
     methods: {
         startGame() {
+			console.log(112);
+			this.search	= true;
             this.client.send(JSON.stringify([5, 'go/game']));
             this.client.send(JSON.stringify([
                 7,// 7 - статус: отправка сообщения

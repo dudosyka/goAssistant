@@ -59,6 +59,11 @@ router.afterEach(async (to, from) => {
     let isLogin = true;
     isLogin = (token !== null);
 
+	if (isLogin)
+		isLogin = (token != "null");
+	
+	//console.log(token != "null");
+
     if (to.path == '/login' && isLogin)
       redirectTo('Home');
 
