@@ -77,3 +77,16 @@
 #recommendedHelpersLabel {
   white-space: nowrap;
 }
+.w3-purple {
+  background: #1f1233  !important;
+  padding: 15px !important;
+}
+#modalHeader {
+  margin: none !important;
+}
+.w3-container {
+  font-size: 20px;
+}
+.w3-modal {
+  background:hsla(287, 100%, 9%, 0.5) !important;
+}
