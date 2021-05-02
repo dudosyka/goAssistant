@@ -162,6 +162,12 @@ html {
 .input:hover {
   border-right: 10px solid #a999c4;
 }
+.input-invalid {
+  border-right: 10px solid red;
+}
+.input[invalid] {
+  border-right: 10px solid red;
+}
 
 .output {
   padding: 20px;
