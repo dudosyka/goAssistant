@@ -17,9 +17,37 @@
         <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/closegame">Назад</router-link>
       </div>
     </article>
+    <router-link to="/passport" class="bookmarck tr">
+      <img src="https://lh3.googleusercontent.com/ogw/ADGmqu8PSHYF5lnPZdPodQ6FuOsCmbGJwWMaSzCVE4U=s32-c-mo">
+      <span>nick</span>
+    </router-link>
   </main>
 </template>
 
+<style scoped>
+  .bookmarck {
+     display: block;
+    transform: translateX(-100px) rotate(90deg);
+    position: fixed;
+    left: 0;
+    padding: 10px 30px 50px 30px;
+    background: #1f1233;
+    border-radius: 5px;
+    min-width: 220;
+  }
+  .bookmarck:hover {
+    transform: translateX(-80px) rotate(90deg) scale(1.05);
+  }
+  .bookmarck img {
+    width: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  .bookmarck span {
+    color: #fff;
+    font-size: 20px;
+  }
+</style>
 
 
 <script>
