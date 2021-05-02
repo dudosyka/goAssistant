@@ -11,7 +11,7 @@ global.redirectTo = (name) => {
     router.push({name: name}).catch(err => { /* QUITE! */ });
 }
 
-global.request = (url, type, data, success) => {
+global.request = (url, type, data, success, failed) => {
     let bodyFormData = new FormData();
 
     if (data !== null) {
@@ -32,16 +32,16 @@ global.request = (url, type, data, success) => {
         }
     )
     .catch(
-        err => { console.log(err); }
+        err => { failed(err); }
     );
 }
 
-global.get = async (url, data = null, success) => {
-    return request(url, "get", data, success);
+global.get = async (url, data = null, success, failed = (err) => { console.log(err); }) => {
+    return request(url, "get", data, success, failed);
 }
 
-global.post = async (url, data = null, success) => {
-    return request(url, "post", data, success);
+global.post = async (url, data = null, success, failed = (err) => { console.log(err); }) => {
+    return request(url, "post", data, success, failed);
 }
 
 global.storage = name => localStorage.getItem(name);

@@ -20,7 +20,21 @@
     </article>
 
     <!-- MODAL !-->
-    <transition name="top-fade">
+    <div id="modal" class="w3-modal">
+        <div class="w3-modal-content w3-animate-top w3-card-4">
+            <header class="w3-container w3-purple">
+                <span onclick="document.getElementById('modal').style.display='none'"
+                class="w3-button w3-display-topright">&times;</span>
+            <h2 id="modalHeader">-</h2>
+        </header>
+        <div class="w3-container">
+            <p id="modalText">Some text..</p>
+        </div>
+        <footer class="w3-container w3-purple" id="modalFooter">
+        </footer>
+      </div>
+    </div>
+    <!--transition name="top-fade">
       <aside class="modal_bg" v-show="modal">
         <div class="modal">
           <header class="modal">
@@ -31,7 +45,7 @@
           <p class="modal">Ошибка подключения</p>
         </div>
       </aside>
-    </transition>
+    </transition-->
     <!-- MODAL !-->
 
   </main>
@@ -43,7 +57,6 @@
     data() {
       return {
         code: "",
-        modal: false,
         search: false
       }
     },
@@ -51,9 +64,15 @@
 
     },
     methods: {
+        showModal(header,text) {
+            document.getElementById('modal').style.display='block';
+            document.getElementById('modalHeader').innerHTML = header;
+            document.getElementById('modalText').innerHTML = text;
+            document.getElementById('modalFooter').innerHTML = `<button class="w3-button w3-white w3-hover-white w3-card-4 tr" onclick="document.getElementById('modal').style.display='none'">Закрыть</button>`;
+        },
         join() {
             this.search = true;
-            post('/game/join/' + this.code + "?token=" + storage('token'), {token: storage('token')}, data => {
+            post('/game/join/' + this.code + "?token=" + storage('token'), {token: storage('token')}, data => {  
                 get("/game/current?token=" + storage('token'), null, data => {
                     if (data.data.gameId === null) {
                         window.location = "/"
@@ -63,6 +82,9 @@
                     }
                 });
                 console.log("DATA", data);
+            },err => {
+              this.search = false;
+              this.showModal(`Присоединение к игре`,`Игра с указанным кодом не найдена! Проверьте правильность написания кода гобана и повторите попытку`);
             });
         }
     },

@@ -38,8 +38,8 @@
         <div id="modal" class="w3-modal">
             <div class="w3-modal-content w3-animate-top w3-card-4">
                 <header class="w3-container w3-purple">
-                    <span onclick="document.getElementById('modalMessage').style.display='none'"
-                    class="w3-button w3-display-topright">&times;</span>
+                    <!--span onclick="document.getElementById('modal').style.display='none'"
+                    class="w3-button w3-display-topright">&times;</span-->
                 <h2 id="modalHeader">-</h2>
             </header>
             <div class="w3-container">
@@ -49,20 +49,6 @@
             </footer>
           </div>
         </div>
-
-        <!--transition name="top-fade">
-          <aside class="modal_bg" id="modal" style="display: none">
-            <div class="modal" style="margin: auto">
-              <header class="modal">
-                <h1 class="modal" id="modalHeader"></h1>
-              </header>
-              <p class="modal" id="modalText"></p>
-              <header>
-                <h1 class="modal" id="modalFooter"></h1>
-              </header>
-            </div>
-          </aside>
-        </transition-->
     </div>
 </template>
 
