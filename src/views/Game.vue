@@ -508,6 +508,16 @@ export default {
                                                 Вы находитесь в выигрышной ситуации, используйте подсказки для отражения последующих атак и победите в этой игре!`}`);
                 });
             },false),
+            new Helper("Худший ход противника",3,function(){
+                toggleSelector("Выберите поле для которого искать худший ход",1,function(){
+                    baseHint("worst enemy move", async function() {
+                        const result = await hint.worstEnemyMove(parseField(selectedPoints[0],selectedPoints[1]));
+                        let coords = parseXY(result.data.hint);
+                        addHint(coords[0],coords[1]);
+                        clearSelectors();
+                    });
+                })
+            },false),
         ];
         let helpersBlocked = false;
         let allHelpersShown = false;

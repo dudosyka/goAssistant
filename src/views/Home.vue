@@ -82,7 +82,7 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
             });
         },
         randomGame() {
-		  this.loaderMsg = "Поиск противника";		  
+		  this.loaderMsg = "Поиск противника";
           this.showLoader = true;
             post("/game/create/random?token=" + storage('token'), null, data => {
               //this.showLoader = false;
@@ -117,7 +117,7 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
 						console.log(11);
 					}
 					console.log(data);
-				} 
+				}
                 //startGame(data.data.gameId);
             });
         },
@@ -132,7 +132,7 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
         }
     },
     async created() {
-		getCurUser().then(data => { 
+		getCurUser().then(data => {
 			this.ava = data.avatar;
 			this.nick = data.nickname;
 		});

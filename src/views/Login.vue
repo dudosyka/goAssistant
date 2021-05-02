@@ -7,12 +7,12 @@
         <div class="row">
           <div>
             <section class="form_login" v-show="!lever">
-              <input v-model='email' type="email" class="input" placeholder="Email">
-              <input v-model='password' type="password" class="input" placeholder="Password" style="margin:0;">
+              <input v-model='email' type="email" class="input" placeholder="Email" :invalid="valid.email">
+              <input v-model='password' type="passsword" class="input" placeholder="Password" style="margin:0;" :invalid="valid.pass">
             </section>
             <section class="form_signup" v-show="lever">
-              <input v-model='email' type="text" class="input" placeholder="Email">
-              <input v-model='nickname' type="text" class="input" placeholder="Nickname" style="margin:0;">
+              <input v-model='email' type="text" class="input" placeholder="Email" :invalid="valid.email">
+              <input v-model='nickname' type="text" class="input" placeholder="Nickname" style="margin:0;" :invalid="valid.nick">
             </section>
           </div>
           <button @click='auth()' class="button w3-button w3-card-4 tr w3-hover-white">&#10148;</button>
@@ -20,6 +20,11 @@
       </article>
     </main>
 </template>
+<style>
+  .attention {
+    font-weight: bold;
+  }
+</style>
 <script>
   export default {
     name: 'Login',
@@ -28,7 +33,12 @@
         email: null,
         password: null,
         nickname: null,
-        lever: 0
+        lever: 0,
+        valid: {
+          email: false,
+          pass: false,
+          nick: false
+        }
       }
     },
     components: {
