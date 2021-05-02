@@ -1,6 +1,6 @@
 .bar {
   font-size: 15px;
-  overflow: auto;
+  overflow: visible;
   max-height: calc(100% - 25px);
   padding: 20px;
 }
@@ -42,14 +42,25 @@
 .time-icon {
   grid-area: timer-i;
 }
+.beetwin {
+  display: flex !important;
+  justify-content: space-between;
+}
 
 
 .helperButton {
     width:100%;
-    border-bottom: 3px solid #3e1a75;
+    border-bottom: 3px solid #fff;
+    background: #5d4483 !important;
+    font-size: 15px;
 }
 .helperButton:last-child {
     border:none;
+}
+.helperButton:hover, .helperButtonSmall:hover {
+    background: #402f5a !important;
+    color: #fff !important;
+
 }
 .helperButtonSmall {
     width:100%;

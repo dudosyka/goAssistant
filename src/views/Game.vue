@@ -34,12 +34,13 @@
             <div class="w3-container w3-card-4 w3-center" style="padding: 10px">История ходов</div>
             <div id="moveHistory" style="overflow: auto;max-height: calc(100% - 25px);padding-bottom:18px;"></div>
         </div>
-        
+
+        <!--
         <div id="modal" class="w3-modal">
             <div class="w3-modal-content w3-animate-top w3-card-4">
                 <header class="w3-container w3-purple">
-                    <!--span onclick="document.getElementById('modalMessage').style.display='none'"
-                    class="w3-button w3-display-topright">&times;</span-->
+                    span onclick="document.getElementById('modalMessage').style.display='none'"
+                    class="w3-button w3-display-topright">&times;</span
                 <h2 id="modalHeader">-</h2>
             </header>
             <div class="w3-container">
@@ -47,8 +48,23 @@
             </div>
             <footer class="w3-container w3-purple" id="modalFooter">
             </footer>
+          </div>
+        </div>
+        !-->
+
+        <transition name="top-fade">
+          <aside class="modal_bg" id="modal" style="display: none">
+            <div class="modal" style="margin: auto">
+              <header class="modal">
+                <h1 class="modal" id="modalHeader"></h1>
+              </header>
+              <p class="modal" id="modalText"></p>
+              <header>
+                <h1 class="modal" id="modalFooter"></h1>
+              </header>
             </div>
-            </div>
+          </aside>
+        </transition>
     </div>
 </template>
 
@@ -264,7 +280,7 @@ export default {
             HINT: 'hint',
             SELECTOR: 'selector'
         };
-        const movePrefab = `<div class="w3-bar-item w3-card-4 main_color moveDiv">{MOVE}</div>`;
+        const movePrefab = `<div class="w3-bar-item w3-card-4 main_color beetwin ">{MOVE}</div>`;
 
         class Helper {
             constructor(label, stage, sender) {
