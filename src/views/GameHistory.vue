@@ -167,15 +167,19 @@
 			}
 			function addMoveToStory(color, player, position, loaded) {
 				let element = document.createElement('span');
-				element.innerHTML = movePrefab.replace("{MOVE}", `<i class="fas circle fa-circle w3-text-${color==1?'black':'white'}"></i> <span  class="textLimiter">${player}</span> <b>${position==null?'Пас':position}</b>`).replace("{INDEX}",instance.moveIndex);
+				element.innerHTML = movePrefab.replace("{MOVE}", `<i class="fas circle fa-circle w3-text-${color==1?'black':'white'}"></i> <span  class="textLimiter">${player}</span> <b>${position==null?'Пас':position}</b>`).replace("{INDEX}",position==null?"-2":instance.moveIndex);
 				function setOnclick(index) {
 					const constIndex = index*1;
 					element.onclick = function() {
 						setPosition(constIndex);
 					}
 				}
-				setOnclick(instance.moveIndex);
-				instance.moveIndex++;
+				if(position!=null) {
+					setOnclick(instance.moveIndex);
+					instance.moveIndex++;
+				} else {
+					element.innerHTML = element.innerHTML.replace("clickableMove ","").replace("w3-hover-purple ","");
+				}
 				e("moveHistory").appendChild(element);
 				e("moveHistory").scrollTop = e("moveHistory").scrollHeight;
 			}
