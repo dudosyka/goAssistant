@@ -17,10 +17,6 @@
         <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/closegame">Назад</router-link>
       </div>
     </article>
-    <router-link to="/passport" class="bookmarck tr">
-      <img src="https://lh3.googleusercontent.com/ogw/ADGmqu8PSHYF5lnPZdPodQ6FuOsCmbGJwWMaSzCVE4U=s32-c-mo">
-      <span>nick</span>
-    </router-link>
   </main>
 </template>
 
