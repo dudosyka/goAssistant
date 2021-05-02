@@ -33,6 +33,8 @@
 
 .back-profile{
   grid-area: stats;
+  display: grid;
+  grid-template-rows: ;
 }
 
 .back-button{
@@ -49,12 +51,18 @@
 }
 
 .output-passport {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 5px;
   background: #ede7f6;
   font-size: 20px;
   color: #1f1233;
   margin-bottom: 10px;
   text-align: center;
+}
+.output-passport:last-child {
+  margin-bottom: 0;
 }
 
 .score-table{
