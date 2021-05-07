@@ -16,7 +16,7 @@
     3. Write down `npm run build`
    
 ### #4 Project structure:
-    1. /src/Models there u can find midlewares between Leela and this application
+    1. /src/Models there you can find midlewares between Leela and this application
     2. /src/router routing in the application is provided here
     3. /src/views pages of this application (child Vue entities)
     4. /src/App.vue main Vue entity
