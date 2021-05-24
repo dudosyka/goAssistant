@@ -2,12 +2,12 @@
     <div class="home">
         <div style="text-align: center;">
             <div id="game"></div><br>
-            <button class="w3-button w3-white w3-hover-white tr" id="passButton" style="margin-right:10px;width:100px">Пас</button>
-            <button class="w3-button w3-white w3-hover-white tr" id="resignButton" style="width:100px">Сдаться</button><br>
+            <button class="w3-button w3-white w3-hover-white tr" id="passButton">Пас</button>
+            <button class="w3-button w3-white w3-hover-white tr" id="resignButton">Сдаться</button><br>
             <span id="specialMessages"></span>
         </div>
 
-        <div class="w3-sidebar w3-bar-block w3-white" style="width:270px;left:0;top:0px;line-height:2;overflow:hidden;">
+        <div class="w3-sidebar w3-bar-block w3-white" style="width:300px;left:0;top:0px;line-height:2;overflow:hidden;">
             <div class="w3-container w3-card-2 w3-center" style="padding: 10px">GoAssistant</div>
 
             <div class="bar" style="overflow:auto;padding-bottom:40px">
@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <div class="w3-sidebar w3-bar-block w3-white" style="width:250px;right:0;top:0px;overflow:hidden;">
+        <div class="w3-sidebar w3-bar-block w3-white" style="width:300px;right:0;top:0px;overflow:hidden;">
             <div class="w3-container w3-card-4 w3-center" style="padding: 10px">История ходов</div>
             <div id="moveHistory" style="overflow: auto;max-height: calc(100% - 25px);padding-bottom:18px;"></div>
         </div>

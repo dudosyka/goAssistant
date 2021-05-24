@@ -18,15 +18,15 @@
     z-index: -1;
 }
 .letter {
-    font-size: 15px;
+    font-size: 18px;
     position: absolute;
     left:-8px;
     -webkit-user-select: none;
 }
-.letter_bottom {bottom:20px;}
-.letter_top {top:20px;}
+.letter_bottom {bottom:13px;}
+.letter_top {top:13px;}
 .number {
-    font-size: 15px;
+    font-size: 18px;
     position: absolute;
     top:-8px;
     -webkit-user-select: none;
@@ -98,4 +98,13 @@
 }
 #modalFooter {
     padding:15px;
+}
+#passButton {
+    font-size: 18px;
+    width: 120px;
+    margin-right:18px;
+}
+#resignButton {
+    font-size: 18px;
+    width: 120px;
 }

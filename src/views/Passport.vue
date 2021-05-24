@@ -45,9 +45,9 @@
   background-color: #fff;
   position: relative;
 
-  font-size: 40px;
+  font-size: 28px;
   color: #1f1233;
-  height: 100px;
+  height: 70px;
 }
 
 .output-passport {
@@ -56,7 +56,7 @@
   align-items: center;
   padding: 5px;
   background: #ede7f6;
-  font-size: 20px;
+  font-size: 18px;
   color: #1f1233;
   margin-bottom: 10px;
   text-align: center;

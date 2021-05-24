@@ -1,14 +1,14 @@
 .bar {
-  font-size: 15px;
+  font-size: 18px;
   overflow: visible;
   max-height: calc(100% - 25px);
-  padding: 20px;
+  padding: 10px;
 }
 .section {
   margin-bottom: 20px;
 }
 .icon {
-  font-size: 20px;
+  font-size: 18px;
 }
 .opposite {
   display: flex;
@@ -22,7 +22,7 @@
     grid-gap: 10px;
     grid-template-areas:
       "circle name timer-i timer";
-    font-size: 15px;
+    font-size: 18px;
 }
 .circle {
     line-height: unset!important;
@@ -57,7 +57,7 @@
     width:100%;
     border-bottom: 3px solid #fff;
     background: #5d4483;
-    font-size: 15px;
+    font-size: 18px;
     color: white
 }
 .helperButtonCritical {
