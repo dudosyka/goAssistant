@@ -222,7 +222,7 @@ export default {
                 if(data.payload.type == "notify") {
                     try {
                         if(data.error.length > 0) {
-                            if(error.includes("your turn1")) {
+                            if(data.error.includes("your turn1")) {
                                 canPlace = false;
                                 updateHintStatus();
                             } else {
