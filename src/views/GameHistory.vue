@@ -1,7 +1,15 @@
 <template>
     <div class="home">
         <div style="text-align: center;">
-            <div id="game"></div><br>
+            <div id="game" class="gobanTexture"></div><br>
+			<h2 class="w3-text-white">
+				<button class="w3-button tr w3-medium w3-hover-aqua" id="lButton">&larr;</button>
+				Ходы
+				<button class="w3-button tr w3-medium w3-hover-aqua" id="rButton">&rarr;</button>
+			</h2>
+			<div id="moveStoryShort">
+
+			</div>
         </div>
 
         <div class="w3-sidebar w3-bar-block w3-white" style="width:270px;left:0;top:0px;line-height:2;overflow:hidden;">
@@ -16,17 +24,18 @@
 
               <div class="section">
                 <span class="opposite"><div>Камней на поле: </div><b id="blockCount">0</b></span>
-                <div style="margin-top:10px;margin-bottom:10px">
-                    <div>Потрачено на подсказки: </div>
-                    <span class="opposite"><div>&#9899; <b id="blackHints">0</b> очков</div><div><b id="whiteHints">0</b> очков &#9898;</div></span>
-                </div>
                 <span class="opposite"><div>{{stage}} Стадия игры: </div><b id="gameStage">N/A</b></span>
               </div>
             </div>
         </div>
-
-        <div class="w3-sidebar w3-bar-block w3-white" style="width:250px;right:0;top:0px;overflow:hidden;">
-            <div class="w3-container w3-card-4 w3-center" style="padding: 10px">История ходов</div>
+		<div style="right:0;top:0;position:absolute;">
+            <button class="w3-button w3-card-4 tr w3-text-white w3-large" onclick="document.getElementById('gameStoryBar').style.display = 'block'">☰ История</button>
+        </div>
+        <div class="w3-sidebar w3-bar-block w3-white w3-animate-right" style="width:270px;right:0;top:0px;overflow:hidden;display:none" id="gameStoryBar">
+            <div class="w3-container w3-card-4 w3-center" style="padding: 10px">
+                История ходов
+                <span onclick="document.getElementById('gameStoryBar').style.display='none'" class="w3-button w3-display-topright tr">&times;</span>
+            </div>
             <div id="moveHistory" style="overflow: auto;max-height: calc(100% - 25px);padding-bottom:18px;"></div>
         </div>
 
@@ -161,21 +170,33 @@
 			let lastIndex = -1;
 			function setPosition(index) {
 				loadMatrix(gameLog[index]);
-				if(lastIndex > -1) e("move"+lastIndex).setAttribute("class","w3-bar-item w3-card-4 main_color w3-hover-purple beetwin clickableMove tr")
-				e("move"+index).setAttribute("class","w3-bar-item w3-card-4 w3-blue w3-hover-blue beetwin clickableMove tr")
+				if(lastIndex > -1) {
+					e("move"+lastIndex).setAttribute("class","w3-bar-item w3-card-4 main_color w3-hover-purple beetwin clickableMove tr");
+					e("moves"+lastIndex).setAttribute("class",e("moves"+lastIndex).getAttribute("class").replace(" clickedStoryBlock",""));
+				}
+				e("move"+index).setAttribute("class","w3-bar-item w3-card-4 w3-blue w3-hover-blue beetwin clickableMove tr");
+				e("moves"+index).setAttribute("class",e("moves"+index).getAttribute("class")+" clickedStoryBlock");
 				lastIndex = index;
 			}
 			function addMoveToStory(color, player, position, loaded) {
 				let element = document.createElement('span');
+				let shortElement = document.createElement('div');
 				element.innerHTML = movePrefab.replace("{MOVE}", `<i class="fas circle fa-circle w3-text-${color==1?'black':'white'}"></i> <span  class="textLimiter">${player}</span> <b>${position==null?'Пас':position}</b>`).replace("{INDEX}",position==null?"-2":instance.moveIndex);
 				function setOnclick(index) {
 					const constIndex = index*1;
 					element.onclick = function() {
 						setPosition(constIndex);
 					}
+					shortElement.onclick = function() {
+						setPosition(constIndex);
+					}
 				}
 				if(position!=null) {
+					shortElement.setAttribute('class', 'storyBlock tr block_'+color);
+					shortElement.setAttribute('id', "moves"+instance.moveIndex);
+					shortElement.innerHTML = instance.moveIndex*1+1;
 					setOnclick(instance.moveIndex);
+					e("moveStoryShort").appendChild(shortElement);
 					instance.moveIndex++;
 				} else {
 					element.innerHTML = element.innerHTML.replace("clickableMove ","").replace("w3-hover-purple ","");
@@ -279,6 +300,25 @@
 				stageDefinder();
 				e("blackPlayerName").innerHTML = gameData.data.player_1.nickname;
 				e("whitePlayerName").innerHTML = gameData.data.player_2.nickname;
+
+				document.addEventListener("keydown", event => {
+					if(event.keyCode == 39 || event.keyCode == 68) {
+						e("rButton").click();
+					} //right
+					if(event.keyCode == 37 || event.keyCode == 65) {
+						e("lButton").click();
+					} //left
+				});
+				e("rButton").onclick = function() {
+					if(lastIndex+1 >= gameLog.length) return;
+					e("moveStoryShort").scrollLeft = lastIndex*40;
+					setPosition(lastIndex+1);
+				}
+				e("lButton").onclick = function() {
+					if(lastIndex-1 < 0) return;
+					e("moveStoryShort").scrollLeft = (lastIndex-11)*40;
+					setPosition(lastIndex-1);
+				}
 			}, 10);
 		}
 	}

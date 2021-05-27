@@ -1,7 +1,11 @@
 <template>
     <div class="home">
         <div style="text-align: center;">
-            <div id="game"></div><br>
+            <div class="section w3-text-white" style="width:300px;display:inline-block;">
+                <div class="moveDiv">&#9899; <b id="blackPlayerName" class="textLimiter">Загрузка...</b><span class="time-icon">⏳</span><span id="blackTimer">--:--</span></div>
+                <div class="moveDiv">&#9898; <b id="whitePlayerName" class="textLimiter">Загрузка...</b><span class="time-icon">⏳</span><span id="whiteTimer">--:--</span></div>
+            </div><br>
+            <div id="game" class="gobanTexture"></div><br>
             <button class="w3-button w3-white w3-hover-white tr" id="passButton">Пас</button>
             <button class="w3-button w3-white w3-hover-white tr" id="resignButton">Сдаться</button><br>
             <span id="specialMessages"></span>
@@ -11,10 +15,6 @@
             <div class="w3-container w3-card-2 w3-center" style="padding: 10px">GoAssistant</div>
 
             <div class="bar" style="overflow:auto;padding-bottom:40px">
-              <div class="section">
-                <div class="moveDiv">&#9899; <b id="blackPlayerName" class="textLimiter">Загрузка...</b><span class="time-icon">⏳</span><span id="blackTimer">--:--</span></div>
-                <div class="moveDiv">&#9898; <b id="whitePlayerName" class="textLimiter">Загрузка...</b><span class="time-icon">⏳</span><span id="whiteTimer">--:--</span></div>
-              </div>
 
               <div class="section">
                 <span class="opposite"><div>Камней на поле: </div><b id="blockCount">0</b></span>
@@ -33,9 +33,14 @@
                 </div>
             </div>
         </div>
-
-        <div class="w3-sidebar w3-bar-block w3-white" style="width:300px;right:0;top:0px;overflow:hidden;">
-            <div class="w3-container w3-card-4 w3-center" style="padding: 10px">История ходов</div>
+        <div style="right:0;top:0;position:absolute;">
+            <button class="w3-button w3-card-4 tr w3-text-white w3-large" onclick="document.getElementById('gameStoryBar').style.display = 'block'">☰ История</button>
+        </div>
+        <div class="w3-sidebar w3-bar-block w3-white w3-animate-right" style="width:270px;right:0;top:0px;overflow:hidden;display:none" id="gameStoryBar">
+            <div class="w3-container w3-card-4 w3-center" style="padding: 10px">
+                История ходов
+                <span onclick="document.getElementById('gameStoryBar').style.display='none'" class="w3-button w3-display-topright tr">&times;</span>
+            </div>
             <div id="moveHistory" style="overflow: auto;max-height: calc(100% - 25px);padding-bottom:18px;"></div>
         </div>
 
@@ -548,7 +553,7 @@ export default {
                                                 Вы находитесь в выигрышной ситуации, используйте подсказки для отражения последующих атак и победите в этой игре!`}`);
                 });
             },false),
-            new Helper("Худший ход противника",3,function(){
+            /*new Helper("Худший ход противника",3,function(){
                 toggleSelector("Выберите поле для которого искать худший ход",1,function(){
                     baseHint("worst enemy move", async function() {
                         const result = await hint.worstEnemyMove(parseField(selectedPoints[0],selectedPoints[1]));
@@ -557,7 +562,7 @@ export default {
                         clearSelectors();
                     });
                 })
-            },false),
+            },false),*/
         ];
         let helpersBlocked = false;
         let allHelpersShown = false;
@@ -816,8 +821,8 @@ export default {
             if (blockCount > 180 * 0.6) currentStage = 2
             if(turnBlackEnd > -1 && turnWhiteEnd > -1) {
                 let time = (new Date()).getTime();
-                if(time-turnBlackEnd > 0 || time-turnWhiteEnd > 0) {
-                    currentStage = 3
+                if((time-turnBlackEnd > 0 && currentTurn == colors.BLACK) || (time-turnWhiteEnd > 0  && currentTurn == colors.WHITE)) {
+                    //currentStage = 3
                 }
             }
             if(forceStage > -1) currentStage = forceStage;
@@ -880,9 +885,12 @@ export default {
             let time = (new Date()).getTime();
             let blackRemain = time-turnBlackEnd;
             let whiteRemain = time-turnWhiteEnd;
-            if(blackRemain > 0 || whiteRemain > 0) {
-                e("whiteTimer").innerHTML = "--:--";
-                e("blackTimer").innerHTML = "--:--";
+            if(currentTurn == colors.WHITE && whiteRemain > 0) {
+                e("whiteTimer").innerHTML = "0:00";
+                return;
+            }
+            if(currentTurn == colors.BLACK && blackRemain > 0) {
+                e("blackTimer").innerHTML = "0:00";
                 return;
             }
             if(firstTimer) {
