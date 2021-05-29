@@ -48,7 +48,10 @@ let russian = {
         select2: "Выберите 2 поля, зоны которых вас интересуют",
         select4: "Выберите 4 поля",
 
-        fetching: "Получение данных..."
+        fetching: "Получение данных...",
+
+        noAnswerTitle: "Результат подсказки",
+        noAnswerText: "ИИ для подсказок считает, что исход партии уже очевиден, поэтому рекомендует одному из игроков сдаться, узнать победителя и проигравшего можно с помощью подсказки 'Перевес в очках'"
     },
     loading: "Загрузка...",
     pass: "Пас",
@@ -144,7 +147,10 @@ let english = {
         select2: "Select 2 fields, the quarters of which you are interested in",
         select4: "Select 4 fields",
 
-        fetching: "Fetching info..."
+        fetching: "Fetching info...",
+
+        noAnswerTitle: "Hint result",
+        noAnswerText: "The AI for hints believes that the outcome of the game is already obvious, so it recommends resign to one of the players, you can find out the winner and the loser using the 'Superiority' hint"
     },
     loading: "Loading...",
     pass: "Pass",

@@ -378,10 +378,14 @@ export default {
                 addMoveToStory(color,color==colors.WHITE?whitePlayerName:blackPlayerName,parseField(x,y),false);
             }
         }
+        function hintNoAnswer(hint) {
+            console.log("Fetched recommendation: "+hint)
+            showModal(lang.hints.noAnswerTitle,lang.hints.noAnswerText,false);
+        }
         let hint = new Hint.default(gameId);
         let highlightHints = false;
         let helpers = [
-            new Helper(lang.hints.bestQuarter,0,function(){
+            new Helper(lang.hints.bestQuarter,1,function(){
                 baseHint("best quarter", async function() {
                     const result = await hint.heatmapBestZone();
                     for(let x=0;x<size;x++) {
@@ -401,7 +405,7 @@ export default {
                     }
                 });
             },false,1),
-            new Helper(lang.hints.bestMoveOfSelected,0,function(){
+            new Helper(lang.hints.bestMoveOfSelected,1,function(){
                 toggleSelector(lang.hints.select4,4,function(){
                     baseHint("best selected move", async function() {
                         let converted = [];
@@ -416,34 +420,40 @@ export default {
                         clearSelectors();
                     });
                 })
-            },false,2),
-            new Helper(lang.hints.bestMove1,1,async function(){
+            },true,2),
+            new Helper(lang.hints.bestMove1,0,async function(){
                 baseHint("best move",async function() {
                     const result = await hint.bestMoves(1);
+                    if(result == "resign" || result == "pass") return hintNoAnswer(result);
                     for(let i of result) {
+                        if(i == "resign" || i == "pass") return hintNoAnswer(result);
                         let coords = parseXY(i);
                         addHintZone(coords[0],coords[1],3);
                     }
                 });
             },false,3),
-            new Helper(lang.hints.bestMove2,1,async function(){
+            new Helper(lang.hints.bestMove2,0,async function(){
                 baseHint("best moves (2)",async function() {
                     const result = await hint.bestMoves(2);
+                    if(result == "resign" || result == "pass") return hintNoAnswer(result);
                     for(let i of result) {
+                        if(i == "resign" || i == "pass") return hintNoAnswer(result);
                         let coords = parseXY(i);
                         addHintZone(coords[0],coords[1],2);
                     }
                 });
-            },true,3),
-            new Helper(lang.hints.bestMove4,2,async function(){
+            },false,3),
+            new Helper(lang.hints.bestMove4,0,async function(){
                 baseHint("best moves (4)",async function() {
                     const result = await hint.bestMoves(4);
+                    if(result == "resign" || result == "pass") return hintNoAnswer(result);
                     for(let i of result) {
+                        if(i == "resign" || i == "pass") return hintNoAnswer(result);
                         let coords = parseXY(i);
                         addHint(coords[0],coords[1]);
                     }
                 });
-            },true,3),
+            },false,3),
             new Helper(lang.hints.heatmap,1,async function(){
                 baseHint("heatmap",async function() {
                     const result = await hint.fullHeatmap();
@@ -461,8 +471,8 @@ export default {
                         }
                     }
                 });
-            },false,2),
-            new Helper(lang.hints.heatmap2Zones,0,async function(){
+            },true,2),
+            new Helper(lang.hints.heatmap2Zones,1,async function(){
                 toggleSelector(lang.hints.select2,2,async function(){
                     baseHint("heatmap quarter",async function() {
                         e("specialMessages").innerHTML = lang.hints.fetching;
@@ -486,7 +496,7 @@ export default {
                     });
                 });
             },true,2),
-            new Helper(lang.hints.heatmapZone,1,async function(){
+            new Helper(lang.hints.heatmapZone,2,async function(){
                 toggleSelector(lang.hints.select1_z,1,async function(){
                     baseHint("heatmap quarter",async function() {
                         e("specialMessages").innerHTML = lang.hints.fetching;
@@ -510,43 +520,49 @@ export default {
                     })
                 });
             },true,1),
-            new Helper(lang.hints.bestEnemyMove1,1,async function(){
+            new Helper(lang.hints.bestEnemyMove1,0,async function(){
                 baseHint("protect zones (1)",async function() {
                     const result = await hint.bestMovesEnemy(1);
+                    if(result == "resign" || result == "pass") return hintNoAnswer(result);
                     for(let i of result) {
+                        if(i == "resign" || i == "pass") return hintNoAnswer(result);
                         let coords = parseXY(i);
                         addHintZone(coords[0],coords[1],3);
                     }
                 });
             },false,3),
-            new Helper(lang.hints.bestEnemyMove4,1,async function(){
+            new Helper(lang.hints.bestEnemyMove4,0,async function(){
                 baseHint("protect zones (4)",async function() {
                     const result = await hint.bestMovesEnemy(4);
+                    if(result == "resign" || result == "pass") return hintNoAnswer(result);
                     for(let i of result) {
+                        if(i == "resign" || i == "pass") return hintNoAnswer(result);
                         let coords = parseXY(i);
                         addHintZone(coords[0],coords[1],2);
                     }
                 });
-            },true,3),
-            new Helper(lang.hints.prediction10,1,async function(){
+            },false,3),
+            new Helper(lang.hints.prediction10,0,async function(){
                 baseHint("future moves (10)",async function() {
                     const result = await hint.futureMoves(10);
                     let baseOpacity = 0.8;
                     let count=0;
                     for(let i of result.data.hint) {
+                        if(i.move == "resign" || i.move == "pass") return hintNoAnswer(i.move);
                         count++;
                         let coords = parseXY(i.move);
                         addHint(coords[0],coords[1],baseOpacity,count%2==1,count);
                         baseOpacity *= 0.95
                     }
                 });
-            },true,3),
-            new Helper(lang.hints.prediction6,2,async function(){
+            },false,3),
+            new Helper(lang.hints.prediction6,1,async function(){
                 baseHint("future moves (6)",async function() {
                     const result = await hint.futureMoves(6);
                     let baseOpacity = 0.8;
                     let count=0;
                     for(let i of result.data.hint) {
+                        if(i.move == "resign" || i.move == "pass") return hintNoAnswer(i.move);
                         count++;
                         let coords = parseXY(i.move);
                         addHint(coords[0],coords[1],baseOpacity,count%2==1,count);
