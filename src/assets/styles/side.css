@@ -95,3 +95,9 @@
 .w3-modal {
   background:hsla(287, 100%, 9%, 0.5) !important;
 }
+.hintcost {
+  display: block;
+  font-size: 14px;
+  transform: translate(0px,-14px);
+  height: 8px;
+}

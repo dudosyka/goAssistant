@@ -1,16 +1,16 @@
 <template>
   <main class="menu" v-if='user !== false'>
     <article class="window menu">
-      <h1 class="title">Профиль</h1>
+      <h1 class="title">{{localeData.profile}}</h1>
       <div class="back">
         <img v-bind:src="user.avatar" class="avatar-image">
         <div class="back-profile">
-          <div class="output-passport full-width">Ник: {{user.nickname}}</div>
-          <div class="output-passport full-width">Почта: {{user.email}}</div>
+          <div class="output-passport full-width">{{localeData.nick}}{{user.nickname}}</div>
+          <div class="output-passport full-width">{{localeData.mail}}{{user.email}}</div>
           <div class="output-passport full-width">{{user.pts}} pts</div>
         </div>
 		<!--button @click="logout()">Logout</button-->
-        <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/">Назад</router-link>
+        <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/">{{localeData.back}}</router-link>
         <div class="score-table">
           <div style='cursor: pointer;' @click='gameView(score.game_id)' class="output full-width score-td w3-hover-purple tr" v-for="score in user.games_history.reverse()">
 			<img v-bind:src="score.player.avatar">
@@ -104,6 +104,7 @@
 </style>
 
 <script>
+import * as Localization from "../Models/Localization";
   export default {
     name: 'Passport',
     data() {
@@ -117,6 +118,13 @@
             ava: 'https://www.castorama.ru/media/catalog/product/cache/image/1800x/040ec09b1e35df139433887a97daa66f/2/e/2ef250_510229_1.jpg',
             nick: 'badexample',
           },
+          locale: null,
+          localeData: {
+            profile: "",
+            nick: "",
+            mail: "",
+            back: ""
+          }
       }
     },
     components: {
@@ -133,26 +141,18 @@
 		}
     },
     created() {
+        //localization load
+        if(localStorage.getItem("lang") == null) localStorage.setItem("lang","ru")
+        this.locale = new Localization.default(localStorage.getItem("lang"));
+        let lang = this.locale.language;
+
+        this.localeData.profile = lang.menu.profile;
+        this.localeData.nick = lang.menu.nickname;
+        this.localeData.mail = lang.menu.mail;
+        this.localeData.back = lang.menu.back;
+
         get('/user/profile?token='+storage('token'), null, data => {
             this.user = data.data.user;
-            /*
-                [UserObject]
-                avatar: "https://go-backend-denis.ambersoft.llc/uploads/608be2d875e90.png"
-                email: "a.hatson@ya.ru"
-                games_history: Array(7) [GameObject]
-                id: 233
-                nickname: "dudosyka"
-                position: 147
-                pts: -29
-                winrate: "2/5"
-            */
-            /*
-                [GameObject]
-                game_id: 1039
-                player: [UserObject]
-                score: 7 //Очки того, чей профиль (dudosyka заработал 7 очков)
-                scoreOpponent: -7 //Очки противника
-            */
             console.log(this.user);
         });
     }

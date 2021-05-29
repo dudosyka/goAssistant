@@ -3,18 +3,18 @@
     <!-- LOADER !-->
       <aside class="modal loading" v-show="search">
         <header class="modal">
-          <h1 class="modal">Ожидание соперника</h1>
+          <h1 class="modal">{{localeData.waiting}}</h1>
           <span></span>
           <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
         </header>
       </aside>
     <!-- LOADER !-->
     <article class="form_window menu">
-      <h1 class="title">Код вашего гобана</h1>
+      <h1 class="title">{{localeData.gobanCode}}</h1>
       <div class="">
         <div class="output full-width" style="text-align: center; width: 100%">{{code}}</div>
-        <button @click='startGame()' :disabled='search == true' class="button full-width w3-button w3-card-4 tr w3-hover-white">Начать игру</button>
-        <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/closegame">Назад</router-link>
+        <button @click='startGame()' :disabled='search == true' class="button full-width w3-button w3-card-4 tr w3-hover-white">{{localeData.start}}</button>
+        <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/closegame">{{localeData.back}}</router-link>
       </div>
     </article>
   </main>
@@ -47,6 +47,7 @@
 
 
 <script>
+import * as Localization from "../Models/Localization";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
   export default {
@@ -55,7 +56,14 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
       return {
         code: 'XXXX',
         client: false,
-        search: false
+        search: false,
+        locale: null,
+        localeData: {
+          waiting: "",
+          gobanCode: "",
+          start: "",
+          back: ""
+        }
       }
     },
     components: {
@@ -78,6 +86,16 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
         }
     },
     created() {
+        //localization load
+        if(localStorage.getItem("lang") == null) localStorage.setItem("lang","ru")
+        this.locale = new Localization.default(localStorage.getItem("lang"));
+        let lang = this.locale.language;
+
+        this.localeData.waiting = lang.menu.waitingEnemy;
+        this.localeData.gobanCode = lang.menu.gobanCode;
+        this.localeData.start = lang.menu.start;
+        this.localeData.back = lang.menu.back;
+        
         post('/game/create/code', { token: storage('token') }, data => {
             setStorage('secretRoom', data.data.code);
             setStorage('curGameId', data.data.gameId);

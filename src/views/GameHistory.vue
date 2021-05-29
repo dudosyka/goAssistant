@@ -4,7 +4,7 @@
             <div id="game" class="gobanTexture"></div><br>
 			<h2 class="w3-text-white">
 				<button class="w3-button tr w3-medium w3-hover-aqua" id="lButton">&larr;</button>
-				Ходы
+				{{localeData.moves}}
 				<button class="w3-button tr w3-medium w3-hover-aqua" id="rButton">&rarr;</button>
 			</h2>
 			<div id="moveStoryShort">
@@ -14,26 +14,26 @@
 
         <div class="w3-sidebar w3-bar-block w3-white" style="width:270px;left:0;top:0px;line-height:2;overflow:hidden;">
             <div class="w3-container w3-card-2 w3-center" style="padding: 10px">GoAssistant</div>
-			<div class="w3-center">Режим просмотра игры</div>
-			<button class="w3-button w3-hover-cyan tr helperButton" onclick="window.location.href = '/passport'">Вернуться в профиль</button>
+			<div class="w3-center">{{localeData.viewMode}}</div>
+			<button class="w3-button w3-hover-cyan tr helperButton" onclick="window.location.href = '/passport'">{{localeData.backToProfile}}</button>
             <div class="bar" style="overflow:auto;padding-bottom:40px">
               <div class="section">
-                <div>&#9899; <b id="blackPlayerName" class="textLimiter">Загрузка...</b></div>
-                <div>&#9898; <b id="whitePlayerName" class="textLimiter">Загрузка...</b></div>
+                <div>&#9899; <b id="blackPlayerName" class="textLimiter">{{localeData.loading}}</b></div>
+                <div>&#9898; <b id="whitePlayerName" class="textLimiter">{{localeData.loading}}</b></div>
               </div>
 
               <div class="section">
-                <span class="opposite"><div>Камней на поле: </div><b id="blockCount">0</b></span>
-                <span class="opposite"><div>{{stage}} Стадия игры: </div><b id="gameStage">N/A</b></span>
+                <span class="opposite"><div>{{localeData.onBoard}}: </div><b id="blockCount">0</b></span>
+                <span class="opposite"><div>{{stage}} {{localeData.gameStage}} </div><b id="gameStage">N/A</b></span>
               </div>
             </div>
         </div>
 		<div style="right:0;top:0;position:absolute;">
-            <button class="w3-button w3-card-4 tr w3-text-white w3-large" onclick="document.getElementById('gameStoryBar').style.display = 'block'">☰ История</button>
+            <button class="w3-button w3-card-4 tr w3-text-white w3-large" onclick="document.getElementById('gameStoryBar').style.display = 'block'">☰ {{localeData.historyShort}}</button>
         </div>
         <div class="w3-sidebar w3-bar-block w3-white w3-animate-right" style="width:270px;right:0;top:0px;overflow:hidden;display:none" id="gameStoryBar">
             <div class="w3-container w3-card-4 w3-center" style="padding: 10px">
-                История ходов
+                {{localeData.history}}
                 <span onclick="document.getElementById('gameStoryBar').style.display='none'" class="w3-button w3-display-topright tr">&times;</span>
             </div>
             <div id="moveHistory" style="overflow: auto;max-height: calc(100% - 25px);padding-bottom:18px;"></div>
@@ -63,6 +63,7 @@
 </style>
 
 <script>
+	import * as Localization from "../Models/Localization";
 	export default {
 		name: "GameHistory",
 		data() {
@@ -70,7 +71,19 @@
 				game: null,
 				client: null,
 				stage: '🟢',
-				moveIndex: 0
+				moveIndex: 0,
+				locale: null,
+				localeData: {
+					loading: "",
+					onBoard: "",
+					gameStage: "",
+					historyShort: "",
+					history: "",
+
+					moves: "",
+					viewMode: "",
+					backToProfile: ""
+				}
 			};
 		},
 		methods: {
@@ -84,6 +97,22 @@
 		},
 		async created() {
 			let instance = this;
+			//localization load
+			if(localStorage.getItem("lang") == null) localStorage.setItem("lang","ru")
+        	instance.locale = new Localization.default(localStorage.getItem("lang"));
+			let lang = instance.locale.language;
+
+			this.localeData.loading = lang.loading;
+			this.localeData.onBoard = lang.onBoard;
+			this.localeData.gameStage = lang.gameStage.label;
+			this.localeData.historyShort = lang.historyShort;
+			this.localeData.history = lang.history;
+
+			this.localeData.moves = lang.moves;
+			this.localeData.viewMode = lang.viewMode;
+			this.localeData.backToProfile = lang.backToProfile;
+
+			//main block
 			let gameId = localStorage.getItem("watchGameId");
 			let gameData = await this.loadGame(gameId);
 			let gameLog = JSON.parse(gameData.data.log);
@@ -181,7 +210,7 @@
 			function addMoveToStory(color, player, position, loaded) {
 				let element = document.createElement('span');
 				let shortElement = document.createElement('div');
-				element.innerHTML = movePrefab.replace("{MOVE}", `<i class="fas circle fa-circle w3-text-${color==1?'black':'white'}"></i> <span  class="textLimiter">${player}</span> <b>${position==null?'Пас':position}</b>`).replace("{INDEX}",position==null?"-2":instance.moveIndex);
+				element.innerHTML = movePrefab.replace("{MOVE}", `<i class="fas circle fa-circle w3-text-${color==1?'black':'white'}"></i> <span  class="textLimiter">${player}</span> <b>${position==null?lang.pass:position}</b>`).replace("{INDEX}",position==null?"-2":instance.moveIndex);
 				function setOnclick(index) {
 					const constIndex = index*1;
 					element.onclick = function() {
@@ -232,13 +261,12 @@
 				blocks[x][y] = c;
 			}
 			function stageDefinder() {
-				const stages = ["Начальная", "Основная", "Финальная", "Игра окончена"];
 				const emoji = ["🟢","🟡","🔴","🏁"];
 				e("blockCount").innerHTML = blockCount;
 				let currentStage = 0;
 				if (blockCount > 180 * 0.15) currentStage = 1;
 				if (blockCount > 180 * 0.6) currentStage = 2;
-				e("gameStage").innerHTML = stages[currentStage];
+				e("gameStage").innerHTML = lang.gameStage[currentStage];
 				instance.stage = emoji[currentStage];
 			}
 			setTimeout(() => {

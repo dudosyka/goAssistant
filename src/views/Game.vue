@@ -2,12 +2,12 @@
     <div class="home">
         <div style="text-align: center;">
             <div class="section w3-text-white" style="width:300px;display:inline-block;">
-                <div class="moveDiv">&#9899; <b id="blackPlayerName" class="textLimiter">Загрузка...</b><span class="time-icon">⏳</span><span id="blackTimer">--:--</span></div>
-                <div class="moveDiv">&#9898; <b id="whitePlayerName" class="textLimiter">Загрузка...</b><span class="time-icon">⏳</span><span id="whiteTimer">--:--</span></div>
+                <div class="moveDiv">&#9899; <b id="blackPlayerName" class="textLimiter">{{localeData.loading}}</b><span class="time-icon">⏳</span><span id="blackTimer">--:--</span></div>
+                <div class="moveDiv">&#9898; <b id="whitePlayerName" class="textLimiter">{{localeData.loading}}</b><span class="time-icon">⏳</span><span id="whiteTimer">--:--</span></div>
             </div><br>
             <div id="game" class="gobanTexture"></div><br>
-            <button class="w3-button w3-white w3-hover-white tr" id="passButton">Пас</button>
-            <button class="w3-button w3-white w3-hover-white tr" id="resignButton">Сдаться</button><br>
+            <button class="w3-button w3-white w3-hover-white tr" id="passButton">{{localeData.pass}}</button>
+            <button class="w3-button w3-white w3-hover-white tr" id="resignButton">{{localeData.resign}}</button><br>
             <span id="specialMessages"></span>
         </div>
 
@@ -17,28 +17,28 @@
             <div class="bar" style="overflow:auto;padding-bottom:40px">
 
               <div class="section">
-                <span class="opposite"><div>Камней на поле: </div><b id="blockCount">0</b></span>
+                <span class="opposite"><div>{{localeData.onBoard}}: </div><b id="blockCount">0</b></span>
                 <div style="margin-top:10px;margin-bottom:10px">
-                    <div>Потрачено на подсказки: </div>
-                    <span class="opposite"><div>&#9899; <b id="blackHints">0</b> очков</div><div><b id="whiteHints">0</b> очков &#9898;</div></span>
+                    <div>{{localeData.spentScore}} </div>
+                    <span class="opposite"><div>&#9899; <b id="blackHints">0</b> {{localeData.score}}</div><div><b id="whiteHints">0</b> {{localeData.score}} &#9898;</div></span>
                 </div>
-                <span class="opposite"><div>{{stage}} Стадия игры: </div><b id="gameStage">N/A</b></span>
+                <span class="opposite"><div>{{stage}} {{localeData.gameStage}} </div><b id="gameStage">N/A</b></span>
               </div>
 
-                <span id="recommendedHelpersLabel"><span class="icon">💡</span> Рекомендуемые подсказки</span>
+                <span id="recommendedHelpersLabel"><span class="icon">💡</span> {{localeData.recommended}}</span>
                 <div id="recommendedHelpers">
                 </div><br>
-                <button class="w3-button main_color w3-hover-black tr helperButton" id="allHelpersButton">Все подсказки</button>
+                <button class="w3-button main_color w3-hover-black tr helperButton" id="allHelpersButton">{{localeData.allHelpers}}</button>
                 <div id="allHelpers" style="display: none">
                 </div>
             </div>
         </div>
         <div style="right:0;top:0;position:absolute;">
-            <button class="w3-button w3-card-4 tr w3-text-white w3-large" onclick="document.getElementById('gameStoryBar').style.display = 'block'">☰ История</button>
+            <button class="w3-button w3-card-4 tr w3-text-white w3-large" onclick="document.getElementById('gameStoryBar').style.display = 'block'">☰ {{localeData.historyShort}}</button>
         </div>
         <div class="w3-sidebar w3-bar-block w3-white w3-animate-right" style="width:270px;right:0;top:0px;overflow:hidden;display:none" id="gameStoryBar">
             <div class="w3-container w3-card-4 w3-center" style="padding: 10px">
-                История ходов
+                {{localeData.history}}
                 <span onclick="document.getElementById('gameStoryBar').style.display='none'" class="w3-button w3-display-topright tr">&times;</span>
             </div>
             <div id="moveHistory" style="overflow: auto;max-height: calc(100% - 25px);padding-bottom:18px;"></div>
@@ -70,6 +70,7 @@
 <script>
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import * as Hint from "../Models/Hint";
+import * as Localization from "../Models/Localization";
 
 export default {
     name: 'Home',
@@ -78,7 +79,21 @@ export default {
         return {
             game: null,
             client: null,
-            stage: '🟢' //&#128994; &#128993; &#128308;
+            locale: null,
+            stage: '🟢', //&#128994; &#128993; &#128308;
+            localeData: {
+                loading: "",
+                pass: "",
+                resign: "",
+                onBoard: "",
+                spentScore: "",
+                score: "",
+                gameStage: "",
+                recommended: "",
+                allHelpers: "",
+                historyShort: "",
+                history: ""
+            }
         }
     },
     methods: {
@@ -119,6 +134,25 @@ export default {
         }
     },
     async created() {
+        let instance = this;
+        //localization load
+        if(localStorage.getItem("lang") == null) localStorage.setItem("lang","ru")
+        instance.locale = new Localization.default(localStorage.getItem("lang"));
+        let lang = instance.locale.language;
+
+        this.localeData.loading = lang.loading;
+        this.localeData.pass = lang.pass;
+        this.localeData.resign = lang.resign;
+        this.localeData.onBoard = lang.onBoard;
+        this.localeData.spentScore = lang.spentOnHints;
+        this.localeData.score = lang.score;
+        this.localeData.gameStage = lang.gameStage.label;
+        this.localeData.recommended = lang.recommendedHints;
+        this.localeData.allHelpers = lang.allHints;
+        this.localeData.historyShort = lang.historyShort;
+        this.localeData.history = lang.history;
+        
+        //main block
         let gameId = -1;
         await get("/game/current?token=" + storage('token'), null, data => {
             if (data.data.gameId === null) {
@@ -126,7 +160,6 @@ export default {
             } else gameId = data.data.gameId;
         });
         const client = new W3CWebSocket('ws://172.104.137.176:41239');
-        let instance = this;
         client.onopen = function () {
             console.log(client);
             client.send(JSON.stringify([
@@ -216,11 +249,11 @@ export default {
                         finalScore: data.payload.winnerPlayer.finalScore,
                         hintScore: data.payload.winnerPlayer.hintScore
                     }
-                    showModal(`Игра окончена`,`Счет: <b>${score}</b><br><br>
-                                                Победитель: <b>${winnerPlayer.nickname}</b><br>
-                                                Очки победителя: <b>${winnerPlayer.finalScore}</b> (подсказки: ${winnerPlayer.hintScore})<br><br>
-                                                Проигравший: <b>${loserPlayer.nickname}</b><br>
-                                                Очки проигравшего: <b>${loserPlayer.finalScore}</b> (подсказки: ${loserPlayer.hintScore})<br>
+                    showModal(lang.gameStage[3],`${lang.counter}: <b>${score}</b><br><br>
+                                                ${lang.winner}<b>${winnerPlayer.nickname}</b><br>
+                                                ${lang.winnerCount}<b>${winnerPlayer.finalScore}</b> (${lang.hintCount}${winnerPlayer.hintScore})<br><br>
+                                                ${lang.loser}<b>${loserPlayer.nickname}</b><br>
+                                                ${lang.loserCount}<b>${loserPlayer.finalScore}</b> (${lang.hintCount}${loserPlayer.hintScore})<br>
                                                 `,
                                 `<button class="w3-button w3-white w3-hover-white w3-card-4 tr" onclick="window.location.href='/'">В главное меню</button>`);
                 }
@@ -289,12 +322,13 @@ export default {
         const movePrefab = `<div class="w3-bar-item w3-card-4 main_color beetwin ">{MOVE}</div>`;
 
         class Helper {
-            constructor(label, stage, sender, loseHinted) {
+            constructor(label, stage, sender, loseHinted, cost) {
                 this.label = label;
                 this.stage = stage;
                 this.sender = sender;
                 this.enabled = true;
                 this.loseHinted = loseHinted;
+                this.cost = cost;
             }
         };
         function toggleSelector(label,limit,callback) {
@@ -313,29 +347,6 @@ export default {
                 callback();
             };
         }
-        /*let helpers = [
-            new Helper("Начальная 1", 0, function() {}),
-            new Helper("Начальная 2", 0, function() {}),
-            new Helper("SelectorMode", 0, function() {
-                selectorMode = !selectorMode;
-                if (selectorMode) {
-                    clearSelectors();
-                    selectedPoints = [];
-                    e("specialMessages").innerHTML = "Выберите нужные поля (3 поля)";
-                } else {
-                    e("specialMessages").innerHTML = "";
-                    clearSelectors();
-                }
-                selectorLimit = 3;
-                selectorCallback = function() {
-                    e("specialMessages").innerHTML = "";
-                }
-            }),
-            new Helper("Основная 1", 1, function() {}),
-            new Helper("Основная 2", 1, function() {}),
-            new Helper("Финальная 1", 2, function() {}),
-            new Helper("Финальная 2", 2, function() {})
-        ];*/
         async function baseHint(hintName, invoke) {
             togglePlacement(true);
             console.log("Fetching "+hintName);
@@ -370,7 +381,7 @@ export default {
         let hint = new Hint.default(gameId);
         let highlightHints = false;
         let helpers = [
-            new Helper("Лучшая четверть для игры",0,function(){
+            new Helper(lang.hints.bestQuarter,0,function(){
                 baseHint("best quarter", async function() {
                     const result = await hint.heatmapBestZone();
                     for(let x=0;x<size;x++) {
@@ -379,8 +390,8 @@ export default {
                         }
                     }
                 })
-            },false),
-            new Helper("Четверть игры противника",1,async function(){
+            },false,1),
+            new Helper(lang.hints.bestEnemyQuarter,1,async function(){
                 baseHint("best enemy quarter",async function() {
                     const result = await hint.heatmapEnemyBestZone();
                     for(let x=0;x<size;x++) {
@@ -389,9 +400,9 @@ export default {
                         }
                     }
                 });
-            },false),
-            new Helper("Лучший ход из выбранных",0,function(){
-                toggleSelector("Выберите 4 поля",4,function(){
+            },false,1),
+            new Helper(lang.hints.bestMoveOfSelected,0,function(){
+                toggleSelector(lang.hints.select4,4,function(){
                     baseHint("best selected move", async function() {
                         let converted = [];
                         for(let i of selectedPoints) {
@@ -400,13 +411,13 @@ export default {
                         const result = await hint.bestMovesOf(converted);
                         let coords = parseXY(result.data.hint);
                         if(coords[0] < 0)
-                            showModal(`Лучший ход из 4`,`Выбранные вами ходы равносильны и не повлияют на игру - можете играть в любом поле`,false);
+                            showModal(lang.hints.bestMoveOfSelected,lang.hints.selectedError,false);
                         else addHint(coords[0],coords[1]);
                         clearSelectors();
                     });
                 })
-            },false),
-            new Helper("Зона лучшего хода",1,async function(){
+            },false,2),
+            new Helper(lang.hints.bestMove1,1,async function(){
                 baseHint("best move",async function() {
                     const result = await hint.bestMoves(1);
                     for(let i of result) {
@@ -414,8 +425,8 @@ export default {
                         addHintZone(coords[0],coords[1],3);
                     }
                 });
-            },false),
-            new Helper("Зоны 2 лучших ходов",1,async function(){
+            },false,3),
+            new Helper(lang.hints.bestMove2,1,async function(){
                 baseHint("best moves (2)",async function() {
                     const result = await hint.bestMoves(2);
                     for(let i of result) {
@@ -423,8 +434,8 @@ export default {
                         addHintZone(coords[0],coords[1],2);
                     }
                 });
-            },true),
-            new Helper("4 лучших хода",2,async function(){
+            },true,3),
+            new Helper(lang.hints.bestMove4,2,async function(){
                 baseHint("best moves (4)",async function() {
                     const result = await hint.bestMoves(4);
                     for(let i of result) {
@@ -432,8 +443,8 @@ export default {
                         addHint(coords[0],coords[1]);
                     }
                 });
-            },true),
-            new Helper("Тепловая карта доски",1,async function(){
+            },true,3),
+            new Helper(lang.hints.heatmap,1,async function(){
                 baseHint("heatmap",async function() {
                     const result = await hint.fullHeatmap();
                     let matrix = normalizeMatrix(result);
@@ -450,11 +461,11 @@ export default {
                         }
                     }
                 });
-            },false),
-            new Helper("Тепловая карта 2 зон",0,async function(){
-                toggleSelector("Выберите 2 поля, зоны которых вас интересуют",2,async function(){
+            },false,2),
+            new Helper(lang.hints.heatmap2Zones,0,async function(){
+                toggleSelector(lang.hints.select2,2,async function(){
                     baseHint("heatmap quarter",async function() {
-                        e("specialMessages").innerHTML = "Получение данных...";
+                        e("specialMessages").innerHTML = lang.hints.fetching;
                         let quarter = [defineQuarter(selectedPoints[0][0],selectedPoints[0][1]),defineQuarter(selectedPoints[1][0],selectedPoints[1][1])];
                         const result = await hint.heatmapQuarters(quarter);
                         let matrix = normalizeMatrix(result);
@@ -474,11 +485,11 @@ export default {
                         clearSelectors();
                     });
                 });
-            },true),
-            new Helper("Тепловая карта зоны",1,async function(){
-                toggleSelector("Выберите поле, зона которого вас интересует",1,async function(){
+            },true,2),
+            new Helper(lang.hints.heatmapZone,1,async function(){
+                toggleSelector(lang.hints.select1_z,1,async function(){
                     baseHint("heatmap quarter",async function() {
-                        e("specialMessages").innerHTML = "Получение данных...";
+                        e("specialMessages").innerHTML = lang.hints.fetching;
                         let quarter = defineQuarter(selectedPoints[0][0],selectedPoints[0][1]);
                         const result = await hint.heatmapQuarter(quarter);
                         let matrix = normalizeMatrix(result);
@@ -498,8 +509,8 @@ export default {
                         clearSelectors();
                     })
                 });
-            },true),
-            new Helper("Самая опасная зона",1,async function(){
+            },true,1),
+            new Helper(lang.hints.bestEnemyMove1,1,async function(){
                 baseHint("protect zones (1)",async function() {
                     const result = await hint.bestMovesEnemy(1);
                     for(let i of result) {
@@ -507,8 +518,8 @@ export default {
                         addHintZone(coords[0],coords[1],3);
                     }
                 });
-            },false),
-            new Helper("4 опасных зоны",1,async function(){
+            },false,3),
+            new Helper(lang.hints.bestEnemyMove4,1,async function(){
                 baseHint("protect zones (4)",async function() {
                     const result = await hint.bestMovesEnemy(4);
                     for(let i of result) {
@@ -516,8 +527,8 @@ export default {
                         addHintZone(coords[0],coords[1],2);
                     }
                 });
-            },true),
-            new Helper("Прогноз игры (10 ходов)",1,async function(){
+            },true,3),
+            new Helper(lang.hints.prediction10,1,async function(){
                 baseHint("future moves (10)",async function() {
                     const result = await hint.futureMoves(10);
                     let baseOpacity = 0.8;
@@ -529,8 +540,8 @@ export default {
                         baseOpacity *= 0.95
                     }
                 });
-            },true),
-            new Helper("Прогноз игры (6 ходов)",2,async function(){
+            },true,3),
+            new Helper(lang.hints.prediction6,2,async function(){
                 baseHint("future moves (6)",async function() {
                     const result = await hint.futureMoves(6);
                     let baseOpacity = 0.8;
@@ -542,27 +553,15 @@ export default {
                         baseOpacity *= 0.95
                     }
                 });
-            },false),
-            new Helper("Перевес в очках",2,async function(){
+            },false,3),
+            new Helper(lang.hints.superiority,2,async function(){
                 baseHint("superiority",async function() {
                     const result = await hint.superiority();
                     highlightHints = !((result.winner=="W"?colors.WHITE:colors.BLACK)==playerColor);
-                    showModal(`Перевес в очках`,`Текущий перевес в очках: <b>${result.score}</b> (без учета подсказок)<br>
-                                                На данный момент побеждают: <b>${result.winner=="W"?"Белые":"Черные"}</b><br>${highlightHints?`
-                                                Вы находитесь в проигрышной ситуации, для удобства были подсвечены самые полезные подсказки - настоятельно рекомендуем вам их использовать для победы.`:`
-                                                Вы находитесь в выигрышной ситуации, используйте подсказки для отражения последующих атак и победите в этой игре!`}`);
+                    showModal(lang.hints.superiority,`${lang.hints.superiorityLabels.current}<b>${result.score}</b> (${lang.hints.superiorityLabels.noHints})<br>
+                                                    ${lang.hints.superiorityLabels.winner}<b>${result.winner=="W"?lang.hints.superiorityLabels.white:lang.hints.superiorityLabels.black}</b><br>${highlightHints?lang.hints.superiorityLabels.loseNow:lang.hints.superiorityLabels.winNow}`);
                 });
-            },false),
-            /*new Helper("Худший ход противника",3,function(){
-                toggleSelector("Выберите поле для которого искать худший ход",1,function(){
-                    baseHint("worst enemy move", async function() {
-                        const result = await hint.worstEnemyMove(parseField(selectedPoints[0],selectedPoints[1]));
-                        let coords = parseXY(result.data.hint);
-                        addHint(coords[0],coords[1]);
-                        clearSelectors();
-                    });
-                })
-            },false),*/
+            },false,1)
         ];
         let helpersBlocked = false;
         let allHelpersShown = false;
@@ -663,8 +662,6 @@ export default {
                 return;
             }
             removeFantom();
-            /*generateBlock(actualX, actualY, last);
-            addMoveToStory(last, "Player" + last, parseField(actualX, actualY));*/
             canPlace = false;
             updateHintStatus();
             instance.sendMove(parseField(actualX,actualY));
@@ -804,7 +801,7 @@ export default {
         }
         //storybar
         function addMoveToStory(color, player, position, loaded) {
-            e("moveHistory").innerHTML += movePrefab.replace("{MOVE}", `<i class="fas circle fa-circle w3-text-${color==1?'black':'white'}"></i> <span  class="textLimiter">${player}</span> <b>${position==null?'Пас':position}</b>`);
+            e("moveHistory").innerHTML += movePrefab.replace("{MOVE}", `<i class="fas circle fa-circle w3-text-${color==1?'black':'white'}"></i> <span  class="textLimiter">${player}</span> <b>${position==null?lang.pass:position}</b>`);
             moveStory.push([color,player,position]);
             e("moveHistory").scrollTop = e("moveHistory").scrollHeight;
         }
@@ -813,7 +810,6 @@ export default {
         }
         //helper stuff
         function stageDefinder() {
-            const stages = ["Начальная", "Основная", "Финальная", "Игра окончена"];
             const emoji = ["🟢","🟡","🔴","🏁"];
             e("blockCount").innerHTML = blockCount;
             let currentStage = 0;
@@ -826,7 +822,7 @@ export default {
                 }
             }
             if(forceStage > -1) currentStage = forceStage;
-            e("gameStage").innerHTML = stages[currentStage];
+            e("gameStage").innerHTML = lang.gameStage[currentStage];
             instance.stage = emoji[currentStage];
 
             e("recommendedHelpers").innerHTML = "";
@@ -835,7 +831,7 @@ export default {
                 for (let i of helpers) {
                     let helperButton = document.createElement("button");
                     if(!i.enabled) helperButton.setAttribute("disabled","true");
-                    helperButton.innerHTML = i.label;
+                    helperButton.innerHTML = i.label+`<span class='hintcost'>${lang.cost}<b>${i.cost} ${lang.score}</b></span>`;
                     helperButton.onclick = i.sender;
                     if (helpersBlocked) helperButton.setAttribute("disabled", "true");
                     if (i.stage == currentStage) {
@@ -865,7 +861,7 @@ export default {
         }
         //modal
         function showModal(header,text,footer) {
-            if(!footer) footer = `<button class="w3-button w3-white w3-hover-white w3-card-4 tr" onclick="document.getElementById('modal').style.display='none'">Закрыть</button>`;
+            if(!footer) footer = `<button class="w3-button w3-white w3-hover-white w3-card-4 tr" onclick="document.getElementById('modal').style.display='none'">${lang.menu.close}</button>`;
             e('modal').style.display='block';
             e('modalHeader').innerHTML = header;
             e('modalText').innerHTML = text;
@@ -898,11 +894,10 @@ export default {
                 e("blackTimer").innerHTML = parseTime(blackRemain);
                 firstTimer = false;
             }
-            if(currentTurn == colors.WHITE) {
+            if(currentTurn == colors.WHITE || e("whiteTimer").innerHTML.length>5)
                 e("whiteTimer").innerHTML = parseTime(whiteRemain);
-            } else {
+            if(currentTurn == colors.BLACK || e("blackTimer").innerHTML.length>5)
                 e("blackTimer").innerHTML = parseTime(blackRemain);
-            }
         }
         //load page
         setTimeout(() => {
@@ -955,9 +950,14 @@ export default {
                     td.setAttribute("id", "x" + j + "y" + i);
                     td.onclick = onCellClick;
                     td.onmousemove = onCellHover;
+                    if((i==3 || i==9) && (j==2 || j==8) || (i==6 && j == 5)) {
+                        let marker = document.createElement("div");
+                        marker.setAttribute("class","roundmarker");
+                        td.appendChild(marker);
+                    }
                     tr.appendChild(td);
                 }
-                tr.appendChild(createEmpty(size - i))
+                tr.appendChild(createEmpty(size - i));
             }
             createHorizontal("top");
             e("game").appendChild(table);
@@ -967,10 +967,10 @@ export default {
             e("allHelpersButton").onclick = function() {
                 allHelpersShown = !allHelpersShown;
                 if (allHelpersShown) {
-                    this.innerHTML = "Скрыть все";
+                    this.innerHTML = lang.hideAll;
                     e("allHelpers").style.display = "block";
                 } else {
-                    this.innerHTML = "Все подсказки";
+                    this.innerHTML = lang.allHints;
                     e("allHelpers").style.display = "none";
                 }
             }
@@ -985,4 +985,3 @@ export default {
     }
 }
 </script>
->>>>>>> Stashed changes

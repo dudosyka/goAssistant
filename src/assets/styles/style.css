@@ -427,3 +427,15 @@ html {
 .user-nick-link:hover::after {
   width: 100%;
 }
+
+/*mixadev*/
+.flag {
+  width:100px;
+  height:100px;
+  transition: .3s;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.flag:hover {
+  filter: saturate(2)
+}
