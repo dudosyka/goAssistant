@@ -227,7 +227,7 @@ export default {
                     if (data.payload.turn == "black") color = colors.WHITE;
                     let movePlace = data.payload.place;
                     if(data.payload.moveType == "pass") movePlace = null;
-                    addMoveToStory(color, data.payload.move.split("(")[0], data.payload.place, false);
+                    addMoveToStory(color, data.payload.move.split("(")[0], data.payload.place, false, playerColor == (color==colors.BLACK?colors.WHITE:colors.BLACK));
                     currentTurn = color==colors.BLACK?colors.WHITE:colors.BLACK;
                     if(playerColor == currentTurn) canPlace = true;
                     else canPlace = false;
@@ -371,11 +371,11 @@ export default {
                 let alphabet = "abcdefghijklm";
                 let x = alphabet.indexOf(i[2]);
                 if(x<0) {
-                    addMoveToStory(color,color==colors.WHITE?whitePlayerName:blackPlayerName,null);
+                    addMoveToStory(color,color==colors.WHITE?whitePlayerName:blackPlayerName,null,false);
                     continue;
                 }
                 let y = alphabet.indexOf(i[3]);
-                addMoveToStory(color,color==colors.WHITE?whitePlayerName:blackPlayerName,parseField(x,y));
+                addMoveToStory(color,color==colors.WHITE?whitePlayerName:blackPlayerName,parseField(x,y),false);
             }
         }
         let hint = new Hint.default(gameId);
@@ -800,10 +800,15 @@ export default {
             selectedPoints = []
         }
         //storybar
-        function addMoveToStory(color, player, position, loaded) {
+        function addMoveToStory(color, player, position, loaded, markMove) {
             e("moveHistory").innerHTML += movePrefab.replace("{MOVE}", `<i class="fas circle fa-circle w3-text-${color==1?'black':'white'}"></i> <span  class="textLimiter">${player}</span> <b>${position==null?lang.pass:position}</b>`);
             moveStory.push([color,player,position]);
             e("moveHistory").scrollTop = e("moveHistory").scrollHeight;
+            if(markMove && position != null) {
+                let location = parseXY(position);
+                e("block"+location[0]+"_"+location[1]).innerHTML = "O";
+                e("block"+location[0]+"_"+location[1]).style.cssText = "font-size:28px";
+            }
         }
         function loadStory() {
             return getGameStory();
