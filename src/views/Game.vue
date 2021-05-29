@@ -255,7 +255,7 @@ export default {
                                                 ${lang.loser}<b>${loserPlayer.nickname}</b><br>
                                                 ${lang.loserCount}<b>${loserPlayer.finalScore}</b> (${lang.hintCount}${loserPlayer.hintScore})<br>
                                                 `,
-                                `<button class="w3-button w3-white w3-hover-white w3-card-4 tr" onclick="window.location.href='/'">В главное меню</button>`);
+                                `<button class="w3-button w3-white w3-hover-white w3-card-4 tr" onclick="window.location.href='/'">${lang.backToMenu}</button>`);
                 }
                 if(data.payload.type == "notify") {
                     try {

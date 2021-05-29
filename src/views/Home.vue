@@ -32,6 +32,7 @@
           <div class="w3-center">
             <img class="w3-image flag" src="../assets/lang_ru.png" @click="changeLanguage('ru')"> 
             <img class="w3-image flag" src="../assets/lang_en.png" @click="changeLanguage('en')">
+            <img class="w3-image flag" src="../assets/lang_jp.png" @click="changeLanguage('jp')">
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 let Localization = function(locale) {
     if(locale == "ru") this.language = russian;
+    else if(locale == "jp") this.language = japanese;
     else this.language = english;
 }
 let russian = {
@@ -198,6 +199,105 @@ let english = {
         error: "Error!",
 
         waitingEnemy: "Waiting for the opponent"
+    }
+};
+let japanese = {
+    onBoard: "フィールド上の碁石",
+    spentOnHints: "ヒントで使用したポイント数: ",
+    score: "ポイント",
+    gameStage: {
+        label: "ゲームステージ:",
+        0: "スタート",
+        1: "中間",
+        2: "最終ステージ",
+        3: "ゲームオーバー"
+    },
+    recommendedHints: "おすすめヒント",
+    allHints: "全てのヒント",
+    hideAll: "ヒントを隠す",
+    cost: "コスト: ",
+    hints: {
+        bestQuarter: "おすすめクォーター",
+        bestEnemyQuarter: "対戦相手のベストクォーター",
+        bestMoveOfSelected: "選択プレイ中のベスト",
+        selectedError: "あなたの選択したプレイは平等であり、ゲームを影響することはありません。",
+        heatmap: "碁盤ヒートマップ",
+        heatmapZone: "クォーターのヒートマップ",
+        heatmap2Zones: "2クォーターのヒートマップ",
+        bestMove1: "ベストムーブゾーン",
+        bestMove2: "ベストムーブゾーン2択",
+        bestMove4: "ベストムーブゾーン4択",
+        bestEnemyMove1: "危険ゾーン",
+        bestEnemyMove4: "4つの危険ゾーン",
+        prediction6: "6手先までのゲーム予測",
+        prediction10: "10手先までのゲーム予測",
+        superiority: "優勢(現在の勝者)",
+        superiorityLabels: {
+            current: "現在の優勢ポイント: ",
+            noHints: "ヒント無しのスコア",
+            winner: "現在の勝者: ",
+            white: "白",
+            black: "黒",
+            loseNow: "あなたは現在負けを予測されています。最善のヒントをハイライトします。ハイライトされたものを選択することをお勧めします。",
+            winNow: "あなたは現在優勝傾向です。ヒントを使い、相手の攻撃を封じ優勝しよう！"
+        },
+
+        select1: "フィールドを選択",
+        select1_z: "クォーター中のフィールドを選択",
+        select2: "クォーター中のフィールドを2個選択",
+        select4: "4つのフィールドを選択",
+
+        fetching: "情報採取中",
+
+        noAnswerTitle: "ヒント結果",
+        noAnswerText: "AIはゲーム結果を予測し、辞退をおすすめしています。勝者と敗者を「優勢(現在の勝者)」で見ることができます"
+    },
+    loading: "読み込み中",
+    pass: "パス",
+    resign: "辞任する",
+    historyShort: "履歴",
+    history: "ゲーム履歴",
+    counter: "結果",
+    winner: "優勝者: ",
+    winnerCount: "優勝者スコア: ",
+    loser: "敗北: ",
+    loserCount: "敗北者スコア: ",
+    hintCount: "ヒント: ",
+    backToMenu: "メニューへ戻る",
+    backToProfile: "プロファイルへ戻る",
+    moves: "動き",
+    viewMode: "モードを閲覧",
+    menu: {
+        continueGame: "ゲームを続ける",
+        random: "ランダムな相手と対戦する。",
+        ai: "AIと対決",
+        private: "プライベートゲーム",
+        create: "制作",
+        gobanCode: "あなたのコード",
+        start: "ゲームを始める",
+        connect: "接続",
+        fillGobanCode: "碁盤コードを入力",
+        back: "戻る",
+        logout: "ログアウト",
+        profile: "プロファイル",
+        nickname: "ニックネーム: ",
+        mail: "メール: ",
+        close: "閉じる",
+
+        loadGame: "ゲームをロード中",
+        searchingEnemy: "対戦相手を検索中",
+        loadingBot: "ボットと接続中",
+
+        waiting: "対戦相手を検索中",
+        gameConnection: "ゲームに接続中",
+        gameNotFound: "このコードに当てはまるゲームは検出されませんでした。もう一度確認をし、再度入力をしてください。",
+
+        emailExists: "このメールアドレスはすでにシステムに登録されています。ログインをしてください。",
+        login: "ログイン",
+        register: "登録",
+        error: "エラー",
+
+        waitingEnemy: "対戦相手を検索中"
     }
 };
 export default Localization;
