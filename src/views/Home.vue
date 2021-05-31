@@ -17,8 +17,8 @@
 
     <article class="menu">
       <div class="main-layout">
-        <div class="profil w3-card-4">
-          <router-link to="/passport" class="bookmarck">
+        <div class="profile w3-card-4">
+          <router-link to="/passport" class="bookmark">
             <img v-bind:src="ava" /><br>
             <span>{{ nick }}</span> </router-link><br>
           <button @click="logout()" class="button full-width w3-button w3-card-4 tr w3-hover-white door" style="font-size: 20px">{{localeData.logout}}</button>
@@ -52,8 +52,7 @@ export default {
   data() {
     return {
       alreadyStart: false,
-      ava:  
-        "https://www.castorama.ru/media/catalog/product/cache/image/1800x/040ec09b1e35df139433887a97daa66f/2/e/2ef250_510229_1.jpg",
+      ava: "https://www.castorama.ru/media/catalog/product/cache/image/1800x/040ec09b1e35df139433887a97daa66f/2/e/2ef250_510229_1.jpg",
       nick: "ex@mple",
       search: false,
       showLoader: false,
@@ -76,8 +75,6 @@ export default {
     },
     logout() {
       logout();
-      //setStorage('token', null);
-      //window.location = window.location;
     },
 
     continueGame(start = true, silence = true) {
@@ -98,7 +95,6 @@ export default {
       this.loaderMsg = this.locale.language.menu.searchingEnemy;
       this.showLoader = true;
       post("/game/create/random?token=" + storage("token"), null, (data) => {
-        //this.showLoader = false;
         setStorage("curGameId", data.data.gameId);
         const client = new W3CWebSocket("ws://172.104.137.176:41239");
 
@@ -136,7 +132,6 @@ export default {
           }
           console.log(data);
         };
-        //startGame(data.data.gameId);
       });
     },
     startGameWithBot() {
@@ -162,6 +157,7 @@ export default {
     this.localeData.ai = lang.menu.ai;
     this.localeData.closed = lang.menu.private;
 
+    //main block
     getCurUser().then((data) => {
       console.log(data);
       this.ava = data.avatar;

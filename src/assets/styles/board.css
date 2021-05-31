@@ -5,7 +5,6 @@
 .cell {
     width: 40px;
     height: 40px;
-    /*background-color: rgb(180, 145, 108);*/
     background-color: transparent;
     position: relative;
     padding: 0px;
@@ -14,12 +13,12 @@
 .empty_cell {
     width: 40px;
     height: 40px;
-    /*background-color: rgb(180, 145, 108);*/
     background-color: transparent;
     position: relative;
     padding: 0px;
     z-index: 1;
 }
+
 .letter {
     font-size: 18px;
     position: absolute;
@@ -28,18 +27,16 @@
 }
 .letter_bottom {bottom:13px;}
 .letter_top {top:13px;}
+
 .number {
     font-size: 18px;
     position: absolute;
     top:-8px;
     -webkit-user-select: none;
 }
-.number_right {
-    right: 20px
-}
-.number_left {
-    left: 20px
-}
+.number_right {right: 20px}
+.number_left {left: 20px}
+
 .roundmarker {
     width:12px;
     height:12px;
@@ -98,21 +95,18 @@
     background-color: aqua;
     opacity: 0.4;
 }
+
 #game {
     display: inline-flex;
     margin: 25px;
 }
-.tr {
-    transition: 0.3s;
-}
+.tr {transition: 0.3s;}
 #specialMessages {
     font-size: 20px;
     padding: 15px;
     color:#fff
 }
-#modalFooter {
-    padding:15px;
-}
+#modalFooter {padding:15px;}
 #passButton {
     font-size: 18px;
     width: 120px;

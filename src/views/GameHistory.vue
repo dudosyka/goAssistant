@@ -7,9 +7,7 @@
 				{{localeData.moves}}
 				<button class="w3-button tr w3-medium w3-hover-aqua" id="rButton">&rarr;</button>
 			</h2>
-			<div id="moveStoryShort">
-
-			</div>
+			<div id="moveStoryShort"></div>
         </div>
 
         <div class="w3-sidebar w3-bar-block w3-white" style="width:270px;left:0;top:0px;line-height:2;overflow:hidden;">
@@ -42,10 +40,8 @@
         <div id="modal" class="w3-modal">
             <div class="w3-modal-content w3-animate-top w3-card-4">
                 <header class="w3-container w3-purple">
-                    <!--span onclick="document.getElementById('modal').style.display='none'"
-                    class="w3-button w3-display-topright">&times;</span-->
-                <h2 id="modalHeader">-</h2>
-            </header>
+					<h2 id="modalHeader">-</h2>
+				</header>
             <div class="w3-container">
                 <p id="modalText">Some text..</p>
             </div>
@@ -139,10 +135,6 @@
 			function parseField(x, y) {
 				const xAlign = "ABCDEFGHJKLMN";
 				return xAlign[x] + (13 - y);
-			}
-			function parseXY(field) {
-				const xAlign = "ABCDEFGHJKLMN";
-				return [xAlign.indexOf(field[0]),(13-field.slice(1,3))];
 			}
 			function normalizeMatrix(matrix) {
 				for(let i in matrix)

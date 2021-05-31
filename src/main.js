@@ -79,7 +79,7 @@ global.getCurUser = async () => {
 global.logout = function () {
 	setStorage('curUserData', "");
 	setStorage('token', null);
-	window.location = window.location;
+	window.location.reload();
 }
 
 router.afterEach(async (to, from) => {
@@ -88,8 +88,6 @@ router.afterEach(async (to, from) => {
 
 	if (isLogin)
 		isLogin = (token != "null" && token != "");
-	
-	//console.log(token != "null");
 
     if (to.path == '/login' && isLogin)
       redirectTo('Home');

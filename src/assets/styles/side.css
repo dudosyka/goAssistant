@@ -1,27 +1,22 @@
 .bar {
-  font-size: 18px;
-  overflow: visible;
-  max-height: calc(100% - 25px);
-  padding: 10px;
+    font-size: 18px;
+    overflow: visible;
+    max-height: calc(100% - 25px);
+    padding: 10px;
 }
-.section {
-  margin-bottom: 20px;
-}
-.icon {
-  font-size: 18px;
-}
+.section {margin-bottom: 20px;}
+.icon {font-size: 18px;}
 .opposite {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 .moveDiv {
     padding: 8px!important;
     display: grid;
     grid-template-columns: 14px 1fr 20px 30px;
     grid-gap: 10px;
-    grid-template-areas:
-      "circle name timer-i timer";
+    grid-template-areas: "circle name timer-i timer";
     font-size: 18px;
 }
 .circle {
@@ -36,23 +31,17 @@
     grid-area: name;
 }
 #whiteTimer, #blackTimer {
-  text-align: right;
-  grid-area: timer;
+    text-align: right;
+    grid-area: timer;
 }
-.time-icon {
-  grid-area: timer-i;
-}
+.time-icon {grid-area: timer-i;}
 .beetwin {
-  display: flex !important;
-  justify-content: space-between;
-  -webkit-user-select: none;
-  -moz-user-select: none;
+    display: flex !important;
+    justify-content: space-between;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
-.clickableMove {
-  cursor:pointer;
-}
-
-
+.clickableMove {cursor:pointer;}
 .helperButton {
     width:100%;
     border-bottom: 3px solid #fff;
@@ -60,12 +49,8 @@
     font-size: 18px;
     color: white
 }
-.helperButtonCritical {
-  background: #447b83!important;
-}
-.helperButton:last-child {
-    border:none;
-}
+.helperButtonCritical {background: #447b83!important;}
+.helperButton:last-child {border:none;}
 .helperButton:hover, .helperButtonSmall:hover {
     background: #402f5a !important;
     color: #fff !important;
@@ -76,28 +61,18 @@
     padding: 2px;
     background-color: #dec8ff;
 }
-.helperButtonSmallCritical {
-  background: #cfffc8!important;
-}
-#recommendedHelpersLabel {
-  white-space: nowrap;
-}
+.helperButtonSmallCritical {background: #cfffc8!important;}
+#recommendedHelpersLabel {white-space: nowrap;}
 .w3-purple {
-  background: #1f1233  !important;
-  padding: 15px !important;
+    background: #1f1233  !important;
+    padding: 15px !important;
 }
-#modalHeader {
-  margin: none !important;
-}
-.w3-container {
-  font-size: 20px;
-}
-.w3-modal {
-  background:hsla(287, 100%, 9%, 0.5) !important;
-}
+#modalHeader {margin: none !important;}
+.w3-container {font-size: 20px;}
+.w3-modal {background:hsla(287, 100%, 9%, 0.5) !important;}
 .hintcost {
-  display: block;
-  font-size: 14px;
-  transform: translate(0px,-14px);
-  height: 8px;
+    display: block;
+    font-size: 14px;
+    transform: translate(0px,-14px);
+    height: 8px;
 }

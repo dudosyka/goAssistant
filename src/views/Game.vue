@@ -47,15 +47,12 @@
         <div id="modal" class="w3-modal">
             <div class="w3-modal-content w3-animate-top w3-card-4">
                 <header class="w3-container w3-purple">
-                    <!--span onclick="document.getElementById('modal').style.display='none'"
-                    class="w3-button w3-display-topright">&times;</span-->
-                <h2 id="modalHeader">-</h2>
-            </header>
+                    <h2 id="modalHeader">-</h2>
+                </header>
             <div class="w3-container">
                 <p id="modalText">Some text..</p>
             </div>
-            <footer class="w3-container w3-purple" id="modalFooter">
-            </footer>
+            <footer class="w3-container w3-purple" id="modalFooter"></footer>
           </div>
         </div>
     </div>
@@ -80,7 +77,7 @@ export default {
             game: null,
             client: null,
             locale: null,
-            stage: '🟢', //&#128994; &#128993; &#128308;
+            stage: '🟢',
             localeData: {
                 loading: "",
                 pass: "",
@@ -835,13 +832,7 @@ export default {
             e("blockCount").innerHTML = blockCount;
             let currentStage = 0;
             if (blockCount > 180 * 0.15) currentStage = 1;
-            if (blockCount > 180 * 0.6) currentStage = 2
-            if(turnBlackEnd > -1 && turnWhiteEnd > -1) {
-                let time = (new Date()).getTime();
-                if((time-turnBlackEnd > 0 && currentTurn == colors.BLACK) || (time-turnWhiteEnd > 0  && currentTurn == colors.WHITE)) {
-                    //currentStage = 3
-                }
-            }
+            if (blockCount > 180 * 0.6) currentStage = 2;
             if(forceStage > -1) currentStage = forceStage;
             e("gameStage").innerHTML = lang.gameStage[currentStage];
             instance.stage = emoji[currentStage];
@@ -997,9 +988,6 @@ export default {
             }
             e("passButton").onclick = instance.sendPass;
             e("resignButton").onclick = instance.sendResign;
-            /*for(let i=0;i<5;i++) {
-                addHintZone(Math.floor(Math.random()*size),Math.floor(Math.random()*size),3);
-            }*/
         }, 10);
         //timer calculator
         setInterval(updateTimer, 1000);

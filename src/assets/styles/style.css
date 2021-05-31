@@ -7,29 +7,19 @@ body {
   background-size: 100px !important;
   background-position: left 20px top 20px !important;
 }
-html {
-  overflow: hidden;
-}
+html {overflow: hidden;}
 /* transitions */
 
-.slide-fade-enter-active {
-  transition: all .5s;
-}
-.slide-fade-leave-active {
-  transition: all .5s;
-}
+.slide-fade-enter-active {transition: all .5s;}
+.slide-fade-leave-active {transition: all .5s;}
 .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active до версии 2.1.8 */ {
   transform: translateX(10px);
   opacity: 0;
 }
 
-.top-fade-enter-active {
-  transition: all .5s;
-}
-.top-fade-leave-active {
-  transition: all .5s;
-}
+.top-fade-enter-active {transition: all .5s;}
+.top-fade-leave-active {transition: all .5s;}
 .top-fade-enter, .top-fade-leave-to
 /* .slide-fade-leave-active до версии 2.1.8 */ {
   transform: translateY(10px);
@@ -118,26 +108,15 @@ html {
 
   cursor: pointer;
 }
-.button:last-child {
-  margin: 0;
-}
-.button:hover {
-  transform: scale(1.05);
-}
-.button:active {
-  transform: scale(1.025);
-}
-
-.button:disabled, .disabled {
-  opacity: 0.5;
-}
+.button:last-child {margin: 0;}
+.button:hover {transform: scale(1.05);}
+.button:active {transform: scale(1.025);}
+.button:disabled, .disabled {opacity: 0.5;}
 .button:disabled:hover, .disabled {
   cursor: not-allowed;
   transform: none;
 }
-.disabled {
-  transform: none !important;
-}
+.disabled {transform: none !important;}
 
 .button::before {
   position: absolute;
@@ -161,15 +140,9 @@ html {
   margin-bottom: 8px;
   transition: border-color 0.3s;
 }
-.input:hover {
-  border-right: 10px solid #a999c4;
-}
-.input-invalid {
-  border-right: 10px solid red;
-}
-.input[invalid] {
-  border-right: 10px solid red;
-}
+.input:hover {border-right: 10px solid #a999c4;}
+.input-invalid {border-right: 10px solid red;}
+.input[invalid] {border-right: 10px solid red;}
 
 .output {
   padding: 16px;
@@ -179,16 +152,10 @@ html {
   margin-bottom: 8px;
   text-align: center;
 }
-.output:last-child {
-  margin: 0;
-}
+.output:last-child {margin: 0;}
 
-.full-width {
-  width: 100%;
-}
-.full-height {
-  height: 100%;
-}
+.full-width {width: 100%;}
+.full-height {height: 100%;}
 .full-size {
   width: 100%;
   height: 100%;
@@ -249,12 +216,12 @@ html {
   font-size: 24px;
 }
 
-.bookmarck {
+.bookmark {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.profil {
+.profile {
   padding: 16px;
   background: #a999c4;
   display: flex;
@@ -262,15 +229,10 @@ html {
   justify-content: space-between;
   max-width: 200px;
 }
-.bookmarck img {
-  width: 100%;
-}
-.bookmarck span {
+.bookmark img {width: 100%;}
+.bookmark span {
   color: #fff;
   font-size: 18px;
-}
-.profil button {
-
 }
 /* End patters */
 
@@ -282,27 +244,13 @@ html {
   content-visibility: visible;
 }
 
-.hi::before {
-  content: '👋'
-}
-.lamp::before {
-  content: '💡'
-}
-.loocker::before {
-  content: '🔐'
-}
-.point::before {
-  content: '👉'
-}
-.god::before {
-  content: '🧘'
-}
-.join::before {
-  content: '🤝'
-}
-.door::before {
-  content: '🚪'
-}
+.hi::before {content: '👋'}
+.lamp::before {content: '💡'}
+.loocker::before {content: '🔐'}
+.point::before {content: '👉'}
+.god::before {content: '🧘'}
+.join::before {content: '🤝'}
+.door::before {content: '🚪'}
 
 .row {
   display: grid;
@@ -318,9 +266,7 @@ html {
   outline: none;
   transition: transform 0.3s;
 }
-.right-arrow:hover {
-  transform: scale(1.05);
-}
+.right-arrow:hover {transform: scale(1.05);}
 
 .menu {
   height: 100vh;
@@ -330,9 +276,7 @@ html {
   flex-direction: column;
 }
 
-.form_window {
-  max-width: 700px;
-}
+.form_window {max-width: 700px;}
 .main-layout {
   display: grid;
   grid-template-columns: 1fr 700px 1fr;
@@ -375,13 +319,9 @@ html {
   left: 40px;
   transition: transform 0.3s;
 }
-.back-button:hover::before {
-  transform: translateX(-20px) translateY(-50%);
-}
+.back-button:hover::before {transform: translateX(-20px) translateY(-50%);}
 
-.tr {
-  transition: .3s;
-}
+.tr {transition: .3s;}
 
 .user {
   position: absolute;
@@ -421,14 +361,10 @@ html {
   transition: width 0.3s;
 }
 
-.user-nick:hover {
-  transform: translateY(-5px);
-}
-.user-nick-link:hover::after {
-  width: 100%;
-}
+.user-nick:hover {transform: translateY(-5px);}
+.user-nick-link:hover::after {width: 100%;}
 
-/*mixadev*/
+/*language flags*/
 .flag {
   width:100px;
   height:100px;
@@ -436,6 +372,4 @@ html {
   cursor: pointer;
   margin-left: 10px;
 }
-.flag:hover {
-  filter: saturate(2)
-}
+.flag:hover {filter: saturate(2)}

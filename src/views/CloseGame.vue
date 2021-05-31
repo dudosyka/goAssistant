@@ -25,11 +25,8 @@ import * as Localization from "../Models/Localization";
         }
       }
     },
-    components: {
-
-    },
-    methods: {
-    },
+    components: {},
+    methods: {},
     created() {
       //localization load
       if(localStorage.getItem("lang") == null) localStorage.setItem("lang","ru")

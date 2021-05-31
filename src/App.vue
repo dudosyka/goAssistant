@@ -24,11 +24,8 @@
           alreadyLogin: false
       }
     },
-    components: {
-
-    },
-    methods: {
-    },
+    components: {},
+    methods: {},
     created() {
         this.alreadyLogin = storage('token') != null;
     }

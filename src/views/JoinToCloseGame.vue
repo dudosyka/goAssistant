@@ -57,9 +57,7 @@ export default {
       }
     }
   },
-  components: {
-
-  },
+  components: {},
   methods: {
       showModal(header,text) {
           document.getElementById('modal').style.display='block';
@@ -79,7 +77,7 @@ export default {
                   }
               });
               console.log("DATA", data);
-          },err => {
+          }, err => {
             this.search = false;
             this.showModal(this.locale.language.menu.gameConnection,this.locale.language.menu.gameNotFound);
           });
