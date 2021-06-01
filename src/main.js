@@ -22,7 +22,7 @@ global.request = (url, type, data, success, failed) => {
 
     return axios({
       method: type,
-      url: "https://go-backend-denis.ambersoft.llc" + url,
+      url: "http://server.mindgamehack.ru" + url,
       data: bodyFormData,
       headers: { "Content-Type": "multipart/form-data" },
     })

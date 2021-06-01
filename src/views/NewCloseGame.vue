@@ -80,7 +80,7 @@ export default {
       setStorage("secretRoom", data.data.code);
       setStorage("curGameId", data.data.gameId);
       this.code = storage("secretRoom");
-      const client = new W3CWebSocket("ws://172.104.137.176:41239");
+      const client = new W3CWebSocket("ws://185.22.62.66:41239");
 
       client.onopen = function () {
         console.log(client);

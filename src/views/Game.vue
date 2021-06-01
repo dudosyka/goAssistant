@@ -94,7 +94,7 @@ export default {
         }
     },
     methods: {
-        async loadGame(gameId) {
+        async loadGame() {
             return get('/game/info/' + storage('curGameId') + "?token=" + storage('token'), null, data => {
                 return data;
             });
@@ -151,21 +151,17 @@ export default {
         
         //main block
         let gameId = -1;
-        await get("/game/current?token=" + storage('token'), null, data => {
-            if (data.data.gameId === null) {
-                window.location = "/"
-            } else gameId = data.data.gameId;
-        });
-        const client = new W3CWebSocket('ws://172.104.137.176:41239');
+
+        const client = new W3CWebSocket('ws://185.22.62.66:41239');
         client.onopen = function () {
             console.log(client);
             client.send(JSON.stringify([
-                7, // 7 - статус: отправка сообщения
-                "go/game", // в какой топик отправляется сообщение
-                {
-                    command: "auth",  // команда на авторизацию подключения
-                    token: storage('token'), // токен игрока
-                    game_id: storage('curGameId') // номер игры
+                    7, // 7 - статус: отправка сообщения
+                    "go/game", // в какой топик отправляется сообщение
+                    {
+                        command: "auth",  // команда на авторизацию подключения
+                        token: storage('token'), // токен игрока
+                        game_id: storage('curGameId') // номер игры
                     }
                 ])
             );
@@ -279,6 +275,11 @@ export default {
             } catch(e) {}
         }
         this.client = client;
+        get("/game/current?token=" + storage('token'), null, data => {
+            if (data.data.gameId === null) {
+                window.location = "/"
+            } else gameId = data.data.gameId;
+        });
         let data = await this.loadGame();
         console.log(data);
 
