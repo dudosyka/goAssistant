@@ -151,24 +151,9 @@ export default {
         
         //main block
         let gameId = -1;
-
-        const client = new W3CWebSocket('ws://185.22.62.66:41239');
-        client.onopen = function () {
-            console.log(client);
-            client.send(JSON.stringify([
-                    7, // 7 - статус: отправка сообщения
-                    "go/game", // в какой топик отправляется сообщение
-                    {
-                        command: "auth",  // команда на авторизацию подключения
-                        token: storage('token'), // токен игрока
-                        game_id: storage('curGameId') // номер игры
-                    }
-                ])
-            );
-        }
         let firstMapLoad = true;
         let falseEnemy = false;
-        client.onmessage = function (event) {
+        function clientMessage(event) {
             let data = JSON.parse(event.data);
             try {
                 console.log("PC:"+playerColor);
@@ -274,14 +259,16 @@ export default {
                 if(data[4].code == 500) window.location.refresh();
             } catch(e) {}
         }
-        this.client = client;
+        let client = null;
+        let hint = new Hint.default("curGameId");
         get("/game/current?token=" + storage('token'), null, data => {
             if (data.data.gameId === null) {
                 window.location = "/"
-            } else gameId = data.data.gameId;
+            } else {
+                gameId = data.data.gameId;
+                hint = new Hint.default(gameId);
+            }
         });
-        let data = await this.loadGame();
-        console.log(data);
 
         let canPlace = false;
         let playerColor = 0;
@@ -380,7 +367,6 @@ export default {
             console.log("Fetched recommendation: "+hint)
             showModal(lang.hints.noAnswerTitle,lang.hints.noAnswerText,false);
         }
-        let hint = new Hint.default(gameId);
         let highlightHints = false;
         let helpers = [
             new Helper(lang.hints.bestQuarter,1,function(){
@@ -913,7 +899,7 @@ export default {
                 e("blackTimer").innerHTML = parseTime(blackRemain);
         }
         //load page
-        setTimeout(() => {
+        setTimeout(async () => {
             //generating field
             for (let i = 0; i < size; i++) {
                 let subBlock = [];
@@ -989,6 +975,25 @@ export default {
             }
             e("passButton").onclick = instance.sendPass;
             e("resignButton").onclick = instance.sendResign;
+
+            client = new W3CWebSocket('ws://185.22.62.66:41239');
+            client.onopen = function () {
+                console.log(client);
+                client.send(JSON.stringify([
+                        7, // 7 - статус: отправка сообщения
+                        "go/game", // в какой топик отправляется сообщение
+                        {
+                            command: "auth",  // команда на авторизацию подключения
+                            token: storage('token'), // токен игрока
+                            game_id: storage('curGameId') // номер игры
+                        }
+                    ])
+                );
+            }
+            client.onmessage = clientMessage;
+            instance.client = client;
+            let data = await instance.loadGame();
+            console.log(data);
         }, 10);
         //timer calculator
         setInterval(updateTimer, 1000);
