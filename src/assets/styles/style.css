@@ -1,11 +1,6 @@
 body {
   margin: 0;
   font-family: sans-serif;
-  background-color: #543389 !important;
-  background-image: url('../../assets/logo-bg.png') !important;
-  background-repeat: no-repeat !important;
-  background-size: 100px !important;
-  background-position: left 20px top 20px !important;
 }
 html {overflow: hidden;}
 /* transitions */
@@ -140,7 +135,7 @@ html {overflow: hidden;}
   margin-bottom: 8px;
   transition: border-color 0.3s;
 }
-.input:hover {border-right: 10px solid #a999c4;}
+//.input:hover {border-right: 10px solid #a999c4;}
 .input-invalid {border-right: 10px solid red;}
 .input[invalid] {border-right: 10px solid red;}
 
@@ -251,6 +246,7 @@ html {overflow: hidden;}
 .god::before {content: '🧘'}
 .join::before {content: '🤝'}
 .door::before {content: '🚪'}
+.man::before {content: '👨'}
 
 .row {
   display: grid;
@@ -366,10 +362,11 @@ html {overflow: hidden;}
 
 /*language flags*/
 .flag {
-  width:100px;
-  height:100px;
+  width: 50px;
+  height: 50px;
   transition: .3s;
   cursor: pointer;
   margin-left: 10px;
 }
-.flag:hover {filter: saturate(2)}
+
+.flag:hover {filter: saturate(2);}

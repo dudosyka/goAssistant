@@ -10,6 +10,11 @@
           <div class="output-passport full-width">{{user.pts}} pts</div>
         </div>
         <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/">{{localeData.back}}</router-link>
+        <button @click="logout()" class="button full-width w3-button w3-card-4 tr w3-hover-white door" style="font-size: 20px; display: grid; grid-area: exit">{{localeData.logout}}</button>
+        <div style="display: grid; grid-area: history">
+          <input type="checkbox" id="profileCheckbox" @change="onHistory()" style="width: 35px;height: 35px;margin-right: 10px;">
+          <label for="checkbox" style="font-size: 20px">{{localeData.historyLabel}}</label>
+        </div>
         <div class="score-table">
           <div style='cursor: pointer;' @click='gameView(score.game_id)' class="output full-width score-td w3-hover-purple tr" v-for="score in user.games_history.reverse()">
 			      <img v-bind:src="score.player.avatar">
@@ -83,11 +88,13 @@
 .back{
   display: grid;
   grid-template-columns: 200px 1fr 2fr;
-  grid-template-rows: 200px 300px;
+  grid-template-rows: 200px 70px;
   grid-gap: 20px;
-  grid-template-areas:
+  grid-template-areas: 
   "avatar stats score"
-  "escape escape score";
+  "escape escape score"
+  "exit history score"
+  ". . score"
 }
 
 .score-name{margin: 20px;}
@@ -116,7 +123,9 @@
             profile: "",
             nick: "",
             mail: "",
-            back: ""
+            back: "",
+            logout: "",
+            historyLabel: ""
           }
       }
     },
@@ -129,6 +138,10 @@
       gameView(id) {
         setStorage("watchGameId", id);
         window.location = "/game/view";	
+      },
+      onHistory() {
+        checked = document.querySelector("#profileCheckbox").value;
+        if(checked == "on"){ setStorage("checked", true)}else{ setStorage("checked", false);}
       }
     },
     created() {
@@ -141,6 +154,8 @@
         this.localeData.nick = lang.menu.nickname;
         this.localeData.mail = lang.menu.mail;
         this.localeData.back = lang.menu.back;
+        this.localeData.logout = lang.menu.logout;
+        this.localeData.historyLabel = lang.menu.historyLabel;
 
         //main block
         get('/user/profile?token='+storage('token'), null, data => {

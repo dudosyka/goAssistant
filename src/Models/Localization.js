@@ -4,6 +4,7 @@ let Localization = function(locale) {
     else this.language = english;
 }
 let russian = {
+    
     onBoard: "Камней на поле",
     spentOnHints: "Потрачено на подсказки:",
     score: "очков",
@@ -73,6 +74,7 @@ let russian = {
         continueGame: "Продолжить игру",
         random: "Игра со случайным соперником",
         ai: "Игра с ИИ",
+        profile: "Профиль",
         private: "Частная игра",
         create: "Создать",
         gobanCode: "Код вашего гобана",
@@ -81,10 +83,10 @@ let russian = {
         fillGobanCode: "Укажите код гобана",
         back: "Назад",
         logout: "Выйти",
-        profile: "Профиль",
         nickname: "Ник: ",
         mail: "Почта: ",
         close: "Закрыть",
+        historyLabel: "История игры",
 
         loadGame: "Загрузка партии",
         searchingEnemy: "Поиск противника",
@@ -172,6 +174,7 @@ let english = {
         continueGame: "Continue game",
         random: "Play with a random opponent",
         ai: "Play with AI",
+        profile: "Profile",
         private: "Private game",
         create: "Create",
         gobanCode: "Your goban code",
@@ -180,10 +183,10 @@ let english = {
         fillGobanCode: "Enter the goban code",
         back: "Back",
         logout: "Log out",
-        profile: "Profile",
         nickname: "Nickname: ",
-        mail: "EMail: ",
+        mail: "Email: ",
         close: "Close",
+        historyLabel: "Game history",
 
         loadGame: "Loading the game",
         searchingEnemy: "Searching for an opponent",
@@ -271,6 +274,7 @@ let japanese = {
         continueGame: "ゲームを続ける",
         random: "ランダムな相手と対戦する。",
         ai: "AIと対決",
+        profile: "プロフィール",
         private: "プライベートゲーム",
         create: "制作",
         gobanCode: "あなたのコード",
@@ -279,10 +283,10 @@ let japanese = {
         fillGobanCode: "碁盤コードを入力",
         back: "戻る",
         logout: "ログアウト",
-        profile: "プロファイル",
         nickname: "ニックネーム: ",
         mail: "メール: ",
         close: "閉じる",
+        historyLabel: "ゲーム履歴",
 
         loadGame: "ゲームをロード中",
         searchingEnemy: "対戦相手を検索中",

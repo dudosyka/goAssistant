@@ -1,7 +1,22 @@
 <template>
     <div class="home">
         <div style="text-align: center;">
-            <div id="game" class="gobanTexture"></div><br>
+        	<div style="display: inline-flex;margin-top: 50px;">
+            	<div class="w3-sidebar w3-bar-block w3-white" style="width:270px;left:0;top:0px;line-height:2;overflow:hidden;position: initial !important; text-align: left; margin-right: 25px">
+					<button class="w3-button w3-hover-cyan tr helperButton" onclick="window.location.href = '/passport'">{{localeData.backToProfile}}</button>
+            		<div class="bar" style="overflow:auto;">
+              			<div class="section">
+               				<div>&#9899; <b id="blackPlayerName" class="textLimiter">{{localeData.loading}}</b></div>
+                			<div>&#9898; <b id="whitePlayerName" class="textLimiter">{{localeData.loading}}</b></div>
+              			</div>
+
+              			<div class="section">
+                			<span class="opposite"><div>{{localeData.onBoard}}: </div><b id="blockCount">0</b></span>
+              			</div>
+            		</div>
+        		</div>
+        		<div id="game" class="gobanTexture"></div>
+    		</div>
 			<h2 class="w3-text-white">
 				<button class="w3-button tr w3-medium w3-hover-aqua" id="lButton">&larr;</button>
 				{{localeData.moves}}
@@ -10,22 +25,6 @@
 			<div id="moveStoryShort"></div>
         </div>
 
-        <div class="w3-sidebar w3-bar-block w3-white" style="width:270px;left:0;top:0px;line-height:2;overflow:hidden;">
-            <div class="w3-container w3-card-2 w3-center" style="padding: 10px">GoAssistant</div>
-			<div class="w3-center">{{localeData.viewMode}}</div>
-			<button class="w3-button w3-hover-cyan tr helperButton" onclick="window.location.href = '/passport'">{{localeData.backToProfile}}</button>
-            <div class="bar" style="overflow:auto;padding-bottom:40px">
-              <div class="section">
-                <div>&#9899; <b id="blackPlayerName" class="textLimiter">{{localeData.loading}}</b></div>
-                <div>&#9898; <b id="whitePlayerName" class="textLimiter">{{localeData.loading}}</b></div>
-              </div>
-
-              <div class="section">
-                <span class="opposite"><div>{{localeData.onBoard}}: </div><b id="blockCount">0</b></span>
-                <span class="opposite"><div>{{stage}} {{localeData.gameStage}} </div><b id="gameStage">N/A</b></span>
-              </div>
-            </div>
-        </div>
 		<div style="right:0;top:0;position:absolute;">
             <button class="w3-button w3-card-4 tr w3-text-white w3-large" onclick="document.getElementById('gameStoryBar').style.display = 'block'">☰ {{localeData.historyShort}}</button>
         </div>
@@ -253,13 +252,13 @@
 				blocks[x][y] = c;
 			}
 			function stageDefinder() {
-				const emoji = ["🟢","🟡","🔴","🏁"];
-				e("blockCount").innerHTML = blockCount;
-				let currentStage = 0;
-				if (blockCount > 180 * 0.15) currentStage = 1;
-				if (blockCount > 180 * 0.6) currentStage = 2;
-				e("gameStage").innerHTML = lang.gameStage[currentStage];
-				instance.stage = emoji[currentStage];
+				// const emoji = ["🟢","🟡","🔴","🏁"];
+				// e("blockCount").innerHTML = blockCount;
+				// let currentStage = 0;
+				// if (blockCount > 180 * 0.15) currentStage = 1;
+				// if (blockCount > 180 * 0.6) currentStage = 2;
+				// e("gameStage").innerHTML = lang.gameStage[currentStage];
+				// instance.stage = emoji[currentStage];
 			}
 			setTimeout(() => {
 				//generating field

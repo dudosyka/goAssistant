@@ -2,7 +2,7 @@
   <main class="menu">
     <article class="form_window menu">
       <h1 class="title">{{localeData.private}}</h1>
-      <div class="">
+      <div style="display: flex;flex-direction: column; min-width: 350px;"">
         <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white god" to="/closegame/newgame">{{localeData.create}}</router-link>
         <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white join" to="/closegame/joingame">{{localeData.connect}}</router-link>
         <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/">{{localeData.back}}</router-link>

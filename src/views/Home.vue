@@ -16,26 +16,28 @@
     <!-- LOADER !-->
 
     <article class="menu">
-      <div class="main-layout">
+      <!--<div class="main-layout">
         <div class="profile w3-card-4">
           <router-link to="/passport" class="bookmark">
             <img v-bind:src="ava" /><br>
             <span>{{ nick }}</span> </router-link><br>
           <button @click="logout()" class="button full-width w3-button w3-card-4 tr w3-hover-white door" style="font-size: 20px">{{localeData.logout}}</button>
-        </div>
+        </div>-->
 
-        <div style="min-width: fit-content" class="">
+        <div style="display: flex; flex-direction: column;" class="">
+          <div style="font-family: Verdana; font-size: 25px; display: flex; justify-content: center; margin: 25px;">GO ASSISTANT</div>
           <button @click="continueGame()" class="button full-width w3-button w3-card-4 tr w3-hover-white point" v-if="alreadyStart">{{localeData.continue}}</button>
-          <button @click="randomGame()" class="button full-width w3-button w3-card-4 tr w3-hover-white hi" :disabled="alreadyStart">{{localeData.random}}</button>
+          <button @click="randomGame()" class="button full-width w3-button w3-card-4 tr w3-hover-white hi" :disabled="alreadyStart"><div style="margin-left: 20px">{{localeData.random}}</div></button>
           <button @click="startGameWithBot()" class="button full-width w3-button w3-card-4 tr w3-hover-white lamp" :disabled="alreadyStart" >{{localeData.ai}}</button>
           <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white loocker" to="/closegame" tag="button" :disabled="alreadyStart">{{localeData.closed}}</router-link>
+          <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white man" to="/passport">{{localeData.profile}}</router-link>
           <div class="w3-center">
             <img class="w3-image flag" src="../assets/lang_ru.png" @click="changeLanguage('ru')"> 
             <img class="w3-image flag" src="../assets/lang_en.png" @click="changeLanguage('en')">
             <img class="w3-image flag" src="../assets/lang_jp.png" @click="changeLanguage('jp')">
           </div>
         </div>
-      </div>
+      <!--</div>-->
     </article>
   </main>
 </template>
@@ -64,6 +66,7 @@ export default {
         random: "",
         ai: "",
         closed: "",
+        profile: "",
       },
     };
   },
@@ -156,6 +159,7 @@ export default {
     this.localeData.random = lang.menu.random;
     this.localeData.ai = lang.menu.ai;
     this.localeData.closed = lang.menu.private;
+    this.localeData.profile = lang.menu.profile;
 
     //main block
     getCurUser().then((data) => {

@@ -1,20 +1,14 @@
 <template>
-    <div class="home">
+    <div class="home" style="overflow: hidden">
         <div style="text-align: center;">
             <div class="section w3-text-white" style="width:300px;display:inline-block;">
                 <div class="moveDiv">&#9899; <b id="blackPlayerName" class="textLimiter">{{localeData.loading}}</b><span class="time-icon">⏳</span><span id="blackTimer">--:--</span></div>
                 <div class="moveDiv">&#9898; <b id="whitePlayerName" class="textLimiter">{{localeData.loading}}</b><span class="time-icon">⏳</span><span id="whiteTimer">--:--</span></div>
             </div><br>
-            <div id="game" class="gobanTexture"></div><br>
-            <button class="w3-button w3-white w3-hover-white tr" id="passButton">{{localeData.pass}}</button>
-            <button class="w3-button w3-white w3-hover-white tr" id="resignButton">{{localeData.resign}}</button><br>
-            <span id="specialMessages"></span>
-        </div>
-
-        <div class="w3-sidebar w3-bar-block w3-white" style="width:300px;left:0;top:0px;line-height:2;overflow:hidden;">
-            <div class="w3-container w3-card-2 w3-center" style="padding: 10px">GoAssistant</div>
-
-            <div class="bar" style="overflow:auto;padding-bottom:40px">
+            <div style="display: inline-flex; align-items: flex-start; margin-bottom: 5px;">
+            <div id="game" class="gobanTexture"></div>
+            <div><div class="w3-sidebar w3-bar-block w3-white" style="width: 300px; left: 0px; top: 0px; line-height: 2; overflow: hidden; position:  initial !important;margin-left: 25px;">
+            <div class="bar" style="overflow:auto;height: 600px;">
 
               <div class="section">
                 <span class="opposite"><div>{{localeData.onBoard}}: </div><b id="blockCount">0</b></span>
@@ -22,18 +16,22 @@
                     <div>{{localeData.spentScore}} </div>
                     <span class="opposite"><div>&#9899; <b id="blackHints">0</b> {{localeData.score}}</div><div><b id="whiteHints">0</b> {{localeData.score}} &#9898;</div></span>
                 </div>
-                <span class="opposite"><div>{{stage}} {{localeData.gameStage}} </div><b id="gameStage">N/A</b></span>
-              </div>
-
-                <span id="recommendedHelpersLabel"><span class="icon">💡</span> {{localeData.recommended}}</span>
+                <div id="recommendedHelpersLabel"></div>
                 <div id="recommendedHelpers">
-                </div><br>
+                </div>
+              </div>
                 <button class="w3-button main_color w3-hover-black tr helperButton" id="allHelpersButton">{{localeData.allHelpers}}</button>
                 <div id="allHelpers" style="display: none">
                 </div>
             </div>
+        </div></div></div><br>
+            <button class="w3-button w3-white w3-hover-white tr" id="passButton">{{localeData.pass}}</button>
+            <button class="w3-button w3-white w3-hover-white tr" id="resignButton">{{localeData.resign}}</button><br>
+            <span id="specialMessages"></span>
         </div>
-        <div style="right:0;top:0;position:absolute;">
+
+        
+        <div v-if="checked" style="right:0;top:0;position:absolute;">
             <button class="w3-button w3-card-4 tr w3-text-white w3-large" onclick="document.getElementById('gameStoryBar').style.display = 'block'">☰ {{localeData.historyShort}}</button>
         </div>
         <div class="w3-sidebar w3-bar-block w3-white w3-animate-right" style="width:270px;right:0;top:0px;overflow:hidden;display:none" id="gameStoryBar">
@@ -74,8 +72,10 @@ export default {
     components: {},
     data() {
         return {
+            onHistory: false,
             game: null,
             client: null,
+            checked: false,
             locale: null,
             stage: '🟢',
             localeData: {
@@ -135,6 +135,8 @@ export default {
         //localization load
         if(localStorage.getItem("lang") == null) localStorage.setItem("lang","ru")
         instance.locale = new Localization.default(localStorage.getItem("lang"));
+        this.isOnHistory = localStorage.getItem("onHistory");
+
         let lang = instance.locale.language;
 
         this.localeData.loading = lang.loading;
@@ -639,7 +641,9 @@ export default {
             let actualX = x;
             let actualY = y;
             if (event != null) {
-                if (event.path[0].localName == "div") return;
+                if(event.path != undefined){
+                    if (event.path[0].localName == "div") return;
+                }
                 let clickX = event.offsetX;
                 let clickY = event.offsetY;
                 let cellX = event.target.getAttribute("x") * 1;
@@ -815,14 +819,14 @@ export default {
         }
         //helper stuff
         function stageDefinder() {
-            const emoji = ["🟢","🟡","🔴","🏁"];
-            e("blockCount").innerHTML = blockCount;
+            // const emoji = ["🟢","🟡","🔴","🏁"];
+            // e("blockCount").innerHTML = blockCount;
             let currentStage = 0;
             if (blockCount > 180 * 0.15) currentStage = 1;
             if (blockCount > 180 * 0.6) currentStage = 2;
             if(forceStage > -1) currentStage = forceStage;
-            e("gameStage").innerHTML = lang.gameStage[currentStage];
-            instance.stage = emoji[currentStage];
+            //e("gameStage").innerHTML = lang.gameStage[currentStage];
+            //instance.stage = emoji[currentStage];
 
             e("recommendedHelpers").innerHTML = "";
             e("allHelpers").innerHTML = "";

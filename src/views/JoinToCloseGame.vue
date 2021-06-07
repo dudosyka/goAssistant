@@ -12,7 +12,7 @@
 
     <article class="form_window menu">
       <h1 class="title">{{localeData.fillCode}}</h1>
-      <div class="">
+      <div style="display: flex;flex-direction: column;">
         <input v-on:keyup.enter='join()' v-model='code' type="text" class="input" placeholder="code">
         <button class="button full-width w3-button w3-card-4 tr w3-hover-white" @click="join()" :disabled="code.length != 4">{{localeData.connect}}</button>
         <router-link class="button full-width w3-button w3-card-4 tr w3-hover-white back-button" to="/closegame">{{localeData.back}}</router-link>

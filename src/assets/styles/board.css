@@ -1,6 +1,6 @@
 .blockTable {border: 0px;}
 .gobanTexture {
-    background: url('../../assets/goban.png');
+    //background: url('../../assets/goban.png');
 }
 .cell {
     width: 40px;
@@ -53,6 +53,7 @@
     border-radius: 20px;
     -webkit-user-select: none;
     -moz-user-select: none;
+    box-shadow: 1px 2px 2px rgba(0,0,0,.5);
 }
 .block_0corner {
     top: -20px;
@@ -76,7 +77,7 @@
 }
 .block_-1 {
     background-color: white;
-    color: black;
+    color: #0f6c9a;
 }
 .block_fantom {
     opacity: 0.4;
@@ -98,7 +99,7 @@
 
 #game {
     display: inline-flex;
-    margin: 25px;
+    //margin: 25px;
 }
 .tr {transition: 0.3s;}
 #specialMessages {
