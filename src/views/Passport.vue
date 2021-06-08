@@ -1,4 +1,4 @@
-<template>
+d<template>
   <main class="menu" v-if='user !== false'>
     <article class="window menu">
       <h1 class="title">{{localeData.profile}}</h1>
@@ -128,7 +128,7 @@
       },
       gameView(id) {
         setStorage("watchGameId", id);
-        window.location = "/game/view";	
+        window.location = "/game/view";
       }
     },
     created() {
@@ -145,7 +145,16 @@
         //main block
         get('/user/profile?token='+storage('token'), null, data => {
             this.user = data.data.user;
-            console.log(this.user);
+            this.user.games_history.sort((a, b) => {
+                if (a.game_id > b.game_id) {
+                    return 1;
+                }
+
+                if (a.game_id < b.game_id) {
+                    return -1;
+                }
+                return 0;
+            });
         });
     }
   }
