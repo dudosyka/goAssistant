@@ -754,6 +754,9 @@ export default {
                 block.setAttribute("style", "opacity:" + o);
                 if(I) block.innerHTML = I;
                 if(s) block.setAttribute("class", block.getAttribute("class").replace("block_hint","block_hint_special"))
+                if(I*1!=0&&(I*1)+""!="NaN")
+                  if(!s) block.setAttribute("class", block.getAttribute("class").replace("block_hint","block_hint block_hint_predict_"+(playerColor==colors.BLACK?colors.WHITE:colors.BLACK)))
+                  else block.setAttribute("class", block.getAttribute("class").replace("block_hint_special","block_hint_special block_hint_predict_"+playerColor))
                 setOnHover();
                 return setOnClick();
             }

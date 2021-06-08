@@ -91,6 +91,17 @@
     opacity: 0.4;
     font-size: 26px;
 }
+.block_hint_predict_1 {
+  background-color: black!important;
+  color: white!important;
+  box-shadow: 0 0 0px 3px blue;
+}
+
+.block_hint_predict_-1 {
+  background-color: white!important;
+  color:black!important;
+  box-shadow: 0 0 0px 3px red;
+}
 .block_selector {
     background-color: aqua;
     opacity: 0.4;
