@@ -142,3 +142,6 @@
     background-color: #2196F3;
     color: white;
 }
+.ns {
+  -webkit-user-select: none;
+}

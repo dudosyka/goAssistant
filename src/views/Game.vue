@@ -2,12 +2,12 @@
     <div class="home">
         <div style="text-align: center;">
             <div class="section w3-text-white" style="width:300px;display:inline-block;">
-                <div class="moveDiv">&#9899; <b id="blackPlayerName" class="textLimiter">{{localeData.loading}}</b><span class="time-icon">⏳</span><span id="blackTimer">--:--</span></div>
-                <div class="moveDiv">&#9898; <b id="whitePlayerName" class="textLimiter">{{localeData.loading}}</b><span class="time-icon">⏳</span><span id="whiteTimer">--:--</span></div>
-            </div><br>
-            <div id="game" class="gobanTexture"></div><br>
+                <div class="moveDiv">&#9899; <b id="blackPlayerName" class="textLimiter">{{localeData.loading}}</b><span class="time-icon ns">⏳</span><span id="blackTimer" class="ns">--:--</span></div>
+                <div class="moveDiv">&#9898; <b id="whitePlayerName" class="textLimiter">{{localeData.loading}}</b><span class="time-icon ns">⏳</span><span id="whiteTimer" class="ns">--:--</span></div>
+            </div><br class="ns">
+            <div id="game" class="gobanTexture"></div><br class="ns">
             <button class="w3-button w3-white w3-hover-white tr" id="passButton">{{localeData.pass}}</button>
-            <button class="w3-button w3-white w3-hover-white tr" id="resignButton">{{localeData.resign}}</button><br>
+            <button class="w3-button w3-white w3-hover-white tr" id="resignButton">{{localeData.resign}}</button><br class="ns">
             <span id="specialMessages"></span>
         </div>
 
@@ -27,7 +27,7 @@
 
                 <span id="recommendedHelpersLabel"><span class="icon">💡</span> {{localeData.recommended}}</span>
                 <div id="recommendedHelpers">
-                </div><br>
+                </div><br class="ns">
                 <button class="w3-button main_color w3-hover-black tr helperButton" id="allHelpersButton">{{localeData.allHelpers}}</button>
                 <div id="allHelpers" style="display: none">
                 </div>
@@ -148,7 +148,7 @@ export default {
         this.localeData.allHelpers = lang.allHints;
         this.localeData.historyShort = lang.historyShort;
         this.localeData.history = lang.history;
-        
+
         //main block
         let gameId = -1;
         let firstMapLoad = true;

@@ -1,7 +1,7 @@
 <template>
     <div class="home">
         <div style="text-align: center;">
-            <div id="game" class="gobanTexture"></div><br>
+            <div id="game" class="gobanTexture"></div><br class="ns">
 			<h2 class="w3-text-white">
 				<button class="w3-button tr w3-medium w3-hover-aqua" id="lButton">&larr;</button>
 				{{localeData.moves}}

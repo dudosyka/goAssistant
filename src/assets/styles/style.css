@@ -10,16 +10,16 @@ body {
 html {overflow: hidden;}
 /* transitions */
 
-.slide-fade-enter-active {transition: all .5s;}
-.slide-fade-leave-active {transition: all .5s;}
+.slide-fade-enter-active {transition: all .3s;}
+.slide-fade-leave-active {transition: all .3s;}
 .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active до версии 2.1.8 */ {
   transform: translateX(10px);
   opacity: 0;
 }
 
-.top-fade-enter-active {transition: all .5s;}
-.top-fade-leave-active {transition: all .5s;}
+.top-fade-enter-active {transition: all .3s;}
+.top-fade-leave-active {transition: all .3s;}
 .top-fade-enter, .top-fade-leave-to
 /* .slide-fade-leave-active до версии 2.1.8 */ {
   transform: translateY(10px);
